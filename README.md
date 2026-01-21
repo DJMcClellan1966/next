@@ -1,6 +1,6 @@
-# Quantum-Inspired AI Platform
+# ML Toolbox
 
-**Personal experiments blending classical ML/LLMs with quantum-inspired kernels for semantic understanding, similarity computation, and intelligent language generation.**
+**A comprehensive machine learning toolbox for text preprocessing, semantic understanding, and ML best practices. Organized into three compartments: Data, Infrastructure, and Algorithms.**
 
 ## Current Focus
 
