@@ -61,6 +61,21 @@ class AlgorithmsCompartment:
         except ImportError as e:
             print(f"Warning: Could not import ensemble learning: {e}")
         
+        # Statistical Learning Methods
+        try:
+            from statistical_learning import (
+                StatisticalEvaluator,
+                StatisticalValidator,
+                BayesianOptimizer,
+                StatisticalFeatureSelector
+            )
+            self.components['StatisticalEvaluator'] = StatisticalEvaluator
+            self.components['StatisticalValidator'] = StatisticalValidator
+            self.components['BayesianOptimizer'] = BayesianOptimizer
+            self.components['StatisticalFeatureSelector'] = StatisticalFeatureSelector
+        except ImportError as e:
+            print(f"Warning: Could not import statistical learning: {e}")
+        
         # Add component descriptions
         self.component_descriptions = {
             'MLEvaluator': {
