@@ -5,10 +5,10 @@ scipy>=1.11.0
 # Deep learning (required by LLM)
 torch>=2.3.0
 
-# Optional but recommended for improved embeddings in quantum_kernel
+# Required for improved embeddings and quantum methods to work effectively
 sentence-transformers>=2.2.0
 
-# Optional for better theme extraction in quantum_kernel
+# Required for better theme extraction in quantum_kernel
 scikit-learn>=1.5.0
 
 # Optional: Quantum computing frameworks (for quantum kernel methods)

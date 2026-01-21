@@ -19,8 +19,17 @@ def test_exact_match_similarity():
     print("Hypothesis: Classical methods should excel here")
     print("="*70)
     
-    classical_config = KernelConfig(use_quantum_methods=False, similarity_metric='cosine')
-    quantum_config = KernelConfig(use_quantum_methods=True, similarity_metric='quantum')
+    classical_config = KernelConfig(
+        use_sentence_transformers=True,  # Required for proper comparison
+        use_quantum_methods=False, 
+        similarity_metric='cosine'
+    )
+    quantum_config = KernelConfig(
+        use_sentence_transformers=True,  # Required for quantum methods to work
+        use_quantum_methods=True,
+        quantum_amplitude_encoding=True,
+        similarity_metric='quantum'
+    )
     
     classical_kernel = get_kernel(classical_config)
     quantum_kernel = get_kernel(quantum_config)
@@ -61,8 +70,17 @@ def test_semantic_similarity():
     print("Hypothesis: Quantum methods might excel here")
     print("="*70)
     
-    classical_config = KernelConfig(use_quantum_methods=False, similarity_metric='cosine')
-    quantum_config = KernelConfig(use_quantum_methods=True, similarity_metric='quantum')
+    classical_config = KernelConfig(
+        use_sentence_transformers=True,  # Required for proper comparison
+        use_quantum_methods=False, 
+        similarity_metric='cosine'
+    )
+    quantum_config = KernelConfig(
+        use_sentence_transformers=True,  # Required for quantum methods to work
+        use_quantum_methods=True,
+        quantum_amplitude_encoding=True,
+        similarity_metric='quantum'
+    )
     
     classical_kernel = get_kernel(classical_config)
     quantum_kernel = get_kernel(quantum_config)
@@ -102,8 +120,17 @@ def test_unrelated_texts():
     print("Hypothesis: Both should have low similarity")
     print("="*70)
     
-    classical_config = KernelConfig(use_quantum_methods=False, similarity_metric='cosine')
-    quantum_config = KernelConfig(use_quantum_methods=True, similarity_metric='quantum')
+    classical_config = KernelConfig(
+        use_sentence_transformers=True,  # Required for proper comparison
+        use_quantum_methods=False, 
+        similarity_metric='cosine'
+    )
+    quantum_config = KernelConfig(
+        use_sentence_transformers=True,  # Required for quantum methods to work
+        use_quantum_methods=True,
+        quantum_amplitude_encoding=True,
+        similarity_metric='quantum'
+    )
     
     classical_kernel = get_kernel(classical_config)
     quantum_kernel = get_kernel(quantum_config)
@@ -145,8 +172,17 @@ def test_speed_comparison():
     
     import time
     
-    classical_config = KernelConfig(use_quantum_methods=False, similarity_metric='cosine')
-    quantum_config = KernelConfig(use_quantum_methods=True, similarity_metric='quantum')
+    classical_config = KernelConfig(
+        use_sentence_transformers=True,  # Required for proper comparison
+        use_quantum_methods=False, 
+        similarity_metric='cosine'
+    )
+    quantum_config = KernelConfig(
+        use_sentence_transformers=True,  # Required for quantum methods to work
+        use_quantum_methods=True,
+        quantum_amplitude_encoding=True,
+        similarity_metric='quantum'
+    )
     
     classical_kernel = get_kernel(classical_config)
     quantum_kernel = get_kernel(quantum_config)
