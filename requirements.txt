@@ -1,5 +1,7 @@
 # Core dependencies for quantum_kernel, ai, and llm
 numpy>=1.26.0
+
+# Scientific computing (required for statistical methods and quantum kernel)
 scipy>=1.11.0
 
 # Deep learning (required by LLM)
@@ -8,8 +10,11 @@ torch>=2.3.0
 # Required for improved embeddings and quantum methods to work effectively
 sentence-transformers>=2.2.0
 
-# Required for better theme extraction in quantum_kernel
+# Machine learning (required for ML evaluation, statistical methods, and quantum kernel)
 scikit-learn>=1.5.0
+
+# Statistical learning (required for Bayesian optimization)
+scikit-optimize>=0.9.0
 
 # Optional: Quantum computing frameworks (for quantum kernel methods)
 # Choose one based on your preference:
