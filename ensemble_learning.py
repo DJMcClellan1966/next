@@ -477,19 +477,36 @@ class PreprocessorEnsemble:
         
         # Combine embeddings (average)
         if all_embeddings:
-            # Pad to same length
-            max_len = max(emb.shape[0] for emb in all_embeddings)
-            padded_embeddings = []
-            
-            for emb in all_embeddings:
-                if emb.shape[0] < max_len:
-                    # Pad with zeros
-                    padding = np.zeros((max_len - emb.shape[0], emb.shape[1]))
-                    emb = np.vstack([emb, padding])
-                padded_embeddings.append(emb)
-            
-            # Average embeddings
-            ensemble_results['combined_embeddings'] = np.mean(padded_embeddings, axis=0)
+            try:
+                # Find common dimensions
+                max_samples = max(emb.shape[0] for emb in all_embeddings)
+                max_features = max(emb.shape[1] for emb in all_embeddings)
+                
+                # Pad all embeddings to same shape
+                padded_embeddings = []
+                for emb in all_embeddings:
+                    # Create padded embedding with same shape
+                    padded_emb = np.zeros((max_samples, max_features))
+                    
+                    # Copy original embedding
+                    samples_to_copy = min(emb.shape[0], max_samples)
+                    features_to_copy = min(emb.shape[1], max_features)
+                    padded_emb[:samples_to_copy, :features_to_copy] = emb[:samples_to_copy, :features_to_copy]
+                    
+                    padded_embeddings.append(padded_emb)
+                
+                # Convert to numpy array first, then average
+                padded_embeddings = np.array(padded_embeddings)
+                
+                # Average embeddings across preprocessors (axis 0 = preprocessors, axis 1 = samples, axis 2 = features)
+                ensemble_results['combined_embeddings'] = np.mean(padded_embeddings, axis=0)
+                
+            except Exception as e:
+                # Fallback: use first embedding if combination fails
+                if all_embeddings:
+                    ensemble_results['combined_embeddings'] = all_embeddings[0]
+                if verbose:
+                    print(f"  Warning: Could not combine embeddings: {e}. Using first preprocessor's embeddings.")
         
         # Consensus categories (items that appear in multiple preprocessors)
         for category, items in all_categories.items():
