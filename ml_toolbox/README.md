@@ -168,18 +168,20 @@ It's a **data preprocessing tool**, not an algorithm or infrastructure component
   - Similarity computation
   - Relationship discovery
 
-- **AI Components**
-  - SemanticUnderstandingEngine
-  - KnowledgeGraphBuilder
-  - IntelligentSearch
-  - ReasoningEngine
-  - LearningSystem
-  - ConversationalAI
+- **Quantum AI** ⭐
+  - CompleteAISystem (main AI system)
+  - SemanticUnderstandingEngine (understand intent)
+  - KnowledgeGraphBuilder (build knowledge graphs)
+  - IntelligentSearch (semantic search)
+  - ReasoningEngine (logical reasoning)
+  - LearningSystem (continuous learning)
+  - ConversationalAI (conversational interface)
 
-- **LLM**
+- **LLM** ⭐
   - StandaloneQuantumLLM
   - Text generation
   - Grounded generation
+  - Progressive learning
 
 - **Adaptive Neuron/Network**
   - AdaptiveNeuron
@@ -191,13 +193,33 @@ It's a **data preprocessing tool**, not an algorithm or infrastructure component
 # Get kernel
 kernel = toolbox.infrastructure.get_kernel()
 
-# Get AI system
+# Get Quantum AI system
 ai = toolbox.infrastructure.get_ai_system(use_llm=True)
+
+# Use Quantum AI for understanding
+understanding = ai.understanding.understand_intent("What is Python?")
+search_results = ai.search.search("Python programming", corpus)
+
+# Use LLM for text generation
+from llm.quantum_llm_standalone import StandaloneQuantumLLM
+llm = StandaloneQuantumLLM(kernel=kernel)
+generated = llm.generate_grounded("Explain machine learning", max_length=100)
 
 # Use for semantic operations
 embedding = kernel.embed("text")
 similarity = kernel.similarity("text1", "text2")
 ```
+
+### Why Quantum AI and LLM are in Infrastructure
+
+**Quantum AI** and **LLM** belong in **Compartment 2: Infrastructure** because:
+- ✅ They provide **AI services** (understanding, search, generation)
+- ✅ They use **Quantum Kernel** as infrastructure
+- ✅ They're **not data preprocessing** (that's Compartment 1)
+- ✅ They're **not ML algorithms** (that's Compartment 3)
+- ✅ They provide **infrastructure** for AI operations
+
+See `QUANTUM_AI_LLM_PLACEMENT.md` for detailed explanation.
 
 ---
 
