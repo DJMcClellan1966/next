@@ -260,7 +260,21 @@ class EnsembleLearner:
             
             cv_scores_list = []
             for train_idx, val_idx in cv.split(X_train, y_train):
-                ensemble_cv = type(ensemble)(**ensemble.get_params())
+                # Recreate ensemble with same parameters
+                # Create fresh meta-model
+                if hasattr(ensemble.meta_model, 'get_params'):
+                    meta_model_params = ensemble.meta_model.get_params()
+                    fresh_meta_model = type(ensemble.meta_model)(**meta_model_params)
+                else:
+                    fresh_meta_model = type(ensemble.meta_model)()
+                
+                ensemble_cv = StackingEnsemble(
+                    base_models=ensemble.base_models,
+                    meta_model=fresh_meta_model,
+                    task_type=ensemble.task_type,
+                    cv_folds=ensemble.cv_folds,
+                    random_state=ensemble.random_state
+                )
                 ensemble_cv.fit(X_train[train_idx], y_train[train_idx])
                 val_pred = ensemble_cv.predict(X_train[val_idx])
                 if task_type == 'classification':
@@ -342,6 +356,23 @@ class StackingEnsemble:
         self.fitted_base_models = []
         self.fitted_meta_model = None
     
+    def get_params(self, deep: bool = True) -> Dict[str, Any]:
+        """Get parameters for sklearn compatibility"""
+        return {
+            'base_models': self.base_models,
+            'meta_model': self.meta_model,
+            'task_type': self.task_type,
+            'cv_folds': self.cv_folds,
+            'random_state': self.random_state
+        }
+    
+    def set_params(self, **params) -> 'StackingEnsemble':
+        """Set parameters for sklearn compatibility"""
+        for key, value in params.items():
+            if hasattr(self, key):
+                setattr(self, key, value)
+        return self
+    
     def fit(self, X: np.ndarray, y: np.ndarray):
         """Fit stacking ensemble"""
         from sklearn.model_selection import StratifiedKFold, KFold
@@ -355,15 +386,26 @@ class StackingEnsemble:
         meta_features = []
         
         for name, model in self.base_models:
+            # Create fresh model instance for each base model
+            if hasattr(model, 'get_params'):
+                model_params = model.get_params()
+                fresh_model = type(model)(**model_params)
+            else:
+                fresh_model = type(model)()
             # Train on full data
-            model.fit(X, y)
-            self.fitted_base_models.append((name, model))
+            fresh_model.fit(X, y)
+            self.fitted_base_models.append((name, fresh_model))  # Store fitted model, not template
             
             # Create out-of-fold predictions for meta-features
             fold_predictions = np.zeros(len(X))
             
             for train_idx, val_idx in cv.split(X, y):
-                fold_model = type(model)(**model.get_params())
+                # Create fresh model for each fold
+                if hasattr(model, 'get_params'):
+                    fold_model_params = model.get_params()
+                    fold_model = type(model)(**fold_model_params)
+                else:
+                    fold_model = type(model)()
                 fold_model.fit(X[train_idx], y[train_idx])
                 
                 if self.task_type == 'classification':
@@ -398,9 +440,22 @@ class StackingEnsemble:
         # Predict with meta-model
         return self.fitted_meta_model.predict(X_meta)
     
-    def get_params(self):
-        """Get parameters (for sklearn compatibility)"""
-        return {}
+    def get_params(self, deep: bool = True) -> Dict[str, Any]:
+        """Get parameters for sklearn compatibility"""
+        return {
+            'base_models': self.base_models,
+            'meta_model': self.meta_model,
+            'task_type': self.task_type,
+            'cv_folds': self.cv_folds,
+            'random_state': self.random_state
+        }
+    
+    def set_params(self, **params) -> 'StackingEnsemble':
+        """Set parameters for sklearn compatibility"""
+        for key, value in params.items():
+            if hasattr(self, key):
+                setattr(self, key, value)
+        return self
 
 
 class PreprocessorEnsemble:
