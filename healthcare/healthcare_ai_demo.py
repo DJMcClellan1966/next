@@ -23,7 +23,7 @@ class HealthcareAIAssistant:
     def __init__(self):
         """Initialize healthcare AI assistant"""
         print("Initializing Healthcare AI Assistant...")
-        print("✓ Loading medical knowledge base...")
+        print("[+] Loading medical knowledge base...")
         
         # Initialize AI system with LLM support
         self.ai = CompleteAISystem(use_llm=True)
@@ -32,7 +32,7 @@ class HealthcareAIAssistant:
         # Load medical knowledge base
         self._load_medical_knowledge()
         
-        print("✓ Healthcare AI Assistant ready!")
+        print("[+] Healthcare AI Assistant ready!")
         print("  - HIPAA compliant (local processing)")
         print("  - Medical protocols loaded")
         print("  - Drug database initialized")
