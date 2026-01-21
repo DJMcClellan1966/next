@@ -90,8 +90,11 @@ class HealthcareAIAssistant:
         if context:
             full_query = f"Context: {context}\n\nQuestion: {question}"
         
+        # Get documents from knowledge graph
+        knowledge_corpus = [node.get('text', '') for node in self.ai.knowledge_graph.graph.get('nodes', [])]
+        
         # Search medical knowledge base
-        search_results = self.ai.search.semantic_search(full_query, top_k=3)
+        search_results = self.ai.search.search(full_query, knowledge_corpus, top_k=3) if knowledge_corpus else []
         
         # Generate response using LLM
         prompt = f"Answer this medical question based on clinical guidelines and protocols: {question}"
