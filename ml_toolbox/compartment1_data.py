@@ -91,6 +91,13 @@ class DataCompartment:
         except ImportError as e:
             print(f"Warning: Could not import variance/correlation filter: {e}")
         
+        # Phase 2: Time Series Feature Engineering (also in Data compartment)
+        try:
+            from time_series_feature_engineering import TimeSeriesFeatureEngineer
+            self.components['TimeSeriesFeatureEngineer'] = TimeSeriesFeatureEngineer
+        except ImportError as e:
+            print(f"Warning: Could not import time series feature engineer: {e}")
+        
         # Add component descriptions
         self.component_descriptions = {
             'AdvancedDataPreprocessor': {

@@ -183,6 +183,70 @@ class AlgorithmsCompartment:
         except ImportError as e:
             print(f"Warning: Could not import genetic algorithm optimizer: {e}")
         
+        # Phase 1: Information-Theoretic Feature Selection
+        try:
+            from information_theoretic_feature_selection import InformationTheoreticFeatureSelector
+            self.components['InformationTheoreticFeatureSelector'] = InformationTheoreticFeatureSelector
+        except ImportError as e:
+            print(f"Warning: Could not import information-theoretic feature selector: {e}")
+        
+        # Phase 1: SHAP Interpretability
+        try:
+            from shap_interpretability import SHAPInterpreter
+            self.components['SHAPInterpreter'] = SHAPInterpreter
+        except ImportError as e:
+            print(f"Warning: Could not import SHAP interpreter: {e}")
+        
+        # Phase 1: LIME Interpretability
+        try:
+            from lime_interpretability import LIMEInterpreter
+            self.components['LIMEInterpreter'] = LIMEInterpreter
+        except ImportError as e:
+            print(f"Warning: Could not import LIME interpreter: {e}")
+        
+        # Phase 1: Partial Dependence Plots
+        try:
+            from partial_dependence_plots import PartialDependenceAnalyzer
+            self.components['PartialDependenceAnalyzer'] = PartialDependenceAnalyzer
+        except ImportError as e:
+            print(f"Warning: Could not import partial dependence analyzer: {e}")
+        
+        # Phase 1: Fairness & Bias Detection
+        try:
+            from fairness_bias_detection import FairnessAnalyzer
+            self.components['FairnessAnalyzer'] = FairnessAnalyzer
+        except ImportError as e:
+            print(f"Warning: Could not import fairness analyzer: {e}")
+        
+        # Phase 2: ARIMA Time Series
+        try:
+            from arima_time_series import ARIMAModel, AutoARIMA
+            self.components['ARIMAModel'] = ARIMAModel
+            self.components['AutoARIMA'] = AutoARIMA
+        except ImportError as e:
+            print(f"Warning: Could not import ARIMA models: {e}")
+        
+        # Phase 2: Time Series Feature Engineering
+        try:
+            from time_series_feature_engineering import TimeSeriesFeatureEngineer
+            self.components['TimeSeriesFeatureEngineer'] = TimeSeriesFeatureEngineer
+        except ImportError as e:
+            print(f"Warning: Could not import time series feature engineer: {e}")
+        
+        # Phase 2: Active Learning
+        try:
+            from active_learning import ActiveLearner
+            self.components['ActiveLearner'] = ActiveLearner
+        except ImportError as e:
+            print(f"Warning: Could not import active learner: {e}")
+        
+        # Phase 2: Causal Discovery
+        try:
+            from causal_discovery import CausalDiscovery
+            self.components['CausalDiscovery'] = CausalDiscovery
+        except ImportError as e:
+            print(f"Warning: Could not import causal discovery: {e}")
+        
         # Add component descriptions
         self.component_descriptions = {
             'MLEvaluator': {
@@ -477,6 +541,126 @@ class AlgorithmsCompartment:
                 ],
                 'location': 'genetic_algorithm_optimizer.py',
                 'category': 'Optimization'
+            },
+            'InformationTheoreticFeatureSelector': {
+                'description': 'Information-theoretic feature selection (entropy-based)',
+                'features': [
+                    'Shannon entropy for feature importance',
+                    'Conditional entropy for feature interactions',
+                    'Information gain',
+                    'Mutual information (extended)',
+                    'KL divergence for feature selection'
+                ],
+                'location': 'information_theoretic_feature_selection.py',
+                'category': 'Feature Selection'
+            },
+            'SHAPInterpreter': {
+                'description': 'SHAP (SHapley Additive exPlanations) for model interpretability',
+                'features': [
+                    'Tree SHAP (for tree-based models)',
+                    'Kernel SHAP (model-agnostic)',
+                    'Linear SHAP (for linear models)',
+                    'Deep SHAP (for neural networks)',
+                    'SHAP summary plots',
+                    'SHAP dependence plots'
+                ],
+                'location': 'shap_interpretability.py',
+                'category': 'Interpretability'
+            },
+            'LIMEInterpreter': {
+                'description': 'LIME (Local Interpretable Model-agnostic Explanations)',
+                'features': [
+                    'Local explanations for individual predictions',
+                    'Model-agnostic',
+                    'Feature importance explanations',
+                    'Tabular and text data support'
+                ],
+                'location': 'lime_interpretability.py',
+                'category': 'Interpretability'
+            },
+            'PartialDependenceAnalyzer': {
+                'description': 'Partial Dependence Plots and ICE plots',
+                'features': [
+                    'Partial Dependence Plots (PDP)',
+                    'Individual Conditional Expectation (ICE) plots',
+                    'Feature interaction plots',
+                    '2D PDP plots',
+                    'Visual interpretability'
+                ],
+                'location': 'partial_dependence_plots.py',
+                'category': 'Interpretability'
+            },
+            'FairnessAnalyzer': {
+                'description': 'Fairness metrics and bias detection',
+                'features': [
+                    'Demographic parity',
+                    'Equalized odds',
+                    'Equal opportunity',
+                    'Calibration by group',
+                    'Disparate impact analysis',
+                    'Statistical parity testing'
+                ],
+                'location': 'fairness_bias_detection.py',
+                'category': 'Fairness'
+            },
+            'ARIMAModel': {
+                'description': 'ARIMA models for time series forecasting',
+                'features': [
+                    'ARIMA model fitting',
+                    'Seasonal ARIMA (SARIMA)',
+                    'Time series forecasting',
+                    'Model diagnostics',
+                    'Confidence intervals'
+                ],
+                'location': 'arima_time_series.py',
+                'category': 'Time Series'
+            },
+            'AutoARIMA': {
+                'description': 'Automatic ARIMA model selection',
+                'features': [
+                    'Finds optimal (p, d, q) parameters',
+                    'Information criteria (AIC, BIC)',
+                    'Seasonal model selection',
+                    'Grid search over parameter space'
+                ],
+                'location': 'arima_time_series.py',
+                'category': 'Time Series'
+            },
+            'TimeSeriesFeatureEngineer': {
+                'description': 'Time series feature engineering',
+                'features': [
+                    'Lag features',
+                    'Rolling statistics (mean, std, min, max)',
+                    'Difference features',
+                    'Seasonal features (hour, day, month)',
+                    'Autocorrelation features'
+                ],
+                'location': 'time_series_feature_engineering.py',
+                'category': 'Feature Engineering'
+            },
+            'ActiveLearner': {
+                'description': 'Active learning for sample selection',
+                'features': [
+                    'Uncertainty sampling (least confident, margin, entropy)',
+                    'Query-by-committee',
+                    'Expected model change',
+                    'Iterative labeling',
+                    'Reduce labeling costs'
+                ],
+                'location': 'active_learning.py',
+                'category': 'Learning'
+            },
+            'CausalDiscovery': {
+                'description': 'Causal discovery from observational data',
+                'features': [
+                    'PC Algorithm (constraint-based)',
+                    'GES Algorithm (score-based)',
+                    'Causal graph learning',
+                    'D-separation testing',
+                    'Independence testing'
+                ],
+                'location': 'causal_discovery.py',
+                'category': 'Causal Inference'
             }
         }
     
@@ -693,6 +877,76 @@ class AlgorithmsCompartment:
             return self.components['GeneticAlgorithmOptimizer'](**kwargs)
         else:
             raise ImportError("GeneticAlgorithmOptimizer not available")
+    
+    def get_information_theoretic_feature_selector(self):
+        """Get information-theoretic feature selector instance (Phase 1)"""
+        if 'InformationTheoreticFeatureSelector' in self.components:
+            return self.components['InformationTheoreticFeatureSelector']()
+        else:
+            raise ImportError("InformationTheoreticFeatureSelector not available")
+    
+    def get_shap_interpreter(self):
+        """Get SHAP interpreter instance (Phase 1)"""
+        if 'SHAPInterpreter' in self.components:
+            return self.components['SHAPInterpreter']()
+        else:
+            raise ImportError("SHAPInterpreter not available")
+    
+    def get_lime_interpreter(self):
+        """Get LIME interpreter instance (Phase 1)"""
+        if 'LIMEInterpreter' in self.components:
+            return self.components['LIMEInterpreter']()
+        else:
+            raise ImportError("LIMEInterpreter not available")
+    
+    def get_partial_dependence_analyzer(self):
+        """Get partial dependence analyzer instance (Phase 1)"""
+        if 'PartialDependenceAnalyzer' in self.components:
+            return self.components['PartialDependenceAnalyzer']()
+        else:
+            raise ImportError("PartialDependenceAnalyzer not available")
+    
+    def get_fairness_analyzer(self):
+        """Get fairness analyzer instance (Phase 1)"""
+        if 'FairnessAnalyzer' in self.components:
+            return self.components['FairnessAnalyzer']()
+        else:
+            raise ImportError("FairnessAnalyzer not available")
+    
+    def get_arima_model(self, order: Tuple[int, int, int] = (1, 0, 1), **kwargs):
+        """Get ARIMA model instance (Phase 2)"""
+        if 'ARIMAModel' in self.components:
+            return self.components['ARIMAModel'](order=order, **kwargs)
+        else:
+            raise ImportError("ARIMAModel not available")
+    
+    def get_auto_arima(self, **kwargs):
+        """Get AutoARIMA instance (Phase 2)"""
+        if 'AutoARIMA' in self.components:
+            return self.components['AutoARIMA'](**kwargs)
+        else:
+            raise ImportError("AutoARIMA not available")
+    
+    def get_time_series_feature_engineer(self):
+        """Get time series feature engineer instance (Phase 2)"""
+        if 'TimeSeriesFeatureEngineer' in self.components:
+            return self.components['TimeSeriesFeatureEngineer']()
+        else:
+            raise ImportError("TimeSeriesFeatureEngineer not available")
+    
+    def get_active_learner(self, model: Any, method: str = 'uncertainty', **kwargs):
+        """Get active learner instance (Phase 2)"""
+        if 'ActiveLearner' in self.components:
+            return self.components['ActiveLearner'](model=model, method=method, **kwargs)
+        else:
+            raise ImportError("ActiveLearner not available")
+    
+    def get_causal_discovery(self, method: str = 'pc', **kwargs):
+        """Get causal discovery instance (Phase 2)"""
+        if 'CausalDiscovery' in self.components:
+            return self.components['CausalDiscovery'](method=method, **kwargs)
+        else:
+            raise ImportError("CausalDiscovery not available")
     
     def list_components(self):
         """List all available components in this compartment"""
