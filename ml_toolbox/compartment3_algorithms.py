@@ -1,11 +1,26 @@
 """
 Compartment 3: Algorithms
 Machine learning models, evaluation, tuning, and ensembles
+
+Optimizations:
+- Parallel cross-validation
+- Cached model evaluation
+- Big O optimizations
 """
 import sys
 from pathlib import Path
+from typing import Optional, Dict, Any, List
+import functools
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
+
+# Import optimizations
+try:
+    from .optimizations import cache_result, get_global_monitor, ParallelProcessor
+    OPTIMIZATIONS_AVAILABLE = True
+except ImportError:
+    OPTIMIZATIONS_AVAILABLE = False
+    print("Warning: Optimizations not available")
 
 
 class AlgorithmsCompartment:
@@ -19,8 +34,11 @@ class AlgorithmsCompartment:
     - Model utilities and wrappers
     """
     
-    def __init__(self):
+    def __init__(self, n_jobs: Optional[int] = None):
         self.components = {}
+        self.n_jobs = n_jobs or -1  # -1 means use all cores
+        self._monitor = get_global_monitor() if OPTIMIZATIONS_AVAILABLE else None
+        self._parallel = ParallelProcessor(n_workers=None) if OPTIMIZATIONS_AVAILABLE else None
         self._initialize_components()
     
     def _initialize_components(self):

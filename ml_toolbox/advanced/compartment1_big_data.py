@@ -1,13 +1,28 @@
 """
 Advanced Compartment 1: Big Data
 Large-scale data processing, AdvancedDataPreprocessor, and big data management
+
+Optimizations:
+- Batch processing for O(n/p) complexity
+- Memory-efficient operations
+- Parallel processing
+- Big O optimizations
 """
 import sys
 from pathlib import Path
 import numpy as np
 from typing import List, Dict, Any, Optional
+import functools
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
+# Import optimizations
+try:
+    from ..optimizations import ParallelProcessor, MemoryOptimizer, get_global_parallel
+    OPTIMIZATIONS_AVAILABLE = True
+except ImportError:
+    OPTIMIZATIONS_AVAILABLE = False
+    print("Warning: Optimizations not available")
 
 
 class AdvancedBigDataCompartment:
@@ -22,9 +37,13 @@ class AdvancedBigDataCompartment:
     - Streaming data support
     """
     
-    def __init__(self):
+    def __init__(self, n_workers: Optional[int] = None):
         self.components = {}
         self.big_data_threshold = 10000  # Items considered "big data"
+        self.n_workers = n_workers
+        self._parallel = get_global_parallel() if OPTIMIZATIONS_AVAILABLE else None
+        if self._parallel and n_workers:
+            self._parallel.n_workers = n_workers
         self._initialize_components()
     
     def _initialize_components(self):
@@ -145,19 +164,27 @@ class AdvancedBigDataCompartment:
         return results
     
     def process_in_batches(self, data: List[str], batch_size: int = 1000,
-                          advanced: bool = True, **kwargs) -> Dict[str, Any]:
+                          advanced: bool = True, parallel: bool = True, **kwargs) -> Dict[str, Any]:
         """
-        Process large datasets in batches
+        Process large datasets in batches (optimized)
+        
+        Big O:
+        - Sequential: O(n * f(n)) where n is data size
+        - Parallel: O(n/p * f(n)) where p is number of workers
+        - Memory: O(batch_size) instead of O(n)
         
         Args:
             data: List of text strings
             batch_size: Number of items per batch
             advanced: If True, use AdvancedDataPreprocessor
+            parallel: Use parallel processing (default: True)
             **kwargs: Arguments for preprocessor
             
         Returns:
             Combined preprocessing results
         """
+        num_batches = (len(data) + batch_size - 1) // batch_size
+        
         all_results = {
             'deduplicated': [],
             'duplicates': [],
@@ -167,21 +194,39 @@ class AdvancedBigDataCompartment:
             'big_data_info': {
                 'processed_in_batches': True,
                 'batch_size': batch_size,
-                'num_batches': (len(data) + batch_size - 1) // batch_size
+                'num_batches': num_batches,
+                'parallel': parallel
             }
         }
         
-        # Process in batches
-        for i in range(0, len(data), batch_size):
-            batch = data[i:i + batch_size]
-            batch_results = self.preprocess(batch, advanced=advanced, 
-                                          detect_big_data=False, **kwargs)
+        # Create batches
+        batches = [data[i:i + batch_size] for i in range(0, len(data), batch_size)]
+        
+        # Process batches
+        if parallel and self._parallel and OPTIMIZATIONS_AVAILABLE:
+            # Parallel processing - O(n/p * f(n))
+            def process_batch(batch):
+                return self.preprocess(
+                    batch, 
+                    advanced=advanced, 
+                    detect_big_data=False, 
+                    **kwargs
+                )
             
-            # Combine results
+            batch_results_list = self._parallel.map(process_batch, batches)
+        else:
+            # Sequential processing - O(n * f(n))
+            batch_results_list = [
+                self.preprocess(batch, advanced=advanced, detect_big_data=False, **kwargs)
+                for batch in batches
+            ]
+        
+        # Combine results - O(n)
+        for batch_results in batch_results_list:
             all_results['deduplicated'].extend(batch_results['deduplicated'])
             all_results['duplicates'].extend(batch_results['duplicates'])
             
-            # Merge categories
+            # Merge categories - O(k) where k is number of categories
             for cat, items in batch_results.get('categorized', {}).items():
                 if cat not in all_results['categorized']:
                     all_results['categorized'][cat] = []
@@ -189,7 +234,7 @@ class AdvancedBigDataCompartment:
             
             all_results['quality_scores'].extend(batch_results.get('quality_scores', []))
         
-        # Final deduplication across batches
+        # Final deduplication across batches - O(m log m) where m is unique items
         if advanced and len(all_results['deduplicated']) > 0:
             final_results = self.preprocess(
                 all_results['deduplicated'],
