@@ -139,6 +139,50 @@ class AlgorithmsCompartment:
         except ImportError as e:
             print(f"Warning: Could not import model calibrator: {e}")
         
+        # Russell/Norvig Search-Based Feature Selection
+        try:
+            from search_based_feature_selection import SearchBasedFeatureSelector
+            self.components['SearchBasedFeatureSelector'] = SearchBasedFeatureSelector
+        except ImportError as e:
+            print(f"Warning: Could not import search-based feature selection: {e}")
+        
+        # Russell/Norvig Simulated Annealing
+        try:
+            from simulated_annealing_optimizer import SimulatedAnnealingOptimizer
+            self.components['SimulatedAnnealingOptimizer'] = SimulatedAnnealingOptimizer
+        except ImportError as e:
+            print(f"Warning: Could not import simulated annealing optimizer: {e}")
+        
+        # Russell/Norvig Bayesian Networks
+        try:
+            from bayesian_networks import BayesianNetworkAnalyzer
+            self.components['BayesianNetworkAnalyzer'] = BayesianNetworkAnalyzer
+        except ImportError as e:
+            print(f"Warning: Could not import Bayesian network analyzer: {e}")
+        
+        # Russell/Norvig Constraint Satisfaction
+        try:
+            from constraint_satisfaction_optimizer import CSPOptimizer, Constraint, create_constraint
+            self.components['CSPOptimizer'] = CSPOptimizer
+            self.components['Constraint'] = Constraint
+            self.components['create_constraint'] = create_constraint
+        except ImportError as e:
+            print(f"Warning: Could not import CSP optimizer: {e}")
+        
+        # Russell/Norvig Hidden Markov Models
+        try:
+            from hidden_markov_models import HMMAnalyzer
+            self.components['HMMAnalyzer'] = HMMAnalyzer
+        except ImportError as e:
+            print(f"Warning: Could not import HMM analyzer: {e}")
+        
+        # Russell/Norvig Genetic Algorithms
+        try:
+            from genetic_algorithm_optimizer import GeneticAlgorithmOptimizer
+            self.components['GeneticAlgorithmOptimizer'] = GeneticAlgorithmOptimizer
+        except ImportError as e:
+            print(f"Warning: Could not import genetic algorithm optimizer: {e}")
+        
         # Add component descriptions
         self.component_descriptions = {
             'MLEvaluator': {
@@ -361,6 +405,78 @@ class AlgorithmsCompartment:
                 ],
                 'location': 'model_calibration.py',
                 'category': 'Calibration'
+            },
+            'SearchBasedFeatureSelector': {
+                'description': 'Russell/Norvig search-based feature selection',
+                'features': [
+                    'A* search for optimal feature subsets',
+                    'Beam search for feature selection',
+                    'Greedy best-first search',
+                    'Better than wrapper methods in some cases',
+                    'Finds globally optimal feature sets'
+                ],
+                'location': 'search_based_feature_selection.py',
+                'category': 'Feature Selection'
+            },
+            'SimulatedAnnealingOptimizer': {
+                'description': 'Russell/Norvig simulated annealing for hyperparameter optimization',
+                'features': [
+                    'Escapes local optima',
+                    'Temperature schedule (exponential, linear)',
+                    'Acceptance probability based on temperature',
+                    'Better exploration than grid/random search',
+                    'Alternative optimization strategy'
+                ],
+                'location': 'simulated_annealing_optimizer.py',
+                'category': 'Optimization'
+            },
+            'BayesianNetworkAnalyzer': {
+                'description': 'Russell/Norvig Bayesian Networks for feature relationships',
+                'features': [
+                    'Model dependencies between features',
+                    'Causal relationship analysis',
+                    'Structure learning',
+                    'Inference (variable elimination)',
+                    'Feature importance based on network structure'
+                ],
+                'location': 'bayesian_networks.py',
+                'category': 'Probabilistic Models'
+            },
+            'CSPOptimizer': {
+                'description': 'Russell/Norvig constraint satisfaction for optimization',
+                'features': [
+                    'Handle complex constraints in hyperparameter spaces',
+                    'Backtracking search',
+                    'Constraint validation',
+                    'Example: n_estimators > max_depth',
+                    'Constraint-based feature engineering'
+                ],
+                'location': 'constraint_satisfaction_optimizer.py',
+                'category': 'Optimization'
+            },
+            'HMMAnalyzer': {
+                'description': 'Russell/Norvig Hidden Markov Models for sequential data',
+                'features': [
+                    'Model sequential patterns',
+                    'Temporal dependencies',
+                    'Baum-Welch algorithm (EM)',
+                    'Viterbi algorithm for decoding',
+                    'Forward-backward algorithm for inference'
+                ],
+                'location': 'hidden_markov_models.py',
+                'category': 'Probabilistic Models'
+            },
+            'GeneticAlgorithmOptimizer': {
+                'description': 'Russell/Norvig genetic algorithms for model selection',
+                'features': [
+                    'Evolutionary algorithm for hyperparameter search',
+                    'Population-based optimization',
+                    'Crossover and mutation operators',
+                    'Selection strategies (tournament, roulette)',
+                    'Elitism'
+                ],
+                'location': 'genetic_algorithm_optimizer.py',
+                'category': 'Optimization'
             }
         }
     
@@ -535,6 +651,48 @@ class AlgorithmsCompartment:
             return self.components['ModelCalibrator'](method=method, cv=cv)
         else:
             raise ImportError("ModelCalibrator not available")
+    
+    def get_search_based_feature_selector(self, estimator: Any, method: str = 'astar', **kwargs):
+        """Get search-based feature selector instance (Russell/Norvig)"""
+        if 'SearchBasedFeatureSelector' in self.components:
+            return self.components['SearchBasedFeatureSelector'](estimator=estimator, method=method, **kwargs)
+        else:
+            raise ImportError("SearchBasedFeatureSelector not available")
+    
+    def get_simulated_annealing_optimizer(self, **kwargs):
+        """Get simulated annealing optimizer instance (Russell/Norvig)"""
+        if 'SimulatedAnnealingOptimizer' in self.components:
+            return self.components['SimulatedAnnealingOptimizer'](**kwargs)
+        else:
+            raise ImportError("SimulatedAnnealingOptimizer not available")
+    
+    def get_bayesian_network_analyzer(self, **kwargs):
+        """Get Bayesian network analyzer instance (Russell/Norvig)"""
+        if 'BayesianNetworkAnalyzer' in self.components:
+            return self.components['BayesianNetworkAnalyzer'](**kwargs)
+        else:
+            raise ImportError("BayesianNetworkAnalyzer not available")
+    
+    def get_csp_optimizer(self, constraints: Optional[List] = None):
+        """Get CSP optimizer instance (Russell/Norvig)"""
+        if 'CSPOptimizer' in self.components:
+            return self.components['CSPOptimizer'](constraints=constraints)
+        else:
+            raise ImportError("CSPOptimizer not available")
+    
+    def get_hmm_analyzer(self, n_states: int = 3, **kwargs):
+        """Get HMM analyzer instance (Russell/Norvig)"""
+        if 'HMMAnalyzer' in self.components:
+            return self.components['HMMAnalyzer'](n_states=n_states, **kwargs)
+        else:
+            raise ImportError("HMMAnalyzer not available")
+    
+    def get_genetic_algorithm_optimizer(self, **kwargs):
+        """Get genetic algorithm optimizer instance (Russell/Norvig)"""
+        if 'GeneticAlgorithmOptimizer' in self.components:
+            return self.components['GeneticAlgorithmOptimizer'](**kwargs)
+        else:
+            raise ImportError("GeneticAlgorithmOptimizer not available")
     
     def list_components(self):
         """List all available components in this compartment"""
