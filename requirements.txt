@@ -1,12 +1,30 @@
 # Core dependencies for quantum_kernel, ai, and llm
-numpy>=1.21.0
-scipy>=1.7.0
+numpy>=1.26.0
+scipy>=1.11.0
 
 # Deep learning (required by LLM)
-torch>=1.9.0
+torch>=2.3.0
 
 # Optional but recommended for improved embeddings in quantum_kernel
 sentence-transformers>=2.2.0
 
 # Optional for better theme extraction in quantum_kernel
-scikit-learn>=1.0.0
+scikit-learn>=1.5.0
+
+# Optional: Quantum computing frameworks (for quantum kernel methods)
+# Choose one based on your preference:
+# qiskit>=1.2.0
+# qiskit-machine-learning>=0.7.0  # for built-in QSVM/quantum kernels
+# pennylane>=0.34.0
+# cirq>=1.3.0
+
+# Optional: LLM libraries (if extending LLM functionality)
+# transformers>=4.45.0
+
+# Optional: Visualization and development
+# matplotlib>=3.8.0
+# seaborn>=0.13.0
+# jupyter>=1.0.0
+
+# Optional: Testing
+# pytest>=7.4.0
