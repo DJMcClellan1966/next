@@ -19,6 +19,16 @@
 - ✅ **Encoding Fixes** - Fixes encoding issues
 - ✅ **Special Character Handling** - Optional special character removal
 
+### Normalization and Standardization
+
+- ✅ **Number Normalization** - Converts written numbers to digits, normalizes formats
+- ✅ **Date Normalization** - Converts various date formats to standard format (YYYY-MM-DD)
+- ✅ **Currency Normalization** - Converts currency symbols to codes (USD, EUR, GBP)
+- ✅ **Unit Normalization** - Adds spaces between numbers and units (5kg → 5 kg)
+- ✅ **Punctuation Standardization** - Standardizes quotes, dashes, ellipsis
+- ✅ **Abbreviation Expansion** - Expands common abbreviations (Dr. → Doctor, etc.)
+- ✅ **Accent Removal** - Removes accents from characters (é → e, ñ → n)
+
 ### Advanced Scrubbing
 
 - ✅ **Noise Detection** - Detects and removes noisy text
@@ -65,7 +75,15 @@ preprocessor = AdvancedDataPreprocessor(
         'normalize_whitespace': True, # Normalize whitespace
         'remove_special_chars': False, # Don't remove special chars
         'lowercase': False,       # Don't lowercase
-        'fix_encoding': True      # Fix encoding
+        'fix_encoding': True,     # Fix encoding
+        # Normalization options
+        'normalize_numbers': True,    # Normalize numbers
+        'normalize_dates': True,      # Normalize dates
+        'normalize_currency': True,   # Normalize currency
+        'normalize_units': True,      # Normalize units
+        'standardize_punctuation': True, # Standardize punctuation
+        'expand_abbreviations': True,   # Expand abbreviations
+        'remove_accents': False        # Remove accents (optional)
     }
 )
 
@@ -258,6 +276,13 @@ for text in results['scrubbed_data']:
 | `remove_special_chars` | False | Remove special characters |
 | `lowercase` | False | Convert to lowercase |
 | `fix_encoding` | True | Fix encoding issues |
+| `normalize_numbers` | False | Normalize number formats |
+| `normalize_dates` | False | Normalize date formats |
+| `normalize_currency` | False | Normalize currency formats |
+| `normalize_units` | False | Normalize unit formats |
+| `standardize_punctuation` | False | Standardize punctuation |
+| `expand_abbreviations` | False | Expand abbreviations |
+| `remove_accents` | False | Remove accents |
 
 ### Custom Scrubbing Functions
 

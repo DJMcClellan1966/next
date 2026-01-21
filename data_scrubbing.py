@@ -1,13 +1,15 @@
 """
 Data Scrubbing Tools
 Enhancements for AdvancedDataPreprocessor
-Provides comprehensive data cleaning and scrubbing capabilities
+Provides comprehensive data cleaning, normalization, and standardization capabilities
 """
 import re
 import unicodedata
 from typing import List, Dict, Any, Optional, Callable
 from collections import Counter
 import html
+from datetime import datetime
+import calendar
 
 
 class DataScrubber:
@@ -36,12 +38,19 @@ class DataScrubber:
             'special_chars_normalized': 0,
             'whitespace_cleaned': 0,
             'unicode_normalized': 0,
+            'numbers_normalized': 0,
+            'dates_normalized': 0,
+            'currency_normalized': 0,
+            'units_normalized': 0,
+            'punctuation_standardized': 0,
+            'abbreviations_expanded': 0,
+            'accents_removed': 0,
             'total_scrubbed': 0
         }
     
     def scrub(self, text: str, options: Optional[Dict[str, bool]] = None) -> Dict[str, Any]:
         """
-        Comprehensive data scrubbing
+        Comprehensive data scrubbing with normalization and standardization
         
         Args:
             text: Text to scrub
@@ -55,6 +64,13 @@ class DataScrubber:
                 - remove_special_chars: Remove special characters (default: False)
                 - lowercase: Convert to lowercase (default: False)
                 - fix_encoding: Fix encoding issues (default: True)
+                - normalize_numbers: Normalize numbers (default: False)
+                - normalize_dates: Normalize dates (default: False)
+                - normalize_currency: Normalize currency (default: False)
+                - normalize_units: Normalize units (default: False)
+                - standardize_punctuation: Standardize punctuation (default: False)
+                - expand_abbreviations: Expand common abbreviations (default: False)
+                - remove_accents: Remove accents (default: False)
         
         Returns:
             Dictionary with scrubbed text and statistics
@@ -69,7 +85,14 @@ class DataScrubber:
                 'normalize_whitespace': True,
                 'remove_special_chars': False,
                 'lowercase': False,
-                'fix_encoding': True
+                'fix_encoding': True,
+                'normalize_numbers': False,
+                'normalize_dates': False,
+                'normalize_currency': False,
+                'normalize_units': False,
+                'standardize_punctuation': False,
+                'expand_abbreviations': False,
+                'remove_accents': False
             }
         
         original_text = text
@@ -114,7 +137,36 @@ class DataScrubber:
             scrubbed_text = self._remove_special_chars(scrubbed_text)
             self.stats['special_chars_normalized'] += 1
         
-        # Convert to lowercase
+        # Normalization and Standardization
+        if options.get('normalize_numbers', False):
+            scrubbed_text = self._normalize_numbers(scrubbed_text)
+            self.stats['numbers_normalized'] += 1
+        
+        if options.get('normalize_dates', False):
+            scrubbed_text = self._normalize_dates(scrubbed_text)
+            self.stats['dates_normalized'] += 1
+        
+        if options.get('normalize_currency', False):
+            scrubbed_text = self._normalize_currency(scrubbed_text)
+            self.stats['currency_normalized'] += 1
+        
+        if options.get('normalize_units', False):
+            scrubbed_text = self._normalize_units(scrubbed_text)
+            self.stats['units_normalized'] += 1
+        
+        if options.get('standardize_punctuation', False):
+            scrubbed_text = self._standardize_punctuation(scrubbed_text)
+            self.stats['punctuation_standardized'] += 1
+        
+        if options.get('expand_abbreviations', False):
+            scrubbed_text = self._expand_abbreviations(scrubbed_text)
+            self.stats['abbreviations_expanded'] += 1
+        
+        if options.get('remove_accents', False):
+            scrubbed_text = self._remove_accents(scrubbed_text)
+            self.stats['accents_removed'] += 1
+        
+        # Convert to lowercase (after other normalizations)
         if options.get('lowercase', False):
             scrubbed_text = scrubbed_text.lower()
         
@@ -214,6 +266,248 @@ class DataScrubber:
         text = re.sub(r'[^a-zA-Z0-9\s.,!?;:\'"]', '', text)
         return text
     
+    def _normalize_numbers(self, text: str) -> str:
+        """
+        Normalize number formats
+        
+        Converts:
+        - Written numbers to digits (one -> 1, twenty -> 20)
+        - Number formats to standard (1,000 -> 1000 or keep as is)
+        - Fractions to decimals (1/2 -> 0.5)
+        """
+        # Number word to digit mapping
+        number_words = {
+            'zero': '0', 'one': '1', 'two': '2', 'three': '3', 'four': '4',
+            'five': '5', 'six': '6', 'seven': '7', 'eight': '8', 'nine': '9',
+            'ten': '10', 'eleven': '11', 'twelve': '12', 'thirteen': '13',
+            'fourteen': '14', 'fifteen': '15', 'sixteen': '16', 'seventeen': '17',
+            'eighteen': '18', 'nineteen': '19', 'twenty': '20', 'thirty': '30',
+            'forty': '40', 'fifty': '50', 'sixty': '60', 'seventy': '70',
+            'eighty': '80', 'ninety': '90', 'hundred': '100', 'thousand': '1000',
+            'million': '1000000', 'billion': '1000000000'
+        }
+        
+        # Convert written numbers (simple cases)
+        words = text.split()
+        normalized_words = []
+        for word in words:
+            word_lower = word.lower().rstrip('.,!?;:')
+            if word_lower in number_words:
+                normalized_words.append(number_words[word_lower])
+            else:
+                normalized_words.append(word)
+        
+        text = ' '.join(normalized_words)
+        
+        # Normalize number formats (remove commas from numbers, or keep based on preference)
+        # For now, we'll keep commas but normalize spacing
+        text = re.sub(r'(\d+),(\d+)', r'\1,\2', text)  # Ensure proper comma formatting
+        
+        # Normalize fractions to decimals (simple cases)
+        fraction_pattern = r'(\d+)/(\d+)'
+        def fraction_to_decimal(match):
+            num, den = int(match.group(1)), int(match.group(2))
+            if den != 0:
+                return str(round(num / den, 2))
+            return match.group(0)
+        
+        text = re.sub(fraction_pattern, fraction_to_decimal, text)
+        
+        return text
+    
+    def _normalize_dates(self, text: str) -> str:
+        """
+        Normalize date formats to standard format (YYYY-MM-DD or keep readable)
+        
+        Converts various date formats to a standard format
+        """
+        # Common date patterns
+        date_patterns = [
+            # MM/DD/YYYY or DD/MM/YYYY
+            (r'(\d{1,2})/(\d{1,2})/(\d{4})', r'\3-\1-\2'),
+            # Month DD, YYYY
+            (r'([A-Za-z]+)\s+(\d{1,2}),\s*(\d{4})', lambda m: self._format_month_date(m)),
+            # DD Month YYYY
+            (r'(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})', lambda m: self._format_day_month(m)),
+        ]
+        
+        for pattern, replacement in date_patterns:
+            if callable(replacement):
+                text = re.sub(pattern, replacement, text)
+            else:
+                text = re.sub(pattern, replacement, text)
+        
+        return text
+    
+    def _format_month_date(self, match) -> str:
+        """Format 'Month DD, YYYY' to 'YYYY-MM-DD'"""
+        month_name = match.group(1).lower()
+        day = match.group(2)
+        year = match.group(3)
+        
+        month_map = {name.lower(): f'{i:02d}' for i, name in enumerate(calendar.month_name[1:], 1)}
+        month_map.update({name.lower(): f'{i:02d}' for i, name in enumerate(calendar.month_abbr[1:], 1)})
+        
+        month = month_map.get(month_name, '01')
+        day = f'{int(day):02d}'
+        
+        return f'{year}-{month}-{day}'
+    
+    def _format_day_month(self, match) -> str:
+        """Format 'DD Month YYYY' to 'YYYY-MM-DD'"""
+        day = match.group(1)
+        month_name = match.group(2).lower()
+        year = match.group(3)
+        
+        month_map = {name.lower(): f'{i:02d}' for i, name in enumerate(calendar.month_name[1:], 1)}
+        month_map.update({name.lower(): f'{i:02d}' for i, name in enumerate(calendar.month_abbr[1:], 1)})
+        
+        month = month_map.get(month_name, '01')
+        day = f'{int(day):02d}'
+        
+        return f'{year}-{month}-{day}'
+    
+    def _normalize_currency(self, text: str) -> str:
+        """
+        Normalize currency formats
+        
+        Converts:
+        - $100 -> USD 100 or 100 USD
+        - €50 -> EUR 50 or 50 EUR
+        - £30 -> GBP 30 or 30 GBP
+        """
+        # Currency symbol to code mapping
+        currency_map = {
+            '$': 'USD',
+            '€': 'EUR',
+            '£': 'GBP',
+            '¥': 'JPY',
+            '₹': 'INR',
+            'A$': 'AUD',
+            'C$': 'CAD'
+        }
+        
+        # Pattern: currency symbol followed by number
+        for symbol, code in currency_map.items():
+            # Escape special regex characters
+            symbol_escaped = re.escape(symbol)
+            pattern = rf'{symbol_escaped}\s*(\d+(?:[.,]\d+)?)'
+            replacement = rf'{code} \1'
+            text = re.sub(pattern, replacement, text)
+        
+        # Normalize currency abbreviations
+        currency_abbr = {
+            'usd': 'USD', 'eur': 'EUR', 'gbp': 'GBP', 'jpy': 'JPY',
+            'inr': 'INR', 'aud': 'AUD', 'cad': 'CAD'
+        }
+        
+        for abbr, code in currency_abbr.items():
+            pattern = rf'\b{abbr}\b'
+            text = re.sub(pattern, code, text, flags=re.IGNORECASE)
+        
+        return text
+    
+    def _normalize_units(self, text: str) -> str:
+        """
+        Normalize unit formats
+        
+        Converts:
+        - 5kg -> 5 kg
+        - 10cm -> 10 cm
+        - 20mph -> 20 mph
+        """
+        # Common unit patterns
+        units = [
+            'kg', 'g', 'mg', 'lb', 'oz',  # Weight
+            'km', 'm', 'cm', 'mm', 'mi', 'ft', 'in',  # Length
+            'l', 'ml', 'gal', 'qt', 'pt', 'fl oz',  # Volume
+            'mph', 'kph', 'm/s',  # Speed
+            '°C', '°F', 'K',  # Temperature
+        ]
+        
+        # Add space before units if missing
+        for unit in units:
+            # Pattern: number immediately followed by unit
+            pattern = rf'(\d+(?:[.,]\d+)?)({re.escape(unit)})'
+            replacement = r'\1 \2'
+            text = re.sub(pattern, replacement, text, flags=re.IGNORECASE)
+        
+        return text
+    
+    def _standardize_punctuation(self, text: str) -> str:
+        """
+        Standardize punctuation
+        
+        Converts:
+        - Multiple spaces to single space
+        - Multiple punctuation to single
+        - Standardizes quote marks
+        - Standardizes dashes
+        """
+        # Standardize quotes
+        text = re.sub(r'["""]', '"', text)  # Smart quotes to straight quotes
+        # Smart apostrophes to straight (using unicode escapes)
+        text = re.sub(r'[\u2018\u2019]', "'", text)  # Left/right single quotation marks
+        
+        # Standardize dashes
+        text = re.sub(r'[—–]', '-', text)  # Em dash, en dash to hyphen
+        
+        # Standardize ellipsis
+        text = re.sub(r'\.{3,}', '...', text)  # Multiple dots to ellipsis
+        
+        # Standardize multiple punctuation
+        text = re.sub(r'([!?]){2,}', r'\1', text)  # Multiple ! or ? to single
+        
+        # Ensure space after punctuation (optional, can be customized)
+        # text = re.sub(r'([.,!?;:])([A-Za-z])', r'\1 \2', text)
+        
+        return text
+    
+    def _expand_abbreviations(self, text: str) -> str:
+        """
+        Expand common abbreviations
+        
+        Converts:
+        - etc. -> etcetera (or keep etc.)
+        - i.e. -> that is
+        - e.g. -> for example
+        - vs. -> versus
+        """
+        abbreviations = {
+            r'\betc\.': 'etcetera',
+            r'\bi\.e\.': 'that is',
+            r'\be\.g\.': 'for example',
+            r'\bvs\.': 'versus',
+            r'\bet\. al\.': 'and others',
+            r'\bDr\.': 'Doctor',
+            r'\bMr\.': 'Mister',
+            r'\bMrs\.': 'Missus',
+            r'\bMs\.': 'Miss',
+            r'\bProf\.': 'Professor',
+            r'\bSt\.': 'Street',
+            r'\bAve\.': 'Avenue',
+            r'\bBlvd\.': 'Boulevard',
+        }
+        
+        for pattern, expansion in abbreviations.items():
+            text = re.sub(pattern, expansion, text, flags=re.IGNORECASE)
+        
+        return text
+    
+    def _remove_accents(self, text: str) -> str:
+        """
+        Remove accents from characters
+        
+        Converts:
+        - é -> e
+        - ñ -> n
+        - ü -> u
+        """
+        # Normalize to NFD (decomposed form) and remove combining characters
+        text = unicodedata.normalize('NFD', text)
+        text = ''.join(char for char in text if unicodedata.category(char) != 'Mn')
+        return text
+    
     def get_stats(self) -> Dict[str, int]:
         """Get scrubbing statistics"""
         return self.stats.copy()
@@ -228,6 +522,13 @@ class DataScrubber:
             'special_chars_normalized': 0,
             'whitespace_cleaned': 0,
             'unicode_normalized': 0,
+            'numbers_normalized': 0,
+            'dates_normalized': 0,
+            'currency_normalized': 0,
+            'units_normalized': 0,
+            'punctuation_standardized': 0,
+            'abbreviations_expanded': 0,
+            'accents_removed': 0,
             'total_scrubbed': 0
         }
 
