@@ -17,6 +17,14 @@ from quantum_kernel import get_kernel, KernelConfig
 import requests
 import numpy as np
 
+# Import data scrubbing tools
+try:
+    from data_scrubbing import DataScrubber, AdvancedDataScrubber
+    SCRUBBING_AVAILABLE = True
+except ImportError:
+    SCRUBBING_AVAILABLE = False
+    print("Warning: Data scrubbing tools not available. Install data_scrubbing module.")
+
 # Try to import sklearn for PCA and ML evaluation
 try:
     from sklearn.decomposition import PCA, TruncatedSVD
@@ -54,7 +62,10 @@ class AdvancedDataPreprocessor:
                  use_quantum: bool = True,
                  enable_compression: bool = True,
                  compression_ratio: float = 0.5,
-                 compression_method: str = 'pca'):
+                 compression_method: str = 'pca',
+                 enable_scrubbing: bool = True,
+                 scrubbing_options: Optional[Dict[str, bool]] = None,
+                 use_advanced_scrubbing: bool = True):
         self.quantum_kernel = get_kernel(KernelConfig(use_sentence_transformers=True)) if use_quantum else None
         self.pocketfence_url = pocketfence_url
         self.dedup_threshold = dedup_threshold
@@ -63,6 +74,29 @@ class AdvancedDataPreprocessor:
         self.compression_ratio = compression_ratio  # 0.5 = 50% of original dimensions
         self.compression_method = compression_method  # 'pca', 'svd', 'autoencoder'
         self.pocketfence_available = self._check_pocketfence()
+        
+        # Data scrubbing
+        self.enable_scrubbing = enable_scrubbing and SCRUBBING_AVAILABLE
+        self.use_advanced_scrubbing = use_advanced_scrubbing
+        self.scrubbing_options = scrubbing_options or {
+            'remove_html': True,
+            'remove_urls': True,
+            'remove_emails': True,
+            'remove_phone': True,
+            'normalize_unicode': True,
+            'normalize_whitespace': True,
+            'remove_special_chars': False,
+            'lowercase': False,
+            'fix_encoding': True
+        }
+        
+        if self.enable_scrubbing:
+            if self.use_advanced_scrubbing:
+                self.scrubber = AdvancedDataScrubber()
+            else:
+                self.scrubber = DataScrubber()
+        else:
+            self.scrubber = None
         
         # Compression models (fitted on data)
         self.pca_model = None
@@ -79,7 +113,10 @@ class AdvancedDataPreprocessor:
             'compression_applied': False,
             'original_dim': 0,
             'compressed_dim': 0,
-            'compression_ratio_achieved': 0.0
+            'compression_ratio_achieved': 0.0,
+            'scrubbing_applied': False,
+            'noise_removed': 0,
+            'low_quality_removed': 0
         }
     
     def _check_pocketfence(self) -> bool:
@@ -108,6 +145,8 @@ class AdvancedDataPreprocessor:
         
         results = {
             'original_count': len(raw_data),
+            'scrubbed_data': [],
+            'scrubbing_stats': {},
             'safe_data': [],
             'unsafe_data': [],
             'deduplicated': [],
@@ -119,10 +158,55 @@ class AdvancedDataPreprocessor:
             'stats': {}
         }
         
-        # Stage 1: Safety filtering
+        # Stage 0: Data scrubbing (if enabled)
+        if self.enable_scrubbing and self.scrubber:
+            if verbose:
+                print("[Stage 0] Data Scrubbing")
+            
+            if self.use_advanced_scrubbing:
+                # Advanced scrubbing with quality filtering
+                scrubbing_results = self.scrubber.scrub_batch_advanced(
+                    raw_data,
+                    options=self.scrubbing_options,
+                    filter_noise=True,
+                    filter_low_quality=False  # Let quality scoring handle this
+                )
+                scrubbed_data = scrubbing_results['clean_texts']
+                results['scrubbing_stats'] = {
+                    'total_scrubbed': scrubbing_results['total'],
+                    'kept': scrubbing_results['kept'],
+                    'filtered': scrubbing_results['filtered'],
+                    'noise_removed': len([f for f in scrubbing_results['filtered_out'] if f['reason'] == 'noise']),
+                    'low_quality_removed': len([f for f in scrubbing_results['filtered_out'] if f['reason'] == 'low_quality']),
+                    'scrubber_stats': scrubbing_results['stats']
+                }
+                self.stats['noise_removed'] += results['scrubbing_stats']['noise_removed']
+                self.stats['low_quality_removed'] += results['scrubbing_stats']['low_quality_removed']
+            else:
+                # Basic scrubbing
+                scrubbing_results = self.scrubber.scrub_batch(raw_data, options=self.scrubbing_options)
+                scrubbed_data = [r['scrubbed'] for r in scrubbing_results]
+                results['scrubbing_stats'] = {
+                    'total_scrubbed': len(raw_data),
+                    'scrubber_stats': self.scrubber.get_stats()
+                }
+            
+            results['scrubbed_data'] = scrubbed_data
+            self.stats['scrubbing_applied'] = True
+            
+            if verbose:
+                print(f"  Scrubbed: {len(scrubbed_data)} items")
+                if self.use_advanced_scrubbing:
+                    print(f"  Noise removed: {results['scrubbing_stats']['noise_removed']}")
+                    print(f"  Low quality removed: {results['scrubbing_stats']['low_quality_removed']}")
+        else:
+            scrubbed_data = raw_data
+            results['scrubbed_data'] = scrubbed_data
+        
+        # Stage 1: Safety filtering (on scrubbed data)
         if verbose:
             print("[Stage 1] Safety Filtering (PocketFence Kernel)")
-        safe_data, unsafe_data = self._safety_filter(raw_data, verbose)
+        safe_data, unsafe_data = self._safety_filter(scrubbed_data, verbose)
         results['safe_data'] = safe_data
         results['unsafe_data'] = unsafe_data
         self.stats['unsafe_filtered'] += len(unsafe_data)
