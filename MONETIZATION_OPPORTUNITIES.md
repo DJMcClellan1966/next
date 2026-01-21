@@ -1,12 +1,24 @@
 # Monetization Opportunities - What Could Make Money
 
-## Your Competitive Advantages
+## Your Competitive Advantages (Potential)
 
-1. **Zero API Costs** - No per-query fees (huge for high-volume)
-2. **Complete Privacy** - All processing local (crucial for sensitive data)
-3. **Customizable** - Train on specific domains/data
-4. **Offline Capable** - Works without internet
-5. **Own the Stack** - Full control, no vendor lock-in
+⚠️ **CURRENT STATUS:** These are **potential** advantages. Current implementation is a proof-of-concept with significant limitations for regulated industries.
+
+**Potential Advantages:**
+1. **Zero API Costs** - No per-query fees (huge for high-volume) ✅ *This is real*
+2. **Complete Privacy** - All processing local (crucial for sensitive data) ⚠️ *Local but not HIPAA-compliant*
+3. **Customizable** - Train on specific domains/data ⚠️ *Limited - needs domain-specific models*
+4. **Offline Capable** - Works without internet ✅ *This is real*
+5. **Own the Stack** - Full control, no vendor lock-in ✅ *This is real*
+
+**Key Limitations:**
+- ❌ Not HIPAA-compliant for healthcare (missing security/privacy features)
+- ❌ No medical domain adaptation (needs PubMedBERT, SNOMED, ICD)
+- ❌ Not clinically validated (unproven medical accuracy)
+- ❌ Experimental methods (quantum kernels unproven for healthcare)
+- ❌ Not production-ready (missing deployment, integration, safety)
+
+**See `healthcare/LIMITATIONS.md` for detailed limitations.**
 
 ---
 

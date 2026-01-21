@@ -1,14 +1,17 @@
 # Business Plan: Local AI Platform
 
+⚠️ **IMPORTANT NOTE:** This business plan is based on a **proof-of-concept demonstration system**. The current implementation has significant limitations for regulated industries like healthcare (see `healthcare/LIMITATIONS.md`). Production deployment would require 12-24 months of development, $500K-$2M investment, domain expertise, and regulatory compliance work.
+
 ## Executive Summary
 
-**Product:** Enterprise-grade, locally-deployable AI platform for privacy-sensitive and regulated industries.
+**Product:** Locally-deployable AI platform for privacy-sensitive applications (demonstration version).
 
-**Unique Value:** Zero API costs + complete data privacy + domain customization + offline capability
+**Current Status:** Proof-of-concept demonstration  
+**Unique Value (Potential):** Zero API costs + local processing + domain customization + offline capability  
+**Target Markets:** Healthcare, Legal, Finance, Enterprise Documentation (with significant development needed)  
 
-**Target Markets:** Healthcare, Legal, Finance, Enterprise Documentation
-
-**Revenue Potential:** $136K Year 1 → $680K Year 2 → $2.24M Year 3
+**Revenue Potential (Conceptual):** $136K Year 1 → $680K Year 2 → $2.24M Year 3  
+**Reality Check:** Would require extensive development before generating revenue
 
 ---
 
@@ -44,23 +47,26 @@
 
 ### Primary Market: Healthcare (Year 1 Focus)
 
-**Size:**
-- 6,000+ hospitals in US
-- 1M+ physicians
-- $4.1T healthcare spending
+⚠️ **CRITICAL LIMITATIONS FOR HEALTHCARE:**
+- Current system is **NOT HIPAA-compliant** (missing encryption, audit logging, PHI handling)
+- **NOT clinically validated** (no medical accuracy testing)
+- **No medical domain adaptation** (uses general embeddings, not PubMedBERT/BioLinkBERT)
+- **Experimental methods** (unproven for healthcare)
+- **Not production-ready** (missing deployment, integration, safety features)
 
-**Pain Points:**
-- Can't use cloud AI (HIPAA)
-- Need clinical decision support
-- High query volumes = expensive with APIs
-- Need domain-specific training (medical protocols)
+**What's Needed:**
+- Medical fine-tuning and biomedical embeddings (PubMedBERT, BioLinkBERT)
+- HIPAA compliance implementation (encryption, audit logging, PHI safeguards)
+- Clinical validation (12+ months with healthcare providers)
+- Production deployment (API, UI, EHR integration)
+- Regulatory compliance (FDA pathway consideration)
 
-**Willingness to Pay:**
-- Hospitals: $10K-$100K/year
-- Clinics: $2K-$10K/year
-- Individual providers: $50-$200/month
+**Estimated Development:** 12-24 months, $500K-$2M investment, healthcare domain experts
 
-**Competition:** Minimal (most AI solutions are cloud-based)
+**For production healthcare AI, recommend:** Established biomedical LLMs (MedLLaMA, ClinicalCamel) via Ollama, or professional healthcare platforms (Nuance DAX, Epic AI)
+
+**Size:** 6,000+ hospitals, but requires production-ready system  
+**Competition:** Established solutions exist (MedLLaMA, Nuance, Epic AI)
 
 ---
 
