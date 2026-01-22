@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import List, Dict, Tuple, Any, Optional
 from datetime import datetime, timedelta
 import json
+import asyncio
 import warnings
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -144,7 +145,6 @@ class MonitoringDashboard:
                         }
                     
                     await websocket.send_json(metrics)
-                    import asyncio
                     await asyncio.sleep(5)
             except WebSocketDisconnect:
                 pass
