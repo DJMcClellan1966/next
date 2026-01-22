@@ -103,6 +103,28 @@ class MLOpsCompartment:
             self.components['ExperimentTracker'] = ExperimentTracker
             self.components['Experiment'] = Experiment
         
+        # Phase 3: Feature Store
+        try:
+            from feature_store import FeatureStore
+            self.components['FeatureStore'] = FeatureStore
+        except ImportError as e:
+            print(f"Warning: Could not import feature store: {e}")
+        
+        # Phase 3: Monitoring Dashboard
+        try:
+            from monitoring_dashboard import MonitoringDashboard, create_dashboard_from_monitors
+            self.components['MonitoringDashboard'] = MonitoringDashboard
+            self.components['create_dashboard_from_monitors'] = create_dashboard_from_monitors
+        except ImportError as e:
+            print(f"Warning: Could not import monitoring dashboard: {e}")
+        
+        # Phase 3: Model Compression
+        try:
+            from model_compression import ModelCompressor
+            self.components['ModelCompressor'] = ModelCompressor
+        except ImportError as e:
+            print(f"Warning: Could not import model compressor: {e}")
+        
         # Component descriptions
         self.component_descriptions = {
             'DataDriftDetector': {
@@ -265,6 +287,44 @@ class MLOpsCompartment:
                 'location': 'experiment_tracking.py',
                 'category': 'Tracking',
                 'dependencies': []
+            },
+            'FeatureStore': {
+                'description': 'Feature store for ML models',
+                'features': [
+                    'Feature storage and retrieval',
+                    'Feature versioning',
+                    'Feature lineage',
+                    'Online/offline serving',
+                    'Feature discovery'
+                ],
+                'location': 'feature_store.py',
+                'category': 'Data Management',
+                'dependencies': ['numpy>=1.26.0', 'pandas>=2.0.0']
+            },
+            'MonitoringDashboard': {
+                'description': 'Web dashboard for monitoring',
+                'features': [
+                    'Real-time metrics visualization',
+                    'Drift detection alerts',
+                    'Performance monitoring',
+                    'Model comparison',
+                    'Alert management'
+                ],
+                'location': 'monitoring_dashboard.py',
+                'category': 'Monitoring',
+                'dependencies': ['fastapi>=0.100.0', 'plotly>=5.0.0']
+            },
+            'ModelCompressor': {
+                'description': 'Model compression for efficient deployment',
+                'features': [
+                    'Quantization (reduce precision)',
+                    'Pruning (remove unnecessary weights)',
+                    'Size optimization',
+                    'Model size estimation'
+                ],
+                'location': 'model_compression.py',
+                'category': 'Optimization',
+                'dependencies': ['torch>=2.3.0']
             }
         }
     
@@ -360,6 +420,27 @@ class MLOpsCompartment:
             return self.components['ExperimentTracker'](storage_dir)
         else:
             raise ImportError("ExperimentTracker not available")
+    
+    def get_feature_store(self, storage_dir: str = "feature_store", backend: str = 'pickle'):
+        """Get feature store instance (Phase 3)"""
+        if 'FeatureStore' in self.components:
+            return self.components['FeatureStore'](storage_dir, backend)
+        else:
+            raise ImportError("FeatureStore not available")
+    
+    def get_monitoring_dashboard(self, model_monitors=None, port: int = 8080):
+        """Get monitoring dashboard instance (Phase 3)"""
+        if 'MonitoringDashboard' in self.components:
+            return self.components['MonitoringDashboard'](model_monitors, port)
+        else:
+            raise ImportError("MonitoringDashboard not available")
+    
+    def get_model_compressor(self):
+        """Get model compressor instance (Phase 3)"""
+        if 'ModelCompressor' in self.components:
+            return self.components['ModelCompressor']()
+        else:
+            raise ImportError("ModelCompressor not available")
     
     def list_components(self) -> List[str]:
         """List all available components"""

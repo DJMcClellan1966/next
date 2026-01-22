@@ -40,6 +40,12 @@ seaborn>=0.12.0
 # MLOps & Production (Burkov Machine Learning Engineering)
 fastapi>=0.100.0
 uvicorn>=0.23.0
+websockets>=11.0
+
+# Phase 3: Feature Store & Monitoring
+h5py>=3.9.0
+pyarrow>=14.0.0  # For parquet support
+plotly>=5.18.0
 
 # Optional: Quantum computing frameworks (for quantum kernel methods)
 # Choose one based on your preference:
