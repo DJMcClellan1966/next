@@ -460,7 +460,7 @@ class MLSecurityTester:
         ])
         
         # Test input validation
-        if 'validator' in ml_system:
+        if 'validator' in ml_system and ml_system['validator'] is not None:
             input_tests = self.test_input_manipulation(ml_system['validator'], np.random.rand(10, 10))
             results['tested_components'].append('input_validation')
             results['vulnerabilities_found'].extend(input_tests.get('vulnerabilities', []))

@@ -270,7 +270,7 @@ class MLNetworkSecurity:
         
         features = np.array(features)
         
-        # Use ML Toolbox for anomaly detection
+            # Use ML Toolbox for anomaly detection
         if use_ml_toolbox:
             try:
                 from ml_toolbox import MLToolbox
@@ -280,8 +280,13 @@ class MLNetworkSecurity:
                 detector = toolbox.algorithms.get_threat_detection_system()
                 
                 # Create normal vs attack data (simplified)
-                X_normal = features[:len(features)//2]
-                X_attacks = features[len(features)//2:] + np.random.randn(*X_attacks.shape) * 10
+                if len(features) > 1:
+                    split_idx = len(features) // 2
+                    X_normal = features[:split_idx]
+                    X_attacks = features[split_idx:] + np.random.randn(len(features) - split_idx, features.shape[1]) * 10
+                else:
+                    X_normal = features
+                    X_attacks = features + np.random.randn(*features.shape) * 10
                 
                 # Train detector
                 detector.train_threat_detector(X_normal, X_attacks, use_ml_toolbox=True)

@@ -536,6 +536,38 @@ class AlgorithmsCompartment:
         except ImportError as e:
             print(f"Warning: Could not import data learning framework: {e}")
         
+        # ML Security Testing (Priority 1)
+        try:
+            from ml_security_testing import (
+                MLSecurityTester, MLExploitTester, MLSecurityAuditor
+            )
+            self.components['MLSecurityTester'] = MLSecurityTester
+            self.components['MLExploitTester'] = MLExploitTester
+            self.components['MLSecurityAuditor'] = MLSecurityAuditor
+        except ImportError as e:
+            print(f"Warning: Could not import ML security testing: {e}")
+        
+        # Network Security for ML (Priority 2)
+        try:
+            from ml_network_security import (
+                MLNetworkSecurity, MLAPISecurityTester
+            )
+            self.components['MLNetworkSecurity'] = MLNetworkSecurity
+            self.components['MLAPISecurityTester'] = MLAPISecurityTester
+        except ImportError as e:
+            print(f"Warning: Could not import ML network security: {e}")
+        
+        # Enhanced Cryptographic Security (Priority 3)
+        try:
+            from enhanced_cryptographic_security import (
+                EnhancedModelEncryption, SecureKeyManager, CryptographicTester
+            )
+            self.components['EnhancedModelEncryption'] = EnhancedModelEncryption
+            self.components['SecureKeyManager'] = SecureKeyManager
+            self.components['CryptographicTester'] = CryptographicTester
+        except ImportError as e:
+            print(f"Warning: Could not import enhanced cryptography: {e}")
+        
         # Interactive Dashboard
         try:
             from interactive_dashboard import InteractiveDashboard
@@ -1528,6 +1560,46 @@ class AlgorithmsCompartment:
                 'location': 'data_learning_framework.py',
                 'category': 'Data Learning',
                 'dependencies': []
+            },
+            'MLSecurityTester': {
+                'description': 'ML security testing framework (Priority 1)',
+                'features': [
+                    'Vulnerability assessment',
+                    'Adversarial attack testing',
+                    'Input manipulation testing',
+                    'Model exploitation testing',
+                    'Penetration testing',
+                    'Security reporting'
+                ],
+                'location': 'ml_security_testing.py',
+                'category': 'Security',
+                'dependencies': []
+            },
+            'MLNetworkSecurity': {
+                'description': 'Network security for ML serving (Priority 2)',
+                'features': [
+                    'API security testing',
+                    'Traffic analysis',
+                    'Attack detection',
+                    'Network monitoring',
+                    'Real-time threat detection'
+                ],
+                'location': 'ml_network_security.py',
+                'category': 'Security',
+                'dependencies': []
+            },
+            'EnhancedModelEncryption': {
+                'description': 'Enhanced cryptographic security (Priority 3)',
+                'features': [
+                    'AES-256 encryption',
+                    'Secure key derivation (PBKDF2)',
+                    'Key rotation',
+                    'Cryptographic testing',
+                    'Secure key management'
+                ],
+                'location': 'enhanced_cryptographic_security.py',
+                'category': 'Security',
+                'dependencies': ['cryptography>=41.0.0']
             }
         }
     
@@ -2096,6 +2168,62 @@ class AlgorithmsCompartment:
             return self.components['ContinuousLearningPipeline'](base_model, use_ml_toolbox)
         else:
             raise ImportError("ContinuousLearningPipeline not available")
+    
+    def get_ml_security_tester(self, model: Any, deployment_config: Optional[Dict[str, Any]] = None):
+        """Get ML Security Tester (Priority 1)"""
+        if 'MLSecurityTester' in self.components:
+            return self.components['MLSecurityTester'](model, deployment_config)
+        else:
+            raise ImportError("MLSecurityTester not available")
+    
+    def get_ml_exploit_tester(self, model: Any):
+        """Get ML Exploit Tester"""
+        if 'MLExploitTester' in self.components:
+            return self.components['MLExploitTester'](model)
+        else:
+            raise ImportError("MLExploitTester not available")
+    
+    def get_ml_security_auditor(self, model: Any, deployment: Optional[Dict[str, Any]] = None):
+        """Get ML Security Auditor"""
+        if 'MLSecurityAuditor' in self.components:
+            return self.components['MLSecurityAuditor'](model, deployment)
+        else:
+            raise ImportError("MLSecurityAuditor not available")
+    
+    def get_ml_network_security(self, api_endpoint: Optional[str] = None):
+        """Get ML Network Security (Priority 2)"""
+        if 'MLNetworkSecurity' in self.components:
+            return self.components['MLNetworkSecurity'](api_endpoint)
+        else:
+            raise ImportError("MLNetworkSecurity not available")
+    
+    def get_ml_api_security_tester(self, api_endpoint: str):
+        """Get ML API Security Tester"""
+        if 'MLAPISecurityTester' in self.components:
+            return self.components['MLAPISecurityTester'](api_endpoint)
+        else:
+            raise ImportError("MLAPISecurityTester not available")
+    
+    def get_enhanced_model_encryption(self, key: Optional[bytes] = None, key_derivation: str = 'pbkdf2'):
+        """Get Enhanced Model Encryption (Priority 3)"""
+        if 'EnhancedModelEncryption' in self.components:
+            return self.components['EnhancedModelEncryption'](key, key_derivation)
+        else:
+            raise ImportError("EnhancedModelEncryption not available")
+    
+    def get_secure_key_manager(self, key_store_path: str = ".key_store"):
+        """Get Secure Key Manager"""
+        if 'SecureKeyManager' in self.components:
+            return self.components['SecureKeyManager'](key_store_path)
+        else:
+            raise ImportError("SecureKeyManager not available")
+    
+    def get_cryptographic_tester(self):
+        """Get Cryptographic Tester"""
+        if 'CryptographicTester' in self.components:
+            return self.components['CryptographicTester']()
+        else:
+            raise ImportError("CryptographicTester not available")
     
     def get_interactive_dashboard(self, storage_path: str = "experiments.json"):
         """Get Interactive Dashboard"""
