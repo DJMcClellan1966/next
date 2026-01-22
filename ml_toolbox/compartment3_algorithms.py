@@ -268,6 +268,25 @@ class AlgorithmsCompartment:
         except ImportError as e:
             print(f"Warning: Could not import Knuth algorithms: {e}")
         
+        # Advanced Algorithms (TAOCP Vol. 2, CLRS, Sedgewick)
+        try:
+            from advanced_algorithms import (
+                NumericalMethods,
+                DynamicProgramming,
+                GreedyAlgorithms,
+                AdvancedDataStructures,
+                AdvancedGraphAlgorithms,
+                AdvancedAlgorithms
+            )
+            self.components['NumericalMethods'] = NumericalMethods
+            self.components['DynamicProgramming'] = DynamicProgramming
+            self.components['GreedyAlgorithms'] = GreedyAlgorithms
+            self.components['AdvancedDataStructures'] = AdvancedDataStructures
+            self.components['AdvancedGraphAlgorithms'] = AdvancedGraphAlgorithms
+            self.components['AdvancedAlgorithms'] = AdvancedAlgorithms
+        except ImportError as e:
+            print(f"Warning: Could not import advanced algorithms: {e}")
+        
         # Three Books Methods (ESL, Bishop, Deep Learning)
         try:
             from three_books_methods import (
@@ -854,6 +873,81 @@ class AlgorithmsCompartment:
                 'location': 'knuth_ml_integrations.py',
                 'category': 'Algorithms',
                 'dependencies': ['numpy>=1.26.0', 'scikit-learn>=1.5.0']
+            },
+            'NumericalMethods': {
+                'description': 'Numerical methods (TAOCP Vol. 2)',
+                'features': [
+                    "Horner's method (polynomial evaluation)",
+                    'Euclidean GCD',
+                    'Extended Euclidean',
+                    'Modular arithmetic (inverse, exponentiation)',
+                    'Multiple-precision arithmetic'
+                ],
+                'location': 'advanced_algorithms.py',
+                'category': 'Algorithms',
+                'dependencies': ['numpy>=1.26.0']
+            },
+            'DynamicProgramming': {
+                'description': 'Dynamic programming algorithms (CLRS)',
+                'features': [
+                    'Longest Common Subsequence (LCS)',
+                    '0/1 Knapsack',
+                    'Matrix Chain Multiplication',
+                    'Optimal solutions for optimization'
+                ],
+                'location': 'advanced_algorithms.py',
+                'category': 'Algorithms',
+                'dependencies': []
+            },
+            'GreedyAlgorithms': {
+                'description': 'Greedy algorithms (CLRS)',
+                'features': [
+                    'Huffman Coding (compression)',
+                    "Kruskal's MST",
+                    'Fractional Knapsack',
+                    'Fast approximate solutions'
+                ],
+                'location': 'advanced_algorithms.py',
+                'category': 'Algorithms',
+                'dependencies': []
+            },
+            'AdvancedDataStructures': {
+                'description': 'Advanced data structures (TAOCP Vol. 1, CLRS)',
+                'features': [
+                    'Min/Max Heap',
+                    'Binary Search Tree',
+                    'Hash Table (with chaining)',
+                    'Union-Find (Disjoint-Set)',
+                    'Trie (Prefix Tree)'
+                ],
+                'location': 'advanced_algorithms.py',
+                'category': 'Algorithms',
+                'dependencies': []
+            },
+            'AdvancedGraphAlgorithms': {
+                'description': 'Advanced graph algorithms (CLRS, Sedgewick)',
+                'features': [
+                    'Strongly Connected Components (SCC)',
+                    'Floyd-Warshall (all-pairs shortest path)',
+                    'Advanced graph analysis'
+                ],
+                'location': 'advanced_algorithms.py',
+                'category': 'Algorithms',
+                'dependencies': ['numpy>=1.26.0']
+            },
+            'AdvancedAlgorithms': {
+                'description': 'Unified interface for all advanced algorithms',
+                'features': [
+                    'Numerical methods',
+                    'Dynamic programming',
+                    'Greedy algorithms',
+                    'Advanced data structures',
+                    'Advanced graph algorithms',
+                    'Complete foundational algorithm library'
+                ],
+                'location': 'advanced_algorithms.py',
+                'category': 'Algorithms',
+                'dependencies': ['numpy>=1.26.0']
             }
         }
     
@@ -1211,6 +1305,41 @@ class AlgorithmsCompartment:
             return KnuthMLIntegration(seed=seed)
         except ImportError:
             raise ImportError("KnuthMLIntegration not available")
+    
+    def get_advanced_algorithms(self):
+        """Get unified advanced algorithms interface"""
+        if 'AdvancedAlgorithms' in self.components:
+            return self.components['AdvancedAlgorithms']()
+        else:
+            raise ImportError("AdvancedAlgorithms not available")
+    
+    def get_numerical_methods(self):
+        """Get numerical methods (TAOCP Vol. 2)"""
+        if 'NumericalMethods' in self.components:
+            return self.components['NumericalMethods']()
+        else:
+            raise ImportError("NumericalMethods not available")
+    
+    def get_dynamic_programming(self):
+        """Get dynamic programming algorithms (CLRS)"""
+        if 'DynamicProgramming' in self.components:
+            return self.components['DynamicProgramming']()
+        else:
+            raise ImportError("DynamicProgramming not available")
+    
+    def get_greedy_algorithms(self):
+        """Get greedy algorithms (CLRS)"""
+        if 'GreedyAlgorithms' in self.components:
+            return self.components['GreedyAlgorithms']()
+        else:
+            raise ImportError("GreedyAlgorithms not available")
+    
+    def get_advanced_data_structures(self):
+        """Get advanced data structures"""
+        if 'AdvancedDataStructures' in self.components:
+            return self.components['AdvancedDataStructures']()
+        else:
+            raise ImportError("AdvancedDataStructures not available")
     
     def list_components(self):
         """List all available components in this compartment"""
