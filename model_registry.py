@@ -102,21 +102,21 @@ class ModelRegistry:
                 with open(self.metadata_file, 'r') as f:
                     data = json.load(f)
                     for version_str, version_data in data.items():
-                    # Load model from disk
-                    model_path = self.registry_path / version_str / "model.pkl"
-                    if model_path.exists():
-                        with open(model_path, 'rb') as f:
-                            model = pickle.load(f)
-                        
-                        version = ModelVersion(
-                            version=version_data['version'],
-                            model=model,
-                            metadata=version_data['metadata'],
-                            stage=ModelStage(version_data['stage'])
-                        )
-                        version.created_at = datetime.datetime.fromisoformat(version_data['created_at'])
-                        version.updated_at = datetime.datetime.fromisoformat(version_data['updated_at'])
-                        self.versions[version_str] = version
+                        # Load model from disk
+                        model_path = self.registry_path / version_str / "model.pkl"
+                        if model_path.exists():
+                            with open(model_path, 'rb') as f:
+                                model = pickle.load(f)
+                            
+                            version = ModelVersion(
+                                version=version_data['version'],
+                                model=model,
+                                metadata=version_data['metadata'],
+                                stage=ModelStage(version_data['stage'])
+                            )
+                            version.created_at = datetime.datetime.fromisoformat(version_data['created_at'])
+                            version.updated_at = datetime.datetime.fromisoformat(version_data['updated_at'])
+                            self.versions[version_str] = version
         except Exception as e:
             print(f"Error loading registry: {e}")
             self.versions = {}
