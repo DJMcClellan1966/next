@@ -48,7 +48,12 @@ class NetworkGraphAnalysis:
         self.edge_features = {}
         
         for conn in connections:
-            if len(conn) == 2:
+            if len(conn) == 1:
+                # Isolated node (no connections)
+                source = conn[0]
+                self.graph[source] = []  # Initialize empty
+                continue
+            elif len(conn) == 2:
                 source, target = conn
                 attrs = {}
             else:
