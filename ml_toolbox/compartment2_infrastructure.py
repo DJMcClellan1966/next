@@ -72,6 +72,13 @@ class InfrastructureCompartment:
         except ImportError as e:
             print(f"Warning: Could not import Adaptive Neuron: {e}")
         
+        # Knuth Knowledge Graph (for knowledge graph operations)
+        try:
+            from knuth_ml_integrations import KnuthKnowledgeGraph
+            self.components['KnuthKnowledgeGraph'] = KnuthKnowledgeGraph
+        except ImportError as e:
+            print(f"Warning: Could not import Knuth knowledge graph: {e}")
+        
         # Add component descriptions
         self.component_descriptions = {
             'QuantumKernel': {
