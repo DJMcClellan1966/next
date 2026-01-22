@@ -178,28 +178,28 @@ class ExperimentTrackingUI:
         Returns:
             HTML string
         """
-        html = """
+        html_template = """
 <!DOCTYPE html>
 <html>
 <head>
     <title>ML Toolbox - Experiment Tracking</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .experiment { border: 1px solid #ddd; padding: 15px; margin: 10px 0; }
-        .metrics { display: flex; gap: 20px; }
-        .metric { padding: 5px 10px; background: #f0f0f0; border-radius: 3px; }
-        .best { background: #90EE90; }
-        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #4CAF50; color: white; }
+        body {{ font-family: Arial, sans-serif; margin: 20px; }}
+        .experiment {{ border: 1px solid #ddd; padding: 15px; margin: 10px 0; }}
+        .metrics {{ display: flex; gap: 20px; }}
+        .metric {{ padding: 5px 10px; background: #f0f0f0; border-radius: 3px; }}
+        .best {{ background: #90EE90; }}
+        table {{ border-collapse: collapse; width: 100%; margin: 20px 0; }}
+        th, td {{ border: 1px solid #ddd; padding: 8px; text-align: left; }}
+        th {{ background-color: #4CAF50; color: white; }}
     </style>
 </head>
 <body>
     <h1>ML Toolbox - Experiment Tracking Dashboard</h1>
-    <h2>Experiments (Total: {})</h2>
-    {}
+    <h2>Experiments (Total: {total})</h2>
+    {experiments}
     <h2>Best Experiment</h2>
-    {}
+    {best}
 </body>
 </html>
         """
@@ -233,7 +233,11 @@ class ExperimentTrackingUI:
             </div>
             """
         
-        return html.format(len(self.experiments), experiments_html, best_html)
+        return html_template.format(
+            total=len(self.experiments),
+            experiments=experiments_html,
+            best=best_html
+        )
     
     def save_dashboard(self, output_path: str = "experiment_dashboard.html"):
         """Save HTML dashboard to file"""
