@@ -287,6 +287,40 @@ class AlgorithmsCompartment:
         except ImportError as e:
             print(f"Warning: Could not import advanced algorithms: {e}")
         
+        # TAOCP Complete (Missing Algorithms)
+        try:
+            from taocp_complete_algorithms import (
+                TAOCPSorting,
+                TAOCPString,
+                TAOCPNumerical,
+                TAOCPCombinatorial,
+                TAOCPComplete
+            )
+            self.components['TAOCPSorting'] = TAOCPSorting
+            self.components['TAOCPString'] = TAOCPString
+            self.components['TAOCPNumerical'] = TAOCPNumerical
+            self.components['TAOCPCombinatorial'] = TAOCPCombinatorial
+            self.components['TAOCPComplete'] = TAOCPComplete
+        except ImportError as e:
+            print(f"Warning: Could not import TAOCP complete algorithms: {e}")
+        
+        # Foundational Algorithms (Sedgewick, Skiena, Aho/Hopcroft/Ullman, Bentley)
+        try:
+            from foundational_algorithms import (
+                SedgewickDataStructures,
+                SkienaAlgorithms,
+                AhoHopcroftUllman,
+                BentleyAlgorithms,
+                FoundationalAlgorithms
+            )
+            self.components['SedgewickDataStructures'] = SedgewickDataStructures
+            self.components['SkienaAlgorithms'] = SkienaAlgorithms
+            self.components['AhoHopcroftUllman'] = AhoHopcroftUllman
+            self.components['BentleyAlgorithms'] = BentleyAlgorithms
+            self.components['FoundationalAlgorithms'] = FoundationalAlgorithms
+        except ImportError as e:
+            print(f"Warning: Could not import foundational algorithms: {e}")
+        
         # Three Books Methods (ESL, Bishop, Deep Learning)
         try:
             from three_books_methods import (
@@ -1340,6 +1374,20 @@ class AlgorithmsCompartment:
             return self.components['AdvancedDataStructures']()
         else:
             raise ImportError("AdvancedDataStructures not available")
+    
+    def get_taocp_complete(self):
+        """Get complete TAOCP algorithms (missing algorithms)"""
+        if 'TAOCPComplete' in self.components:
+            return self.components['TAOCPComplete']()
+        else:
+            raise ImportError("TAOCPComplete not available")
+    
+    def get_foundational_algorithms(self):
+        """Get foundational algorithms (Sedgewick, Skiena, etc.)"""
+        if 'FoundationalAlgorithms' in self.components:
+            return self.components['FoundationalAlgorithms']()
+        else:
+            raise ImportError("FoundationalAlgorithms not available")
     
     def list_components(self):
         """List all available components in this compartment"""
