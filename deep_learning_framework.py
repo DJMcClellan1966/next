@@ -226,6 +226,7 @@ class DeepLearningFramework:
         if not self.torch_available:
             return {'error': 'PyTorch required for RNN. Install with: pip install torch'}
         
+        import torch
         import torch.nn as nn
         
         class RNNModel(nn.Module):
