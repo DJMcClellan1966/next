@@ -1,0 +1,12 @@
+[
+  {
+    "id": "exp_0",
+    "name": "test",
+    "timestamp": "2026-01-22T13:24:57.118255",
+    "metrics": {
+      "accuracy": 0.9
+    },
+    "parameters": {},
+    "model_info": {}
+  }
+]

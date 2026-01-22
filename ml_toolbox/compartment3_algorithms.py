@@ -474,6 +474,27 @@ class AlgorithmsCompartment:
         except ImportError as e:
             print(f"Warning: Could not import deep learning framework: {e}")
         
+        # Experiment Tracking UI
+        try:
+            from experiment_tracking_ui import ExperimentTrackingUI
+            self.components['ExperimentTrackingUI'] = ExperimentTrackingUI
+        except ImportError as e:
+            print(f"Warning: Could not import experiment tracking UI: {e}")
+        
+        # AutoML Framework
+        try:
+            from automl_framework import AutoMLFramework
+            self.components['AutoMLFramework'] = AutoMLFramework
+        except ImportError as e:
+            print(f"Warning: Could not import AutoML framework: {e}")
+        
+        # Simple ML Tasks
+        try:
+            from simple_ml_tasks import SimpleMLTasks
+            self.components['SimpleMLTasks'] = SimpleMLTasks
+        except ImportError as e:
+            print(f"Warning: Could not import simple ML tasks: {e}")
+        
         # Three Books Methods (ESL, Bishop, Deep Learning)
         try:
             from three_books_methods import (
@@ -1289,6 +1310,50 @@ class AlgorithmsCompartment:
                 'location': 'deep_learning_framework.py',
                 'category': 'Deep Learning',
                 'dependencies': ['torch>=2.0.0', 'torchvision>=0.15.0']
+            },
+            'ExperimentTrackingUI': {
+                'description': 'Experiment tracking with web UI',
+                'features': [
+                    'Experiment logging and storage',
+                    'HTML dashboard generation',
+                    'Experiment comparison',
+                    'Best experiment selection',
+                    'Metrics visualization',
+                    'Experiment search and filtering',
+                    'Web-based dashboard'
+                ],
+                'location': 'experiment_tracking_ui.py',
+                'category': 'MLOps',
+                'dependencies': []
+            },
+            'AutoMLFramework': {
+                'description': 'Automated machine learning',
+                'features': [
+                    'Automated model selection',
+                    'Automated hyperparameter tuning',
+                    'Automated feature engineering (PCA, polynomial, selection)',
+                    'Automated pipeline creation',
+                    'Time-budgeted search',
+                    'Auto-detect task type (classification/regression)',
+                    'Multiple model comparison'
+                ],
+                'location': 'automl_framework.py',
+                'category': 'AutoML',
+                'dependencies': ['scikit-learn>=1.3.0']
+            },
+            'SimpleMLTasks': {
+                'description': 'Simplified interfaces for common ML tasks',
+                'features': [
+                    'One-line ML training',
+                    'Simple API for classification and regression',
+                    'Automatic model selection',
+                    'Quick train (auto-detect task)',
+                    'Easy prediction interface',
+                    'Simplified for beginners'
+                ],
+                'location': 'simple_ml_tasks.py',
+                'category': 'ML',
+                'dependencies': ['scikit-learn>=1.3.0']
             }
         }
     
@@ -1758,6 +1823,27 @@ class AlgorithmsCompartment:
             return self.components['DeepLearningFramework']()
         else:
             raise ImportError("DeepLearningFramework not available")
+    
+    def get_experiment_tracking_ui(self, storage_path: str = "experiments.json"):
+        """Get Experiment Tracking UI"""
+        if 'ExperimentTrackingUI' in self.components:
+            return self.components['ExperimentTrackingUI'](storage_path)
+        else:
+            raise ImportError("ExperimentTrackingUI not available")
+    
+    def get_automl_framework(self):
+        """Get AutoML Framework"""
+        if 'AutoMLFramework' in self.components:
+            return self.components['AutoMLFramework']()
+        else:
+            raise ImportError("AutoMLFramework not available")
+    
+    def get_simple_ml_tasks(self):
+        """Get Simple ML Tasks"""
+        if 'SimpleMLTasks' in self.components:
+            return self.components['SimpleMLTasks']()
+        else:
+            raise ImportError("SimpleMLTasks not available")
     
     def list_components(self):
         """List all available components in this compartment"""
