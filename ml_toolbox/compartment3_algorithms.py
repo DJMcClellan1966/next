@@ -387,6 +387,25 @@ class AlgorithmsCompartment:
         except ImportError as e:
             print(f"Warning: Could not import SICP methods: {e}")
         
+        # Sipser Methods (Theory of Computation)
+        try:
+            from sipser_methods import (
+                FiniteAutomaton,
+                NondeterministicFiniteAutomaton,
+                StateMachine,
+                RegularLanguageProcessor,
+                ComputabilityAnalysis,
+                SipserMethods
+            )
+            self.components['FiniteAutomaton'] = FiniteAutomaton
+            self.components['NondeterministicFiniteAutomaton'] = NondeterministicFiniteAutomaton
+            self.components['StateMachine'] = StateMachine
+            self.components['RegularLanguageProcessor'] = RegularLanguageProcessor
+            self.components['ComputabilityAnalysis'] = ComputabilityAnalysis
+            self.components['SipserMethods'] = SipserMethods
+        except ImportError as e:
+            print(f"Warning: Could not import Sipser methods: {e}")
+        
         # Three Books Methods (ESL, Bishop, Deep Learning)
         try:
             from three_books_methods import (
@@ -1126,6 +1145,20 @@ class AlgorithmsCompartment:
                 'location': 'sicp_methods.py',
                 'category': 'Functional Programming',
                 'dependencies': []
+            },
+            'SipserMethods': {
+                'description': 'Sipser methods for automata theory and computability',
+                'features': [
+                    'Finite Automata (DFA/NFA) for pattern matching',
+                    'NFA to DFA conversion (subset construction)',
+                    'State machines for ML workflow modeling',
+                    'Regular language processing and pattern matching',
+                    'Computability analysis (decidability, problem classification)',
+                    'Formal language recognition'
+                ],
+                'location': 'sipser_methods.py',
+                'category': 'Automata Theory',
+                'dependencies': []
             }
         }
     
@@ -1560,6 +1593,13 @@ class AlgorithmsCompartment:
             return self.components['SICPMethods']()
         else:
             raise ImportError("SICPMethods not available")
+    
+    def get_sipser_methods(self):
+        """Get Sipser methods (Theory of Computation)"""
+        if 'SipserMethods' in self.components:
+            return self.components['SipserMethods']()
+        else:
+            raise ImportError("SipserMethods not available")
     
     def list_components(self):
         """List all available components in this compartment"""
