@@ -98,6 +98,14 @@ class DataCompartment:
         except ImportError as e:
             print(f"Warning: Could not import time series feature engineer: {e}")
         
+        # Knuth Data Sampling and Preprocessing
+        try:
+            from knuth_ml_integrations import KnuthDataSampling, KnuthDataPreprocessing
+            self.components['KnuthDataSampling'] = KnuthDataSampling
+            self.components['KnuthDataPreprocessing'] = KnuthDataPreprocessing
+        except ImportError as e:
+            print(f"Warning: Could not import Knuth data operations: {e}")
+        
         # Add component descriptions
         self.component_descriptions = {
             'AdvancedDataPreprocessor': {

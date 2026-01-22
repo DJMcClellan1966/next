@@ -247,6 +247,27 @@ class AlgorithmsCompartment:
         except ImportError as e:
             print(f"Warning: Could not import causal discovery: {e}")
         
+        # Knuth Algorithms (TAOCP)
+        try:
+            from knuth_algorithms import (
+                KnuthRandom,
+                KnuthSorting,
+                KnuthSearching,
+                KnuthCombinatorial,
+                KnuthGraph,
+                KnuthString,
+                KnuthAlgorithms
+            )
+            self.components['KnuthRandom'] = KnuthRandom
+            self.components['KnuthSorting'] = KnuthSorting
+            self.components['KnuthSearching'] = KnuthSearching
+            self.components['KnuthCombinatorial'] = KnuthCombinatorial
+            self.components['KnuthGraph'] = KnuthGraph
+            self.components['KnuthString'] = KnuthString
+            self.components['KnuthAlgorithms'] = KnuthAlgorithms
+        except ImportError as e:
+            print(f"Warning: Could not import Knuth algorithms: {e}")
+        
         # Three Books Methods (ESL, Bishop, Deep Learning)
         try:
             from three_books_methods import (
@@ -730,6 +751,109 @@ class AlgorithmsCompartment:
                 'location': 'three_books_methods.py',
                 'category': 'Classical ML',
                 'dependencies': ['scikit-learn>=1.5.0', 'scipy>=1.11.0', 'numpy>=1.26.0', 'torch>=2.3.0']
+            },
+            'KnuthRandom': {
+                'description': 'Random number generation (TAOCP Vol. 2)',
+                'features': [
+                    'Linear Congruential Generator (LCG)',
+                    'Lagged Fibonacci Generator',
+                    'Fisher-Yates Shuffle',
+                    'Random sampling without replacement',
+                    'Reproducible random numbers'
+                ],
+                'location': 'knuth_algorithms.py',
+                'category': 'Algorithms',
+                'dependencies': ['numpy>=1.26.0']
+            },
+            'KnuthSorting': {
+                'description': 'Sorting algorithms (TAOCP Vol. 3)',
+                'features': [
+                    'Heapsort (O(n log n) worst-case)',
+                    'Quicksort with median-of-three',
+                    'In-place sorting',
+                    'Custom key functions'
+                ],
+                'location': 'knuth_algorithms.py',
+                'category': 'Algorithms',
+                'dependencies': []
+            },
+            'KnuthSearching': {
+                'description': 'Searching algorithms (TAOCP Vol. 3)',
+                'features': [
+                    'Binary search (O(log n))',
+                    'Interpolation search (O(log log n) average)',
+                    'Efficient data retrieval',
+                    'Sorted array search'
+                ],
+                'location': 'knuth_algorithms.py',
+                'category': 'Algorithms',
+                'dependencies': []
+            },
+            'KnuthCombinatorial': {
+                'description': 'Combinatorial algorithms (TAOCP Vol. 4)',
+                'features': [
+                    'Subset generation (feature selection)',
+                    'Permutation generation (hyperparameter search)',
+                    'Combination generation (ensemble selection)',
+                    'Backtracking (constraint satisfaction)',
+                    'Lexicographic ordering'
+                ],
+                'location': 'knuth_algorithms.py',
+                'category': 'Algorithms',
+                'dependencies': []
+            },
+            'KnuthGraph': {
+                'description': 'Graph algorithms (TAOCP Vol. 1, 4)',
+                'features': [
+                    'Depth-First Search (DFS)',
+                    'Breadth-First Search (BFS)',
+                    'Topological sort',
+                    'Dijkstra shortest path',
+                    'Graph traversal'
+                ],
+                'location': 'knuth_algorithms.py',
+                'category': 'Algorithms',
+                'dependencies': []
+            },
+            'KnuthString': {
+                'description': 'String algorithms (TAOCP Vol. 3)',
+                'features': [
+                    'Knuth-Morris-Pratt (KMP) pattern matching',
+                    'Edit distance (Levenshtein)',
+                    'Efficient string search',
+                    'Text processing optimization'
+                ],
+                'location': 'knuth_algorithms.py',
+                'category': 'Algorithms',
+                'dependencies': []
+            },
+            'KnuthAlgorithms': {
+                'description': 'Unified interface for all Knuth algorithms',
+                'features': [
+                    'Random number generation',
+                    'Sorting and searching',
+                    'Combinatorial algorithms',
+                    'Graph algorithms',
+                    'String algorithms',
+                    'Complete TAOCP implementation'
+                ],
+                'location': 'knuth_algorithms.py',
+                'category': 'Algorithms',
+                'dependencies': ['numpy>=1.26.0']
+            },
+            'KnuthMLIntegration': {
+                'description': 'ML-specific integrations of Knuth algorithms',
+                'features': [
+                    'Feature selection using combinatorial algorithms',
+                    'Hyperparameter search with permutation generation',
+                    'Knowledge graph operations with graph algorithms',
+                    'Reproducible data sampling',
+                    'Efficient data preprocessing',
+                    'Complete ML workflow integration'
+                ],
+                'location': 'knuth_ml_integrations.py',
+                'category': 'Algorithms',
+                'dependencies': ['numpy>=1.26.0', 'scikit-learn>=1.5.0']
             }
         }
     
@@ -1051,6 +1175,42 @@ class AlgorithmsCompartment:
             return self.components['get_all_dependencies']()
         else:
             return {}
+    
+    def get_knuth_algorithms(self, seed: int = 42):
+        """Get unified Knuth algorithms instance (TAOCP)"""
+        if 'KnuthAlgorithms' in self.components:
+            return self.components['KnuthAlgorithms'](seed=seed)
+        else:
+            raise ImportError("KnuthAlgorithms not available")
+    
+    def get_knuth_random(self, seed: int = 42):
+        """Get Knuth random number generator (TAOCP Vol. 2)"""
+        if 'KnuthRandom' in self.components:
+            return self.components['KnuthRandom'](seed=seed)
+        else:
+            raise ImportError("KnuthRandom not available")
+    
+    def get_knuth_combinatorial(self):
+        """Get Knuth combinatorial algorithms (TAOCP Vol. 4)"""
+        if 'KnuthCombinatorial' in self.components:
+            return self.components['KnuthCombinatorial']()
+        else:
+            raise ImportError("KnuthCombinatorial not available")
+    
+    def get_knuth_graph(self):
+        """Get Knuth graph algorithms (TAOCP Vol. 1, 4)"""
+        if 'KnuthGraph' in self.components:
+            return self.components['KnuthGraph']()
+        else:
+            raise ImportError("KnuthGraph not available")
+    
+    def get_knuth_ml_integration(self, seed: int = 42):
+        """Get Knuth ML integration (practical ML applications)"""
+        try:
+            from knuth_ml_integrations import KnuthMLIntegration
+            return KnuthMLIntegration(seed=seed)
+        except ImportError:
+            raise ImportError("KnuthMLIntegration not available")
     
     def list_components(self):
         """List all available components in this compartment"""
