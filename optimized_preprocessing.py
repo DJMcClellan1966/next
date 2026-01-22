@@ -110,11 +110,11 @@ class OptimizedPreprocessor:
                 if cached:
                     imputer = cached
                 else:
-                    imputer = SimpleImputer(strategy='mean', n_jobs=n_jobs)
+                    imputer = SimpleImputer(strategy='mean')
                     imputer.fit(X_processed)
                     self._save_cache(cache_key, imputer)
             else:
-                imputer = SimpleImputer(strategy='mean', n_jobs=n_jobs)
+                imputer = SimpleImputer(strategy='mean')
                 imputer.fit(X_processed)
             
             X_processed = imputer.transform(X_processed)
@@ -128,11 +128,11 @@ class OptimizedPreprocessor:
                 if cached:
                     scaler = cached
                 else:
-                    scaler = StandardScaler(n_jobs=n_jobs)
+                    scaler = StandardScaler()
                     scaler.fit(X_processed)
                     self._save_cache(cache_key, scaler)
             else:
-                scaler = StandardScaler(n_jobs=n_jobs)
+                scaler = StandardScaler()
                 scaler.fit(X_processed)
             
             X_processed = scaler.transform(X_processed)
