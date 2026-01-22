@@ -336,6 +336,21 @@ class AlgorithmsCompartment:
         except ImportError as e:
             print(f"Warning: Could not import CLRS complete algorithms: {e}")
         
+        # Network ML Methods (Stevens TCP/IP Inspired)
+        try:
+            from network_ml_methods import (
+                NetworkGraphAnalysis,
+                DistributedMLPatterns,
+                NetworkOptimization,
+                NetworkMLMethods
+            )
+            self.components['NetworkGraphAnalysis'] = NetworkGraphAnalysis
+            self.components['DistributedMLPatterns'] = DistributedMLPatterns
+            self.components['NetworkOptimization'] = NetworkOptimization
+            self.components['NetworkMLMethods'] = NetworkMLMethods
+        except ImportError as e:
+            print(f"Warning: Could not import network ML methods: {e}")
+        
         # Three Books Methods (ESL, Bishop, Deep Learning)
         try:
             from three_books_methods import (
@@ -1035,6 +1050,18 @@ class AlgorithmsCompartment:
                 'location': 'clrs_complete_algorithms.py',
                 'category': 'Algorithms',
                 'dependencies': ['numpy>=1.26.0']
+            },
+            'NetworkMLMethods': {
+                'description': 'Network ML methods inspired by Stevens TCP/IP',
+                'features': [
+                    'Network graph analysis (topology, patterns, GNN preparation)',
+                    'Distributed ML patterns (Parameter Server, Federated Learning)',
+                    'Network optimization (Connection Pool, Protocol Cache, Load Balancing)',
+                    'ML-focused network capabilities'
+                ],
+                'location': 'network_ml_methods.py',
+                'category': 'Algorithms',
+                'dependencies': ['numpy>=1.26.0']
             }
         }
     
@@ -1448,6 +1475,13 @@ class AlgorithmsCompartment:
             return self.components['CLRSComplete']()
         else:
             raise ImportError("CLRSComplete not available")
+    
+    def get_network_ml_methods(self):
+        """Get network ML methods (Stevens TCP/IP inspired)"""
+        if 'NetworkMLMethods' in self.components:
+            return self.components['NetworkMLMethods']()
+        else:
+            raise ImportError("NetworkMLMethods not available")
     
     def list_components(self):
         """List all available components in this compartment"""
