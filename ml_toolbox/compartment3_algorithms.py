@@ -351,6 +351,25 @@ class AlgorithmsCompartment:
         except ImportError as e:
             print(f"Warning: Could not import network ML methods: {e}")
         
+        # Code Complete Framework (McConnell)
+        try:
+            from code_quality_framework import (
+                CodeQualityMetrics,
+                DesignPatterns,
+                AdvancedErrorHandling,
+                CodeSmellDetector,
+                RefactoringTools,
+                CodeCompleteFramework
+            )
+            self.components['CodeQualityMetrics'] = CodeQualityMetrics
+            self.components['DesignPatterns'] = DesignPatterns
+            self.components['AdvancedErrorHandling'] = AdvancedErrorHandling
+            self.components['CodeSmellDetector'] = CodeSmellDetector
+            self.components['RefactoringTools'] = RefactoringTools
+            self.components['CodeCompleteFramework'] = CodeCompleteFramework
+        except ImportError as e:
+            print(f"Warning: Could not import code quality framework: {e}")
+        
         # Three Books Methods (ESL, Bishop, Deep Learning)
         try:
             from three_books_methods import (
@@ -1062,6 +1081,20 @@ class AlgorithmsCompartment:
                 'location': 'network_ml_methods.py',
                 'category': 'Algorithms',
                 'dependencies': ['numpy>=1.26.0']
+            },
+            'CodeCompleteFramework': {
+                'description': 'Code Complete methods for code quality and design',
+                'features': [
+                    'Code quality metrics (cyclomatic complexity, maintainability)',
+                    'Design patterns (Factory, Strategy, Observer)',
+                    'Advanced error handling (recovery, classification)',
+                    'Code smell detection',
+                    'Refactoring tools and suggestions',
+                    'Professional code quality practices'
+                ],
+                'location': 'code_quality_framework.py',
+                'category': 'Code Quality',
+                'dependencies': []
             }
         }
     
@@ -1482,6 +1515,13 @@ class AlgorithmsCompartment:
             return self.components['NetworkMLMethods']()
         else:
             raise ImportError("NetworkMLMethods not available")
+    
+    def get_code_complete_framework(self):
+        """Get Code Complete framework (McConnell)"""
+        if 'CodeCompleteFramework' in self.components:
+            return self.components['CodeCompleteFramework']()
+        else:
+            raise ImportError("CodeCompleteFramework not available")
     
     def list_components(self):
         """List all available components in this compartment"""
