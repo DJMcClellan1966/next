@@ -13,7 +13,7 @@ import pickle
 import json
 import joblib
 from pathlib import Path
-from typing import Any, Optional, Dict, Union
+from typing import Any, Optional, Dict, Union, List
 from datetime import datetime
 import warnings
 
@@ -112,7 +112,7 @@ class ModelPersistence:
         
         return {
             'model_path': str(model_path),
-            'metadata_path': str(metadata_dir / 'metadata.json') if self.include_metadata else None,
+            'metadata_path': str(model_dir / 'metadata.json') if self.include_metadata else None,
             'model_name': model_name,
             'version': version or 'latest',
             'format': self.format
