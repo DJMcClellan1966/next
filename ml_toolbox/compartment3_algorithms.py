@@ -982,6 +982,32 @@ class AlgorithmsCompartment:
                 'location': 'advanced_algorithms.py',
                 'category': 'Algorithms',
                 'dependencies': ['numpy>=1.26.0']
+            },
+            'TAOCPComplete': {
+                'description': 'Complete TAOCP implementation (missing algorithms)',
+                'features': [
+                    'Additional sorting (Merge, Radix, Counting, Bucket)',
+                    'Additional string algorithms (Boyer-Moore, Rabin-Karp, Suffix array)',
+                    'Additional numerical methods (Floating-point, Statistical tests)',
+                    'Additional combinatorial (Gray codes, Partitions, Catalan, Bell, Stirling)',
+                    'Complete TAOCP coverage'
+                ],
+                'location': 'taocp_complete_algorithms.py',
+                'category': 'Algorithms',
+                'dependencies': ['numpy>=1.26.0']
+            },
+            'FoundationalAlgorithms': {
+                'description': 'Algorithms from other foundational CS references',
+                'features': [
+                    'Sedgewick: Red-Black Tree, Skip List, Network Flow',
+                    'Skiena: Backtracking framework, Approximation, Monte Carlo',
+                    'Aho/Hopcroft/Ullman: AVL Tree',
+                    'Bentley: Maximum subarray, Two Sum, Bit manipulation',
+                    'Complete foundational algorithm library'
+                ],
+                'location': 'foundational_algorithms.py',
+                'category': 'Algorithms',
+                'dependencies': ['numpy>=1.26.0']
             }
         }
     
