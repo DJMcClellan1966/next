@@ -64,7 +64,7 @@ def test_ai_agent_comprehensive():
             elapsed = time.time() - start_time
             
             success = result.get('success', False)
-            status = "✅ PASS" if success else "❌ FAIL"
+            status = "[PASS]" if success else "[FAIL]"
             
             print(f"  Status: {status}")
             print(f"  Time: {elapsed:.2f}s")
