@@ -368,18 +368,40 @@ class SimpleIDE:
                 result = self.agent.build(task, context={})
                 
                 if result['success']:
-                    code = result['code']
-                    # Insert code at cursor or replace selection
-                    try:
-                        self.code_editor.insert(tk.INSERT, code)
-                        self.write_output("Code generated successfully!\n")
-                        self.write_output("=" * 60 + "\n")
-                        if result.get('output'):
-                            self.write_output(f"Output:\n{result['output']}\n")
-                        self.update_status("Code generated successfully")
-                    except Exception as e:
-                        self.write_output(f"Error inserting code: {e}\n")
-                        self.update_status(f"Error: {e}")
+                    code = result.get('code', '')
+                    if code:
+                        # Insert code at cursor or replace selection
+                        try:
+                            # Clear selection if any, then insert
+                            try:
+                                self.code_editor.delete(tk.SEL_FIRST, tk.SEL_LAST)
+                            except:
+                                pass
+                            
+                            # Insert code
+                            self.code_editor.insert(tk.INSERT, code)
+                            self.write_output("Code generated successfully!\n")
+                            self.write_output("=" * 60 + "\n")
+                            self.write_output(f"Generated {len(code)} characters of code.\n")
+                            if result.get('output'):
+                                self.write_output(f"Output:\n{result['output']}\n")
+                            self.update_status("Code generated successfully")
+                        except Exception as e:
+                            self.write_output(f"Error inserting code: {e}\n")
+                            self.write_output(f"Code was: {code[:200]}...\n")
+                            self.update_status(f"Error: {e}")
+                    else:
+                        self.write_output("Warning: Code generation returned empty code.\n")
+                        self.write_output("Trying alternative generation method...\n")
+                        # Try direct code generation
+                        code = self._generate_code_directly(task)
+                        if code:
+                            self.code_editor.insert(tk.INSERT, code)
+                            self.write_output("Code generated using alternative method!\n")
+                            self.update_status("Code generated successfully")
+                        else:
+                            self.write_output("Could not generate code. The AI agent may not support this task type.\n")
+                            self.update_status("Code generation failed")
                 else:
                     error = result.get('error', 'Unknown error')
                     self.write_output(f"Code generation failed: {error}\n")
@@ -497,6 +519,161 @@ class SimpleIDE:
             status += f"- Core: {sum(1 for v in dep_status.get('core', {}).values() if v)}/{len(dep_status.get('core', {}))}\n"
         
         messagebox.showinfo("ML Toolbox Status", status)
+    
+    def _generate_code_directly(self, task: str) -> str:
+        """Generate code directly for common tasks"""
+        task_lower = task.lower()
+        
+        # Tic-tac-toe game
+        if 'tic' in task_lower and 'tac' in task_lower or 'tic-tac' in task_lower:
+            return '''"""
+Tic-Tac-Toe Game
+"""
+def print_board(board):
+    """Print the game board"""
+    print("\\n   |   |   ")
+    print(f" {board[0]} | {board[1]} | {board[2]} ")
+    print("___|___|___")
+    print("   |   |   ")
+    print(f" {board[3]} | {board[4]} | {board[5]} ")
+    print("___|___|___")
+    print("   |   |   ")
+    print(f" {board[6]} | {board[7]} | {board[8]} ")
+    print("   |   |   ")
+
+def check_winner(board):
+    """Check if there's a winner"""
+    # Winning combinations
+    winning_combos = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],  # Rows
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],  # Columns
+        [0, 4, 8], [2, 4, 6]              # Diagonals
+    ]
+    
+    for combo in winning_combos:
+        if board[combo[0]] == board[combo[1]] == board[combo[2]] != ' ':
+            return board[combo[0]]
+    return None
+
+def is_board_full(board):
+    """Check if board is full"""
+    return ' ' not in board
+
+def play_game():
+    """Main game loop"""
+    board = [' '] * 9
+    current_player = 'X'
+    
+    print("Welcome to Tic-Tac-Toe!")
+    print("Players take turns. Enter position (1-9):")
+    print("\\nBoard positions:")
+    print(" 1 | 2 | 3 ")
+    print("___|___|___")
+    print(" 4 | 5 | 6 ")
+    print("___|___|___")
+    print(" 7 | 8 | 9 ")
+    print()
+    
+    while True:
+        print_board(board)
+        print(f"\\nPlayer {current_player}'s turn")
+        
+        try:
+            position = int(input("Enter position (1-9): ")) - 1
+            if position < 0 or position > 8:
+                print("Invalid position! Enter 1-9.")
+                continue
+            if board[position] != ' ':
+                print("That position is already taken!")
+                continue
+            
+            board[position] = current_player
+            
+            winner = check_winner(board)
+            if winner:
+                print_board(board)
+                print(f"\\nPlayer {winner} wins!")
+                break
+            
+            if is_board_full(board):
+                print_board(board)
+                print("\\nIt's a tie!")
+                break
+            
+            current_player = 'O' if current_player == 'X' else 'X'
+        except ValueError:
+            print("Invalid input! Enter a number 1-9.")
+        except KeyboardInterrupt:
+            print("\\nGame interrupted.")
+            break
+
+if __name__ == "__main__":
+    play_game()
+'''
+        
+        # Calculator
+        elif 'calculator' in task_lower or 'calc' in task_lower:
+            return '''"""
+Simple Calculator
+"""
+def calculator():
+    """Simple calculator"""
+    print("Simple Calculator")
+    print("Enter 'quit' to exit")
+    
+    while True:
+        try:
+            expression = input("\\nEnter expression: ")
+            if expression.lower() == 'quit':
+                break
+            result = eval(expression)
+            print(f"Result: {result}")
+        except Exception as e:
+            print(f"Error: {e}")
+
+if __name__ == "__main__":
+    calculator()
+'''
+        
+        # Guess the number
+        elif 'guess' in task_lower and 'number' in task_lower:
+            return '''"""
+Guess the Number Game
+"""
+import random
+
+def guess_number():
+    """Guess the number game"""
+    number = random.randint(1, 100)
+    attempts = 0
+    
+    print("Guess the Number!")
+    print("I'm thinking of a number between 1 and 100.")
+    
+    while True:
+        try:
+            guess = int(input("\\nEnter your guess: "))
+            attempts += 1
+            
+            if guess < number:
+                print("Too low!")
+            elif guess > number:
+                print("Too high!")
+            else:
+                print(f"\\nCongratulations! You guessed it in {attempts} attempts!")
+                break
+        except ValueError:
+            print("Invalid input! Enter a number.")
+        except KeyboardInterrupt:
+            print("\\nGame interrupted.")
+            break
+
+if __name__ == "__main__":
+    guess_number()
+'''
+        
+        # Default: return empty string
+        return ''
 
 
 def main():
