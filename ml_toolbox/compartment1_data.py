@@ -114,6 +114,13 @@ class DataCompartment:
         except ImportError as e:
             print(f"Warning: Could not import GPU-accelerated preprocessor: {e}")
         
+        # Corpus Callosum Preprocessor (Combined Brain Approach)
+        try:
+            from corpus_callosum_preprocessor import CorpusCallosumPreprocessor
+            self.components['CorpusCallosumPreprocessor'] = CorpusCallosumPreprocessor
+        except ImportError as e:
+            print(f"Warning: Could not import Corpus Callosum preprocessor: {e}")
+        
         # Add component descriptions
         self.component_descriptions = {
             'AdvancedDataPreprocessor': {
@@ -318,6 +325,32 @@ class DataCompartment:
             return self.components['HybridPreprocessor'](gpu_threshold=gpu_threshold)
         else:
             raise ImportError("HybridPreprocessor not available")
+    
+    def get_corpus_callosum_preprocessor(self, parallel_execution: bool = True, 
+                                         split_strategy: str = 'intelligent',
+                                         combine_results: bool = True):
+        """
+        Get Corpus Callosum Preprocessor
+        
+        Combines AdvancedDataPreprocessor and ConventionalPreprocessor
+        like two brain hemispheres working together
+        
+        Args:
+            parallel_execution: Execute both in parallel
+            split_strategy: 'intelligent', 'equal', 'fast_first'
+            combine_results: Combine results from both
+            
+        Returns:
+            CorpusCallosumPreprocessor instance
+        """
+        if 'CorpusCallosumPreprocessor' in self.components:
+            return self.components['CorpusCallosumPreprocessor'](
+                parallel_execution=parallel_execution,
+                split_strategy=split_strategy,
+                combine_results=combine_results
+            )
+        else:
+            raise ImportError("CorpusCallosumPreprocessor not available")
     
     def get_info(self):
         """Get information about this compartment"""
