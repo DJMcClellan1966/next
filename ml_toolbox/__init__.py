@@ -245,6 +245,163 @@ class MLToolbox:
             return self.optimizer.get_optimization_stats()
         return {"status": "optimizer_not_available"}
     
+    # Lazy-loaded properties for revolutionary features
+    @property
+    def predictive_intelligence(self):
+        """Lazy-loaded Predictive Intelligence"""
+        if self._predictive_intelligence is None:
+            try:
+                from revolutionary_features import get_predictive_intelligence
+                self._predictive_intelligence = get_predictive_intelligence()
+            except Exception as e:
+                if self.error_handler:
+                    self.error_handler.handle_import_error('revolutionary_features', 'Predictive Intelligence', is_optional=True)
+                self._predictive_intelligence = None
+        return self._predictive_intelligence
+    
+    @property
+    def self_healing_code(self):
+        """Lazy-loaded Self-Healing Code"""
+        if self._self_healing_code is None:
+            try:
+                from revolutionary_features import get_self_healing_code
+                self._self_healing_code = get_self_healing_code()
+            except Exception as e:
+                if self.error_handler:
+                    self.error_handler.handle_import_error('revolutionary_features', 'Self-Healing Code', is_optional=True)
+                self._self_healing_code = None
+        return self._self_healing_code
+    
+    @property
+    def natural_language_pipeline(self):
+        """Lazy-loaded Natural Language Pipeline"""
+        if self._natural_language_pipeline is None:
+            try:
+                from revolutionary_features import get_natural_language_pipeline
+                self._natural_language_pipeline = get_natural_language_pipeline()
+            except Exception as e:
+                if self.error_handler:
+                    self.error_handler.handle_import_error('revolutionary_features', 'Natural Language Pipeline', is_optional=True)
+                self._natural_language_pipeline = None
+        return self._natural_language_pipeline
+    
+    @property
+    def collaborative_intelligence(self):
+        """Lazy-loaded Collaborative Intelligence"""
+        if self._collaborative_intelligence is None:
+            try:
+                from revolutionary_features import get_collaborative_intelligence
+                self._collaborative_intelligence = get_collaborative_intelligence()
+            except Exception as e:
+                if self.error_handler:
+                    self.error_handler.handle_import_error('revolutionary_features', 'Collaborative Intelligence', is_optional=True)
+                self._collaborative_intelligence = None
+        return self._collaborative_intelligence
+    
+    @property
+    def auto_optimizer(self):
+        """Lazy-loaded Auto-Optimizer"""
+        if self._auto_optimizer is None:
+            try:
+                from revolutionary_features import get_auto_optimizer
+                self._auto_optimizer = get_auto_optimizer()
+            except Exception as e:
+                if self.error_handler:
+                    self.error_handler.handle_import_error('revolutionary_features', 'Auto-Optimizer', is_optional=True)
+                self._auto_optimizer = None
+        return self._auto_optimizer
+    
+    @property
+    def third_eye(self):
+        """Lazy-loaded Third Eye"""
+        if self._third_eye is None:
+            try:
+                from revolutionary_features import get_third_eye
+                self._third_eye = get_third_eye()
+            except Exception as e:
+                if self.error_handler:
+                    self.error_handler.handle_import_error('revolutionary_features', 'Third Eye', is_optional=True)
+                self._third_eye = None
+        return self._third_eye
+    
+    @property
+    def code_personality(self):
+        """Lazy-loaded Code Personality"""
+        if self._code_personality is None:
+            try:
+                from revolutionary_features import get_code_personality
+                self._code_personality = get_code_personality()
+            except Exception as e:
+                if self.error_handler:
+                    self.error_handler.handle_import_error('revolutionary_features', 'Code Personality', is_optional=True)
+                self._code_personality = None
+        return self._code_personality
+    
+    @property
+    def code_dreams(self):
+        """Lazy-loaded Code Dreams"""
+        if self._code_dreams is None:
+            try:
+                from revolutionary_features import get_code_dreams
+                self._code_dreams = get_code_dreams()
+            except Exception as e:
+                if self.error_handler:
+                    self.error_handler.handle_import_error('revolutionary_features', 'Code Dreams', is_optional=True)
+                self._code_dreams = None
+        return self._code_dreams
+    
+    @property
+    def parallel_universe_testing(self):
+        """Lazy-loaded Parallel Universe Testing"""
+        if self._parallel_universe_testing is None:
+            try:
+                from revolutionary_features import get_parallel_universe_testing
+                self._parallel_universe_testing = get_parallel_universe_testing()
+            except Exception as e:
+                if self.error_handler:
+                    self.error_handler.handle_import_error('revolutionary_features', 'Parallel Universe Testing', is_optional=True)
+                self._parallel_universe_testing = None
+        return self._parallel_universe_testing
+    
+    @property
+    def code_alchemy(self):
+        """Lazy-loaded Code Alchemy"""
+        if self._code_alchemy is None:
+            try:
+                from revolutionary_features import get_code_alchemy
+                self._code_alchemy = get_code_alchemy()
+            except Exception as e:
+                if self.error_handler:
+                    self.error_handler.handle_import_error('revolutionary_features', 'Code Alchemy', is_optional=True)
+                self._code_alchemy = None
+        return self._code_alchemy
+    
+    @property
+    def telepathic_code(self):
+        """Lazy-loaded Telepathic Code"""
+        if self._telepathic_code is None:
+            try:
+                from revolutionary_features import get_telepathic_code
+                self._telepathic_code = get_telepathic_code()
+            except Exception as e:
+                if self.error_handler:
+                    self.error_handler.handle_import_error('revolutionary_features', 'Telepathic Code', is_optional=True)
+                self._telepathic_code = None
+        return self._telepathic_code
+    
+    def get_dependency_status(self) -> Dict[str, Any]:
+        """Get dependency status"""
+        if IMPROVEMENTS_AVAILABLE:
+            dep_manager = get_dependency_manager()
+            return dep_manager.check_all()
+        return {'error': 'Dependency manager not available'}
+    
+    def get_error_summary(self) -> Dict[str, Any]:
+        """Get error summary"""
+        if self.error_handler:
+            return self.error_handler.get_error_summary()
+        return {'error': 'Error handler not available'}
+    
     def get_ml_math_optimizer(self):
         """Get ML Math Optimizer for optimized mathematical operations"""
         if self._ml_math_optimizer:
