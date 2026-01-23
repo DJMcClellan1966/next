@@ -2286,6 +2286,141 @@ class AlgorithmsCompartment:
         else:
             raise ImportError("PretrainedModelHub not available")
     
+    # Advanced Cybersecurity Methods
+    def get_secure_multi_party_computation(self, num_parties: int = 2):
+        """Get Secure Multi-Party Computation"""
+        if 'SecureMultiPartyComputation' in self.components:
+            return self.components['SecureMultiPartyComputation'](num_parties)
+        else:
+            raise ImportError("SecureMultiPartyComputation not available")
+    
+    def get_model_watermarking(self, watermark_key: Optional[str] = None):
+        """Get Model Watermarking"""
+        if 'ModelWatermarking' in self.components:
+            return self.components['ModelWatermarking'](watermark_key)
+        else:
+            raise ImportError("ModelWatermarking not available")
+    
+    def get_secure_model_serving(self, model: Any, input_validator: Optional[Any] = None):
+        """Get Secure Model Serving"""
+        if 'SecureModelServing' in self.components:
+            return self.components['SecureModelServing'](model, input_validator)
+        else:
+            raise ImportError("SecureModelServing not available")
+    
+    def get_output_sanitizer(self, max_output_size: int = 1000, allowed_classes: Optional[List[int]] = None):
+        """Get Output Sanitizer"""
+        if 'OutputSanitizer' in self.components:
+            return self.components['OutputSanitizer'](max_output_size, allowed_classes)
+        else:
+            raise ImportError("OutputSanitizer not available")
+    
+    def get_privacy_budget_manager(self, total_budget: float = 1.0):
+        """Get Privacy Budget Manager"""
+        if 'PrivacyBudgetManager' in self.components:
+            return self.components['PrivacyBudgetManager'](total_budget)
+        else:
+            raise ImportError("PrivacyBudgetManager not available")
+    
+    def get_model_extraction_prevention(self, model: Any, max_queries: int = 1000):
+        """Get Model Extraction Prevention"""
+        if 'ModelExtractionPrevention' in self.components:
+            return self.components['ModelExtractionPrevention'](model, max_queries)
+        else:
+            raise ImportError("ModelExtractionPrevention not available")
+    
+    def get_membership_inference_defense(self, model: Any, defense_method: str = 'output_perturbation'):
+        """Get Membership Inference Defense"""
+        if 'MembershipInferenceDefense' in self.components:
+            return self.components['MembershipInferenceDefense'](model, defense_method)
+        else:
+            raise ImportError("MembershipInferenceDefense not available")
+    
+    def get_data_poisoning_detector(self, contamination: float = 0.1):
+        """Get Data Poisoning Detector"""
+        if 'DataPoisoningDetector' in self.components:
+            return self.components['DataPoisoningDetector'](contamination)
+        else:
+            raise ImportError("DataPoisoningDetector not available")
+    
+    def get_secure_model_deployment(self, model: Any, config: Dict[str, Any]):
+        """Get Secure Model Deployment"""
+        if 'SecureModelDeployment' in self.components:
+            return self.components['SecureModelDeployment'](model, config)
+        else:
+            raise ImportError("SecureModelDeployment not available")
+    
+    # Advanced Data Learning Methods
+    def get_secure_federated_learning(self, use_encryption: bool = True, use_dp: bool = True, epsilon: float = 1.0):
+        """Get Secure Federated Learning"""
+        if 'SecureFederatedLearning' in self.components:
+            return self.components['SecureFederatedLearning'](use_encryption, use_dp, epsilon)
+        else:
+            raise ImportError("SecureFederatedLearning not available")
+    
+    def get_privacy_preserving_feature_engineering(self, privacy_budget: float = 1.0):
+        """Get Privacy-Preserving Feature Engineering"""
+        if 'PrivacyPreservingFeatureEngineering' in self.components:
+            return self.components['PrivacyPreservingFeatureEngineering'](privacy_budget)
+        else:
+            raise ImportError("PrivacyPreservingFeatureEngineering not available")
+    
+    def get_secure_aggregation_with_dp(self, epsilon: float = 1.0, delta: float = 1e-5):
+        """Get Secure Aggregation with Differential Privacy"""
+        if 'SecureAggregationWithDP' in self.components:
+            return self.components['SecureAggregationWithDP'](epsilon, delta)
+        else:
+            raise ImportError("SecureAggregationWithDP not available")
+    
+    def get_privacy_preserving_inference(self, model: Any, epsilon: float = 1.0):
+        """Get Privacy-Preserving Inference"""
+        if 'PrivacyPreservingInference' in self.components:
+            return self.components['PrivacyPreservingInference'](model, epsilon)
+        else:
+            raise ImportError("PrivacyPreservingInference not available")
+    
+    def get_encrypted_inference(self, model: Any):
+        """Get Encrypted Inference"""
+        if 'EncryptedInference' in self.components:
+            return self.components['EncryptedInference'](model)
+        else:
+            raise ImportError("EncryptedInference not available")
+    
+    def get_secure_model_sharing(self, model: Any, access_control: Optional[Dict[str, List[str]]] = None):
+        """Get Secure Model Sharing"""
+        if 'SecureModelSharing' in self.components:
+            return self.components['SecureModelSharing'](model, access_control)
+        else:
+            raise ImportError("SecureModelSharing not available")
+    
+    def get_privacy_auditor(self):
+        """Get Privacy Auditor"""
+        if 'PrivacyAuditor' in self.components:
+            return self.components['PrivacyAuditor']()
+        else:
+            raise ImportError("PrivacyAuditor not available")
+    
+    def get_advanced_online_learning(self, base_model: Any, learning_rate: float = 0.01, adaptive: bool = True):
+        """Get Advanced Online Learning"""
+        if 'AdvancedOnlineLearning' in self.components:
+            return self.components['AdvancedOnlineLearning'](base_model, learning_rate, adaptive)
+        else:
+            raise ImportError("AdvancedOnlineLearning not available")
+    
+    def get_streaming_data_learning(self, model: Any, window_size: int = 1000):
+        """Get Streaming Data Learning"""
+        if 'StreamingDataLearning' in self.components:
+            return self.components['StreamingDataLearning'](model, window_size)
+        else:
+            raise ImportError("StreamingDataLearning not available")
+    
+    def get_incremental_feature_selection(self, max_features: int = 10):
+        """Get Incremental Feature Selection"""
+        if 'IncrementalFeatureSelection' in self.components:
+            return self.components['IncrementalFeatureSelection'](max_features)
+        else:
+            raise ImportError("IncrementalFeatureSelection not available")
+    
     def list_components(self):
         """List all available components in this compartment"""
         print("="*80)

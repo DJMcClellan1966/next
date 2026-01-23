@@ -430,7 +430,13 @@ class AdvancedOnlineLearning:
         
         # Update model (simplified - would use partial_fit for sklearn)
         if hasattr(self.base_model, 'partial_fit'):
-            self.base_model.partial_fit(X_new, y_new)
+            # Get classes on first call
+            if not hasattr(self, '_classes_initialized'):
+                classes = np.unique(y_new)
+                self.base_model.partial_fit(X_new, y_new, classes=classes)
+                self._classes_initialized = True
+            else:
+                self.base_model.partial_fit(X_new, y_new)
         else:
             # Retrain on accumulated data (simplified)
             if not hasattr(self, '_X_buffer'):
