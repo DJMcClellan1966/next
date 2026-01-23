@@ -106,6 +106,14 @@ class DataCompartment:
         except ImportError as e:
             print(f"Warning: Could not import Knuth data operations: {e}")
         
+        # GPU-Accelerated Preprocessing
+        try:
+            from gpu_accelerated_preprocessor import GPUAcceleratedPreprocessor, HybridPreprocessor
+            self.components['GPUAcceleratedPreprocessor'] = GPUAcceleratedPreprocessor
+            self.components['HybridPreprocessor'] = HybridPreprocessor
+        except ImportError as e:
+            print(f"Warning: Could not import GPU-accelerated preprocessor: {e}")
+        
         # Add component descriptions
         self.component_descriptions = {
             'AdvancedDataPreprocessor': {
@@ -296,6 +304,20 @@ class DataCompartment:
             )
         else:
             raise ImportError("VarianceCorrelationFilter not available")
+    
+    def get_gpu_accelerated_preprocessor(self, use_gpu: bool = True, **kwargs):
+        """Get GPU-accelerated preprocessor instance"""
+        if 'GPUAcceleratedPreprocessor' in self.components:
+            return self.components['GPUAcceleratedPreprocessor'](use_gpu=use_gpu, **kwargs)
+        else:
+            raise ImportError("GPUAcceleratedPreprocessor not available")
+    
+    def get_hybrid_preprocessor(self, gpu_threshold: int = 100):
+        """Get hybrid preprocessor (auto GPU/CPU selection)"""
+        if 'HybridPreprocessor' in self.components:
+            return self.components['HybridPreprocessor'](gpu_threshold=gpu_threshold)
+        else:
+            raise ImportError("HybridPreprocessor not available")
     
     def get_info(self):
         """Get information about this compartment"""
