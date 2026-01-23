@@ -73,7 +73,7 @@ class CodeGenerator:
             'code': code,
             'success': validation['valid'],
             'error': validation.get('error'),
-            'pattern_used': solutions[0]['name'] if solutions else None,
+            'pattern_used': solutions[0].get('name') or solutions[0].get('solution') if solutions else None,
             'solutions_found': len(solutions)
         }
     
