@@ -257,7 +257,8 @@ else:
     # Fallback implementations
     def numba_distance_matrix(X: np.ndarray) -> np.ndarray:
         """Fallback: NumPy implementation"""
-        return OptimizedMLOperations.vectorized_similarity_computation(X, 'euclidean')
+        optimizer = OptimizedMLOperations()
+        return optimizer.vectorized_similarity_computation(X, 'euclidean')
     
     def numba_softmax(x: np.ndarray) -> np.ndarray:
         """Fallback: NumPy implementation"""
@@ -270,20 +271,23 @@ if __name__ == '__main__':
     print("Optimized ML Operations")
     print("="*80)
     
+    # Create optimizer instance (with architecture detection)
+    optimizer = OptimizedMLOperations()
+    
     # Test vectorized similarity
     print("\n1. Testing vectorized similarity computation...")
     embeddings = np.random.randn(100, 256)
     
     import time
     start = time.time()
-    similarity = OptimizedMLOperations.vectorized_similarity_computation(embeddings)
+    similarity = optimizer.vectorized_similarity_computation(embeddings)
     vectorized_time = time.time() - start
     print(f"Vectorized similarity: {vectorized_time:.4f}s for {len(embeddings)}x{len(embeddings)} matrix")
     
     # Test vectorized deduplication
     print("\n2. Testing vectorized deduplication...")
     start = time.time()
-    unique_indices, duplicate_indices = OptimizedMLOperations.vectorized_deduplication(embeddings, threshold=0.9)
+    unique_indices, duplicate_indices = optimizer.vectorized_deduplication(embeddings, threshold=0.9)
     dedup_time = time.time() - start
     print(f"Vectorized deduplication: {dedup_time:.4f}s")
     print(f"Unique: {len(unique_indices)}, Duplicates: {len(duplicate_indices)}")
@@ -294,7 +298,7 @@ if __name__ == '__main__':
     y = np.random.randn(1000)
     
     start = time.time()
-    selected_features = OptimizedMLOperations.vectorized_feature_selection(X, y, n_features=10)
+    selected_features = optimizer.vectorized_feature_selection(X, y, n_features=10)
     selection_time = time.time() - start
     print(f"Vectorized feature selection: {selection_time:.4f}s")
     print(f"Selected features: {selected_features}")
