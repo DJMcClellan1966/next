@@ -568,6 +568,46 @@ class AlgorithmsCompartment:
         except ImportError as e:
             print(f"Warning: Could not import enhanced cryptography: {e}")
         
+        # Advanced Cybersecurity Methods
+        try:
+            from advanced_cybersecurity import (
+                SecureMultiPartyComputation, ModelWatermarking, SecureModelServing,
+                OutputSanitizer, PrivacyBudgetManager, ModelExtractionPrevention,
+                MembershipInferenceDefense, DataPoisoningDetector, SecureModelDeployment
+            )
+            self.components['SecureMultiPartyComputation'] = SecureMultiPartyComputation
+            self.components['ModelWatermarking'] = ModelWatermarking
+            self.components['SecureModelServing'] = SecureModelServing
+            self.components['OutputSanitizer'] = OutputSanitizer
+            self.components['PrivacyBudgetManager'] = PrivacyBudgetManager
+            self.components['ModelExtractionPrevention'] = ModelExtractionPrevention
+            self.components['MembershipInferenceDefense'] = MembershipInferenceDefense
+            self.components['DataPoisoningDetector'] = DataPoisoningDetector
+            self.components['SecureModelDeployment'] = SecureModelDeployment
+        except ImportError as e:
+            print(f"Warning: Could not import advanced cybersecurity: {e}")
+        
+        # Advanced Data Learning Methods
+        try:
+            from advanced_data_learning import (
+                SecureFederatedLearning, PrivacyPreservingFeatureEngineering,
+                SecureAggregationWithDP, PrivacyPreservingInference, EncryptedInference,
+                SecureModelSharing, PrivacyAuditor, AdvancedOnlineLearning,
+                StreamingDataLearning, IncrementalFeatureSelection
+            )
+            self.components['SecureFederatedLearning'] = SecureFederatedLearning
+            self.components['PrivacyPreservingFeatureEngineering'] = PrivacyPreservingFeatureEngineering
+            self.components['SecureAggregationWithDP'] = SecureAggregationWithDP
+            self.components['PrivacyPreservingInference'] = PrivacyPreservingInference
+            self.components['EncryptedInference'] = EncryptedInference
+            self.components['SecureModelSharing'] = SecureModelSharing
+            self.components['PrivacyAuditor'] = PrivacyAuditor
+            self.components['AdvancedOnlineLearning'] = AdvancedOnlineLearning
+            self.components['StreamingDataLearning'] = StreamingDataLearning
+            self.components['IncrementalFeatureSelection'] = IncrementalFeatureSelection
+        except ImportError as e:
+            print(f"Warning: Could not import advanced data learning: {e}")
+        
         # Interactive Dashboard
         try:
             from interactive_dashboard import InteractiveDashboard
