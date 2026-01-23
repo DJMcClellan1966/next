@@ -38,20 +38,54 @@ except ImportError:
 # Import advanced toolbox
 try:
     from .advanced import AdvancedMLToolbox
-    __all__ = [
-        'DataCompartment',
-        'InfrastructureCompartment',
-        'AlgorithmsCompartment',
-        'MLToolbox',
-        'AdvancedMLToolbox'
-    ]
+    ADVANCED_AVAILABLE = True
 except ImportError:
-    __all__ = [
-        'DataCompartment',
-        'InfrastructureCompartment',
-        'AlgorithmsCompartment',
-        'MLToolbox'
-    ]
+    ADVANCED_AVAILABLE = False
+    AdvancedMLToolbox = None
+
+# Import Phase 1 integrations
+try:
+    from .testing import ComprehensiveMLTestSuite, MLBenchmarkSuite
+    TESTING_AVAILABLE = True
+except ImportError:
+    TESTING_AVAILABLE = False
+    ComprehensiveMLTestSuite = None
+    MLBenchmarkSuite = None
+
+try:
+    from .deployment import ModelPersistence
+    DEPLOYMENT_AVAILABLE = True
+except ImportError:
+    DEPLOYMENT_AVAILABLE = False
+    ModelPersistence = None
+
+try:
+    from .optimization import ModelCompression, ModelCalibration
+    OPTIMIZATION_AVAILABLE = True
+except ImportError:
+    OPTIMIZATION_AVAILABLE = False
+    ModelCompression = None
+    ModelCalibration = None
+
+# Build __all__
+__all__ = [
+    'DataCompartment',
+    'InfrastructureCompartment',
+    'AlgorithmsCompartment',
+    'MLToolbox'
+]
+
+if ADVANCED_AVAILABLE:
+    __all__.append('AdvancedMLToolbox')
+
+if TESTING_AVAILABLE:
+    __all__.extend(['ComprehensiveMLTestSuite', 'MLBenchmarkSuite'])
+
+if DEPLOYMENT_AVAILABLE:
+    __all__.append('ModelPersistence')
+
+if OPTIMIZATION_AVAILABLE:
+    __all__.extend(['ModelCompression', 'ModelCalibration'])
 
 
 class MLToolbox:
