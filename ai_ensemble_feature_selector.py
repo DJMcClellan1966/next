@@ -16,14 +16,45 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 try:
     from advanced_feature_selection import AdvancedFeatureSelector
-    from information_theoretic_feature_selection import InformationTheoreticFeatureSelector
-    from search_based_feature_selection import SearchBasedFeatureSelector
-    from variance_correlation_filter import VarianceCorrelationFilter
-    from statistical_learning import StatisticalFeatureSelector
     FEATURE_SELECTORS_AVAILABLE = True
 except ImportError:
     FEATURE_SELECTORS_AVAILABLE = False
-    warnings.warn("Some feature selectors not available")
+
+try:
+    from information_theoretic_feature_selection import InformationTheoreticFeatureSelector
+    INFO_THEORETIC_AVAILABLE = True
+except ImportError:
+    INFO_THEORETIC_AVAILABLE = False
+
+try:
+    from search_based_feature_selection import SearchBasedFeatureSelector
+    SEARCH_BASED_AVAILABLE = True
+except ImportError:
+    SEARCH_BASED_AVAILABLE = False
+
+try:
+    from variance_correlation_filter import VarianceCorrelationFilter
+    VARIANCE_FILTER_AVAILABLE = True
+except ImportError:
+    VARIANCE_FILTER_AVAILABLE = False
+
+try:
+    from statistical_learning import StatisticalFeatureSelector
+    STATISTICAL_AVAILABLE = True
+except ImportError:
+    STATISTICAL_AVAILABLE = False
+
+# Try sklearn feature selection as fallback
+try:
+    from sklearn.feature_selection import (
+        SelectKBest, f_classif, f_regression,
+        mutual_info_classif, mutual_info_regression,
+        RFE, RFECV, SelectFromModel
+    )
+    from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+    SKLEARN_FEATURE_SELECTION_AVAILABLE = True
+except ImportError:
+    SKLEARN_FEATURE_SELECTION_AVAILABLE = False
 
 
 class AIEnsembleFeatureSelector:
@@ -47,15 +78,78 @@ class AIEnsembleFeatureSelector:
         """Initialize all available feature selectors"""
         selectors = {}
         
+        # Advanced feature selector
         if FEATURE_SELECTORS_AVAILABLE:
             try:
                 selectors['advanced'] = AdvancedFeatureSelector
+            except Exception as e:
+                warnings.warn(f"Advanced selector not available: {e}")
+        
+        # Information theoretic
+        if INFO_THEORETIC_AVAILABLE:
+            try:
                 selectors['information_theoretic'] = InformationTheoreticFeatureSelector
+            except Exception as e:
+                warnings.warn(f"Information theoretic selector not available: {e}")
+        
+        # Search based
+        if SEARCH_BASED_AVAILABLE:
+            try:
                 selectors['search_based'] = SearchBasedFeatureSelector
+            except Exception as e:
+                warnings.warn(f"Search based selector not available: {e}")
+        
+        # Variance correlation
+        if VARIANCE_FILTER_AVAILABLE:
+            try:
                 selectors['variance_correlation'] = VarianceCorrelationFilter
+            except Exception as e:
+                warnings.warn(f"Variance filter not available: {e}")
+        
+        # Statistical
+        if STATISTICAL_AVAILABLE:
+            try:
                 selectors['statistical'] = StatisticalFeatureSelector
             except Exception as e:
-                warnings.warn(f"Some selectors not available: {e}")
+                warnings.warn(f"Statistical selector not available: {e}")
+        
+        # Sklearn fallback selectors
+        if SKLEARN_FEATURE_SELECTION_AVAILABLE:
+            try:
+                # Create wrapper classes for sklearn selectors
+                class SklearnSelectKBest:
+                    def __init__(self):
+                        self.selector = None
+                    
+                    def fit_transform(self, X, y):
+                        from sklearn.feature_selection import SelectKBest, f_classif, f_regression
+                        is_classification = len(set(y)) < 20
+                        score_func = f_classif if is_classification else f_regression
+                        self.selector = SelectKBest(score_func=score_func, k=min(10, X.shape[1]))
+                        return self.selector.fit_transform(X, y)
+                    
+                    def get_support(self):
+                        return self.selector.get_support() if self.selector else None
+                
+                class SklearnRFE:
+                    def __init__(self):
+                        self.selector = None
+                    
+                    def fit_transform(self, X, y):
+                        from sklearn.feature_selection import RFE
+                        from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+                        is_classification = len(set(y)) < 20
+                        estimator = RandomForestClassifier() if is_classification else RandomForestRegressor()
+                        self.selector = RFE(estimator=estimator, n_features_to_select=min(10, X.shape[1]))
+                        return self.selector.fit_transform(X, y)
+                    
+                    def get_support(self):
+                        return self.selector.get_support() if self.selector else None
+                
+                selectors['sklearn_kbest'] = SklearnSelectKBest
+                selectors['sklearn_rfe'] = SklearnRFE
+            except Exception as e:
+                warnings.warn(f"Sklearn selectors not available: {e}")
         
         return selectors
     
