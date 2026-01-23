@@ -415,8 +415,35 @@ class QuantumKernel:
         return results
     
     def _parallel_similarity(self, query_embed: np.ndarray, candidates: List[str]) -> List[Tuple[str, float]]:
-        """Compute similarities in parallel"""
-        # For small lists, use sequential (overhead not worth it)
+        """Compute similarities in parallel (OPTIMIZED)"""
+        # OPTIMIZATION: Use vectorized operations for larger lists
+        if len(candidates) >= 100:
+            try:
+                from optimized_ml_operations import OptimizedMLOperations
+                
+                # Compute all embeddings at once (can be parallelized)
+                candidate_embeddings = np.array([self.embed(candidate) for candidate in candidates])
+                
+                # Vectorized similarity computation
+                # Normalize query
+                query_norm = query_embed / (np.linalg.norm(query_embed) or 1)
+                
+                # Normalize candidates (vectorized)
+                candidate_norms = np.linalg.norm(candidate_embeddings, axis=1, keepdims=True)
+                candidate_norms = np.where(candidate_norms == 0, 1, candidate_norms)
+                candidate_normalized = candidate_embeddings / candidate_norms
+                
+                # Compute similarities (vectorized dot product)
+                similarities = np.abs(np.dot(candidate_normalized, query_norm))
+                
+                # Create results list
+                results = [(candidates[i], float(sim)) for i, sim in enumerate(similarities)]
+                return results
+            except ImportError:
+                # Fallback to parallel processing
+                pass
+        
+        # For small lists or if optimizations not available, use original method
         if len(candidates) < 100:
             results = []
             for candidate in candidates:

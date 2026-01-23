@@ -345,7 +345,7 @@ class AdvancedDataPreprocessor:
         return unique, duplicates
     
     def _categorize(self, data: List[str], verbose: bool = False) -> Dict[str, List[str]]:
-        """Stage 3: Categorize by semantic similarity"""
+        """Stage 3: Categorize by semantic similarity (OPTIMIZED)"""
         if not self.use_quantum or not self.quantum_kernel:
             return self._categorize_keyword(data, verbose)
         
@@ -360,22 +360,54 @@ class AdvancedDataPreprocessor:
             'general': ['hello', 'thanks', 'information', 'question', 'general']
         }
         
-        for item in data:
-            best_category = 'general'
-            best_score = 0.0
+        # OPTIMIZATION: Compute all embeddings at once
+        try:
+            from optimized_ml_operations import OptimizedMLOperations
             
+            # Compute embeddings for all items and examples
+            item_embeddings = np.array([self.quantum_kernel.embed(item) for item in data])
+            
+            # Compute category embeddings
+            category_embeddings = {}
             for category, examples in category_examples.items():
-                similarities = [
-                    self.quantum_kernel.similarity(item, example)
-                    for example in examples
-                ]
-                avg_similarity = sum(similarities) / len(similarities)
-                
-                if avg_similarity > best_score:
-                    best_score = avg_similarity
-                    best_category = category
+                example_embeddings = np.array([self.quantum_kernel.embed(ex) for ex in examples])
+                # Average embedding for category (vectorized)
+                category_embeddings[category] = np.mean(example_embeddings, axis=0)
             
-            categories[best_category].append(item)
+            # Compute similarities using vectorized operations
+            for i, item in enumerate(data):
+                item_emb = item_embeddings[i]
+                best_category = 'general'
+                best_score = 0.0
+                
+                for category, cat_emb in category_embeddings.items():
+                    # Vectorized similarity computation
+                    similarity = float(np.abs(np.dot(item_emb, cat_emb)))
+                    
+                    if similarity > best_score:
+                        best_score = similarity
+                        best_category = category
+                
+                categories[best_category].append(item)
+        
+        except ImportError:
+            # Fallback to original method
+            for item in data:
+                best_category = 'general'
+                best_score = 0.0
+                
+                for category, examples in category_examples.items():
+                    similarities = [
+                        self.quantum_kernel.similarity(item, example)
+                        for example in examples
+                    ]
+                    avg_similarity = sum(similarities) / len(similarities)
+                    
+                    if avg_similarity > best_score:
+                        best_score = avg_similarity
+                        best_category = category
+                
+                categories[best_category].append(item)
         
         if verbose:
             print(f"  Categories: {len(categories)}")
