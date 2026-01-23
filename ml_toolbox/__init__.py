@@ -140,6 +140,8 @@ class MLToolbox:
             self.universal_preprocessor = get_universal_preprocessor()
             print("[MLToolbox] Universal Adaptive Preprocessor available (AI-powered)")
         except Exception as e:
+            if self.error_handler:
+                self.error_handler.handle_import_error('universal_adaptive_preprocessor', 'Universal Preprocessor', is_optional=True)
             self.universal_preprocessor = None
         
         # AI Model Orchestrator (optional - unified model operations)
@@ -148,6 +150,8 @@ class MLToolbox:
             self.ai_orchestrator = get_ai_orchestrator(toolbox=self)
             print("[MLToolbox] AI Model Orchestrator available (unified model operations)")
         except Exception as e:
+            if self.error_handler:
+                self.error_handler.handle_import_error('ai_model_orchestrator', 'AI Orchestrator', is_optional=True)
             self.ai_orchestrator = None
         
         # AI Ensemble Feature Selector (optional - unifies feature selection)
@@ -156,50 +160,28 @@ class MLToolbox:
             self.ai_feature_selector = get_ai_ensemble_selector()
             print("[MLToolbox] AI Ensemble Feature Selector available (unified feature selection)")
         except Exception as e:
+            if self.error_handler:
+                self.error_handler.handle_import_error('ai_ensemble_feature_selector', 'AI Feature Selector', is_optional=True)
             self.ai_feature_selector = None
         
-        # Revolutionary Features (mindblowing upgrades)
-        try:
-            from revolutionary_features import (
-                get_predictive_intelligence,
-                get_self_healing_code,
-                get_natural_language_pipeline,
-                get_collaborative_intelligence,
-                get_auto_optimizer,
-                get_third_eye
-            )
-            self.predictive_intelligence = get_predictive_intelligence()
-            self.self_healing_code = get_self_healing_code()
-            self.natural_language_pipeline = get_natural_language_pipeline()
-            self.collaborative_intelligence = get_collaborative_intelligence()
-            self.auto_optimizer = get_auto_optimizer()
-            self.third_eye = get_third_eye()
-            self.code_personality = get_code_personality()
-            self.code_dreams = get_code_dreams()
-            self.parallel_universe_testing = get_parallel_universe_testing()
-            self.code_alchemy = get_code_alchemy()
-            self.telepathic_code = get_telepathic_code()
-            print("[MLToolbox] Revolutionary Features enabled:")
-            print("  - Predictive Intelligence (anticipates your needs)")
-            print("  - Self-Healing Code (fixes itself automatically)")
-            print("  - Natural Language Pipeline (describe, get ML solution)")
-            print("  - Collaborative Intelligence (learns from community)")
-            print("  - Auto-Optimizer (gets faster automatically)")
-            print("  - Third Eye (sees into the future of code)")
-            print("[MLToolbox] Fun & Daring Features enabled:")
-            print("  - Code Personality (your code has a personality!)")
-            print("  - Code Dreams (dreams up wild code variations)")
-            print("  - Parallel Universe Testing (tests in multiple universes)")
-            print("  - Code Alchemy (transforms code like elements)")
-            print("  - Telepathic Code (reads your mind!)")
-        except Exception as e:
-            print(f"[MLToolbox] Warning: Revolutionary Features not available: {e}")
-            self.predictive_intelligence = None
-            self.self_healing_code = None
-            self.natural_language_pipeline = None
-            self.collaborative_intelligence = None
-            self.auto_optimizer = None
-            self.third_eye = None
+        # Revolutionary Features (mindblowing upgrades) - LAZY LOADED
+        # Features load on demand for faster startup
+        self._predictive_intelligence = None
+        self._self_healing_code = None
+        self._natural_language_pipeline = None
+        self._collaborative_intelligence = None
+        self._auto_optimizer = None
+        self._third_eye = None
+        self._code_personality = None
+        self._code_dreams = None
+        self._parallel_universe_testing = None
+        self._code_alchemy = None
+        self._telepathic_code = None
+        
+        # Mark as available (will load on first access)
+        self._revolutionary_features_available = True
+        print("[MLToolbox] Revolutionary Features available (lazy-loaded)")
+        print("[MLToolbox] Fun & Daring Features available (lazy-loaded)")
     
     def __repr__(self):
         mlops_info = f", mlops={len(self.mlops.components)}" if self.mlops else ""
