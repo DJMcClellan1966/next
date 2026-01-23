@@ -6,10 +6,15 @@ from .knowledge_base import ToolboxKnowledgeBase
 from .code_generator import CodeGenerator
 from .code_sandbox import CodeSandbox
 from .agent import MLCodeAgent
+from .pattern_graph import PatternGraph, PatternNode
+from .pattern_composer import PatternComposer
 
 __all__ = [
     'ToolboxKnowledgeBase',
     'CodeGenerator',
     'CodeSandbox',
-    'MLCodeAgent'
+    'MLCodeAgent',
+    'PatternGraph',
+    'PatternNode',
+    'PatternComposer'
 ]

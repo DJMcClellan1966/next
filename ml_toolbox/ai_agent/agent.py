@@ -11,6 +11,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from .knowledge_base import ToolboxKnowledgeBase, get_knowledge_base
 from .code_generator import CodeGenerator
 from .code_sandbox import CodeSandbox
+from .pattern_graph import PatternGraph, get_pattern_graph
+from .pattern_composer import PatternComposer
 
 
 class MLCodeAgent:
@@ -24,19 +26,27 @@ class MLCodeAgent:
     - Learn from patterns
     """
     
-    def __init__(self, use_llm: bool = True, max_iterations: int = 3):
+    def __init__(self, use_llm: bool = True, max_iterations: int = 3, 
+                 use_pattern_composition: bool = True):
         """
         Initialize ML Code Agent
         
         Args:
             use_llm: Whether to use LLM for code generation
             max_iterations: Maximum iterations for error fixing
+            use_pattern_composition: Use innovative pattern composition (default: True)
         """
         self.kb = get_knowledge_base()
+        self.graph = get_pattern_graph()
+        self.composer = PatternComposer(self.graph, self.kb)
         self.generator = CodeGenerator(self.kb, use_llm=use_llm)
         self.sandbox = CodeSandbox()
         self.max_iterations = max_iterations
+        self.use_pattern_composition = use_pattern_composition
         self.history = []
+        
+        # Initialize pattern graph with knowledge base patterns
+        self._initialize_pattern_graph()
     
     def build(self, task: str, context: Optional[Dict] = None) -> Dict[str, Any]:
         """
@@ -61,10 +71,21 @@ class MLCodeAgent:
         while iterations < self.max_iterations:
             iterations += 1
             
-            # Generate code
+            # Generate code using innovative pattern composition
             if code is None:
-                generation_result = self.generator.generate(task, context)
-                code = generation_result['code']
+                if self.use_pattern_composition:
+                    # Use pattern composition (innovative approach)
+                    pattern_sequence = self.graph.find_pattern_sequence(task)
+                    if pattern_sequence:
+                        code = self.composer.compose(pattern_sequence, context)
+                    else:
+                        # Fallback to generator
+                        generation_result = self.generator.generate(task, context)
+                        code = generation_result['code']
+                else:
+                    # Use traditional generation
+                    generation_result = self.generator.generate(task, context)
+                    code = generation_result['code']
                 
                 if not generation_result['success']:
                     # Syntax error in generation
@@ -81,7 +102,13 @@ class MLCodeAgent:
             execution_result = self.sandbox.execute(code)
             
             if execution_result['success']:
-                # Success!
+                # Success! Record in pattern graph
+                if self.use_pattern_composition:
+                    pattern_sequence = self.graph.find_pattern_sequence(task)
+                    self.graph.record_successful_composition(
+                        task, pattern_sequence, code, execution_result
+                    )
+                
                 self.history.append({
                     'task': task,
                     'code': code,
@@ -101,7 +128,17 @@ class MLCodeAgent:
             # Error occurred - try to fix
             if iterations < self.max_iterations:
                 error = execution_result.get('error', 'Unknown error')
-                code = self.generator.improve_code(code, error)
+                
+                # Record failure in pattern graph
+                if self.use_pattern_composition:
+                    pattern_sequence = self.graph.find_pattern_sequence(task)
+                    self.graph.record_failed_composition(task, pattern_sequence, code, error)
+                
+                # Try to fix using composer or generator
+                if self.use_pattern_composition:
+                    code = self.composer.refine_composition(code, error)
+                else:
+                    code = self.generator.improve_code(code, error)
             else:
                 # Max iterations reached
                 self.history.append({
