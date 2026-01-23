@@ -20,8 +20,15 @@ class InfrastructureCompartment:
     - Adaptive Neuron: Neural-like learning components
     """
     
-    def __init__(self):
+    def __init__(self, medulla=None):
+        """
+        Initialize Infrastructure Compartment
+        
+        Args:
+            medulla: Optional Medulla Oblongata System for resource regulation
+        """
         self.components = {}
+        self.medulla = medulla
         self._initialize_components()
     
     def _initialize_components(self):
@@ -71,6 +78,22 @@ class InfrastructureCompartment:
             self.components['AdaptiveNeuralNetwork'] = AdaptiveNeuralNetwork
         except ImportError as e:
             print(f"Warning: Could not import Adaptive Neuron: {e}")
+        
+        # Medulla Oblongata System (resource regulation)
+        try:
+            from medulla_oblongata_system import MedullaOblongataSystem
+            self.components['MedullaOblongataSystem'] = MedullaOblongataSystem
+            if self.medulla:
+                self.components['medulla'] = self.medulla  # Instance if available
+        except ImportError as e:
+            print(f"Warning: Could not import Medulla Oblongata System: {e}")
+        
+        # Virtual Quantum Computer
+        try:
+            from virtual_quantum_computer import VirtualQuantumComputer
+            self.components['VirtualQuantumComputer'] = VirtualQuantumComputer
+        except ImportError as e:
+            print(f"Warning: Could not import Virtual Quantum Computer: {e}")
         
         # Knuth Knowledge Graph (for knowledge graph operations)
         try:
