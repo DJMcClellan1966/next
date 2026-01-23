@@ -608,6 +608,49 @@ class AlgorithmsCompartment:
         except ImportError as e:
             print(f"Warning: Could not import advanced data learning: {e}")
         
+        # Code Quality Tools (Priority 1)
+        try:
+            from code_quality_tools import (
+                CodeLinter, CodeFormatter, TypeChecker, DocumentationGenerator,
+                CoverageReporter, PerformanceProfiler, CodeQualitySuite
+            )
+            self.components['CodeLinter'] = CodeLinter
+            self.components['CodeFormatter'] = CodeFormatter
+            self.components['TypeChecker'] = TypeChecker
+            self.components['DocumentationGenerator'] = DocumentationGenerator
+            self.components['CoverageReporter'] = CoverageReporter
+            self.components['PerformanceProfiler'] = PerformanceProfiler
+            self.components['CodeQualitySuite'] = CodeQualitySuite
+        except ImportError as e:
+            print(f"Warning: Could not import code quality tools: {e}")
+        
+        # Reed/Zelle Patterns (Priority 2)
+        try:
+            from reed_zelle_patterns import (
+                ProblemDecomposition, AlgorithmPatterns, DataStructureOptimizer,
+                CodeOrganizer, RecursiveSolutions, IterativeRefinement
+            )
+            self.components['ProblemDecomposition'] = ProblemDecomposition
+            self.components['AlgorithmPatterns'] = AlgorithmPatterns
+            self.components['DataStructureOptimizer'] = DataStructureOptimizer
+            self.components['CodeOrganizer'] = CodeOrganizer
+            self.components['RecursiveSolutions'] = RecursiveSolutions
+            self.components['IterativeRefinement'] = IterativeRefinement
+        except ImportError as e:
+            print(f"Warning: Could not import Reed/Zelle patterns: {e}")
+        
+        # Development Workflow (Priority 3)
+        try:
+            from development_workflow import (
+                PreCommitHooks, CICDPipeline, CodeReviewAutomation, ReleaseManager
+            )
+            self.components['PreCommitHooks'] = PreCommitHooks
+            self.components['CICDPipeline'] = CICDPipeline
+            self.components['CodeReviewAutomation'] = CodeReviewAutomation
+            self.components['ReleaseManager'] = ReleaseManager
+        except ImportError as e:
+            print(f"Warning: Could not import development workflow: {e}")
+        
         # Interactive Dashboard
         try:
             from interactive_dashboard import InteractiveDashboard
