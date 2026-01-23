@@ -133,6 +133,30 @@ class MLToolbox:
         except Exception as e:
             print(f"[MLToolbox] Warning: Model Registry not available: {e}")
             self.model_registry = None
+        
+        # Universal Adaptive Preprocessor (optional - replaces 6+ preprocessors)
+        try:
+            from universal_adaptive_preprocessor import get_universal_preprocessor
+            self.universal_preprocessor = get_universal_preprocessor()
+            print("[MLToolbox] Universal Adaptive Preprocessor available (AI-powered)")
+        except Exception as e:
+            self.universal_preprocessor = None
+        
+        # AI Model Orchestrator (optional - unified model operations)
+        try:
+            from ai_model_orchestrator import get_ai_orchestrator
+            self.ai_orchestrator = get_ai_orchestrator(toolbox=self)
+            print("[MLToolbox] AI Model Orchestrator available (unified model operations)")
+        except Exception as e:
+            self.ai_orchestrator = None
+        
+        # AI Ensemble Feature Selector (optional - unifies feature selection)
+        try:
+            from ai_ensemble_feature_selector import get_ai_ensemble_selector
+            self.ai_feature_selector = get_ai_ensemble_selector()
+            print("[MLToolbox] AI Ensemble Feature Selector available (unified feature selection)")
+        except Exception as e:
+            self.ai_feature_selector = None
     
     def __repr__(self):
         mlops_info = f", mlops={len(self.mlops.components)}" if self.mlops else ""
