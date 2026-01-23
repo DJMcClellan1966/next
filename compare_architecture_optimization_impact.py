@@ -191,13 +191,13 @@ def compare_with_architecture_optimizations():
     print("="*80)
     
     if len(improvements) > len(regressions):
-        print("✅ Architecture optimizations show positive impact!")
+        print("[SUCCESS] Architecture optimizations show positive impact!")
         print(f"   {len(improvements)} tests improved vs {len(regressions)} regressions")
     elif len(improvements) == len(regressions):
-        print("⚠️  Mixed results - some improvements, some regressions")
+        print("[WARNING] Mixed results - some improvements, some regressions")
         print("   (May be due to test variance)")
     else:
-        print("⚠️  More regressions than improvements")
+        print("[WARNING] More regressions than improvements")
         print("   (May need more optimization or test variance)")
 
 
