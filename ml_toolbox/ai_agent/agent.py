@@ -73,11 +73,20 @@ class MLCodeAgent:
             
             # Generate code using innovative pattern composition
             if code is None:
+                generation_result = None
                 if self.use_pattern_composition:
                     # Use pattern composition (innovative approach)
                     pattern_sequence = self.graph.find_pattern_sequence(task)
                     if pattern_sequence:
                         code = self.composer.compose(pattern_sequence, context)
+                        # Validate syntax
+                        from .code_generator import CodeGenerator
+                        temp_gen = CodeGenerator(self.kb, use_llm=False)
+                        validation = temp_gen._validate_syntax(code)
+                        if not validation['valid']:
+                            generation_result = {'success': False, 'error': validation.get('error')}
+                        else:
+                            generation_result = {'success': True}
                     else:
                         # Fallback to generator
                         generation_result = self.generator.generate(task, context)
@@ -87,7 +96,7 @@ class MLCodeAgent:
                     generation_result = self.generator.generate(task, context)
                     code = generation_result['code']
                 
-                if not generation_result['success']:
+                if generation_result and not generation_result.get('success', True):
                     # Syntax error in generation
                     return {
                         'code': code,
@@ -174,3 +183,15 @@ class MLCodeAgent:
     def clear_history(self):
         """Clear execution history"""
         self.history = []
+    
+    def _initialize_pattern_graph(self):
+        """Initialize pattern graph with knowledge base patterns"""
+        patterns = self.kb.get_all_patterns()
+        for pattern in patterns:
+            self.graph.add_pattern(pattern['name'], pattern)
+            
+            # Link related patterns
+            if 'classification' in pattern['name']:
+                self.graph.link_patterns(pattern['name'], 'preprocessing', 'requires')
+            if 'regression' in pattern['name']:
+                self.graph.link_patterns(pattern['name'], 'preprocessing', 'requires')
