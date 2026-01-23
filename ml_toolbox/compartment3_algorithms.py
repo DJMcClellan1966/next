@@ -677,6 +677,18 @@ class AlgorithmsCompartment:
         except ImportError as e:
             print(f"Warning: Could not import AI prompt system: {e}")
         
+        # ML Profiler for Performance Analysis
+        try:
+            from ml_profiler import (
+                MLProfiler, PipelineProfiler, ProfiledMLToolbox, profile_ml_pipeline
+            )
+            self.components['MLProfiler'] = MLProfiler
+            self.components['PipelineProfiler'] = PipelineProfiler
+            self.components['ProfiledMLToolbox'] = ProfiledMLToolbox
+            self.components['profile_ml_pipeline'] = profile_ml_pipeline
+        except ImportError as e:
+            print(f"Warning: Could not import ML profiler: {e}")
+        
         # Interactive Dashboard
         try:
             from interactive_dashboard import InteractiveDashboard
@@ -2676,6 +2688,28 @@ class AlgorithmsCompartment:
             return self.components['create_ai_assistant']()
         else:
             raise ImportError("create_ai_assistant not available")
+    
+    # ML Profiler for Performance Analysis
+    def get_ml_profiler(self, enable_memory_profiling: bool = False):
+        """Get ML Profiler for performance analysis"""
+        if 'MLProfiler' in self.components:
+            return self.components['MLProfiler'](enable_memory_profiling=enable_memory_profiling)
+        else:
+            raise ImportError("MLProfiler not available")
+    
+    def get_profiled_toolbox(self, toolbox=None, enable_profiling: bool = True):
+        """Get Profiled ML Toolbox wrapper"""
+        if 'ProfiledMLToolbox' in self.components:
+            return self.components['ProfiledMLToolbox'](toolbox=toolbox, enable_profiling=enable_profiling)
+        else:
+            raise ImportError("ProfiledMLToolbox not available")
+    
+    def profile_pipeline(self, pipeline_func, *args, **kwargs):
+        """Profile an ML pipeline"""
+        if 'profile_ml_pipeline' in self.components:
+            return self.components['profile_ml_pipeline'](pipeline_func, *args, **kwargs)
+        else:
+            raise ImportError("profile_ml_pipeline not available")
     
     def list_components(self):
         """List all available components in this compartment"""
