@@ -56,7 +56,8 @@ class MLToolbox:
     """
     
     def __init__(self, include_mlops: bool = True, auto_start_optimizer: bool = True, 
-                 enable_caching: bool = True, enable_ml_math: bool = True):
+                 enable_caching: bool = True, enable_ml_math: bool = True,
+                 check_dependencies: bool = True, verbose_errors: bool = False):
         """
         Initialize ML Toolbox
         
