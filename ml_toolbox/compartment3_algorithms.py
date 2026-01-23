@@ -665,6 +665,18 @@ class AlgorithmsCompartment:
         except ImportError as e:
             print(f"Warning: Could not import model data optimization: {e}")
         
+        # AI Prompt System for Non-Technical Users
+        try:
+            from ai_prompt_system import (
+                AIPromptSystem, GuidedWorkflow, ReportGenerator, create_ai_assistant
+            )
+            self.components['AIPromptSystem'] = AIPromptSystem
+            self.components['GuidedWorkflow'] = GuidedWorkflow
+            self.components['ReportGenerator'] = ReportGenerator
+            self.components['create_ai_assistant'] = create_ai_assistant
+        except ImportError as e:
+            print(f"Warning: Could not import AI prompt system: {e}")
+        
         # Interactive Dashboard
         try:
             from interactive_dashboard import InteractiveDashboard
@@ -2635,6 +2647,35 @@ class AlgorithmsCompartment:
             return self.components['ModelOptimizationPipeline']()
         else:
             raise ImportError("ModelOptimizationPipeline not available")
+    
+    # AI Prompt System for Non-Technical Users
+    def get_ai_prompt_system(self):
+        """Get AI Prompt System for non-technical users"""
+        if 'AIPromptSystem' in self.components:
+            return self.components['AIPromptSystem']()
+        else:
+            raise ImportError("AIPromptSystem not available")
+    
+    def get_guided_workflow(self, prompt_system: Any):
+        """Get Guided Workflow"""
+        if 'GuidedWorkflow' in self.components:
+            return self.components['GuidedWorkflow'](prompt_system)
+        else:
+            raise ImportError("GuidedWorkflow not available")
+    
+    def get_report_generator(self):
+        """Get Report Generator"""
+        if 'ReportGenerator' in self.components:
+            return self.components['ReportGenerator']
+        else:
+            raise ImportError("ReportGenerator not available")
+    
+    def create_ai_assistant(self):
+        """Create AI Assistant"""
+        if 'create_ai_assistant' in self.components:
+            return self.components['create_ai_assistant']()
+        else:
+            raise ImportError("create_ai_assistant not available")
     
     def list_components(self):
         """List all available components in this compartment"""
