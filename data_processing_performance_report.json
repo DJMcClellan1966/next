@@ -1,0 +1,432 @@
+{
+  "all_results": {
+    "size_100": {
+      "dataset_size": 100,
+      "results": [
+        {
+          "name": "ConventionalPreprocessor",
+          "processing_time": 0.0,
+          "input_size": 130,
+          "output_size": 15,
+          "duplicates_removed": 115,
+          "unsafe_filtered": 0,
+          "throughput": Infinity,
+          "success": true,
+          "error": null
+        },
+        {
+          "name": "AdvancedDataPreprocessor",
+          "processing_time": 0.03066873550415039,
+          "input_size": 130,
+          "output_size": 6,
+          "duplicates_removed": 124,
+          "unsafe_filtered": 0,
+          "throughput": 4238.844473467357,
+          "success": true,
+          "error": null
+        },
+        {
+          "name": "CorpusCallosumPreprocessor (Intelligent)",
+          "processing_time": 0.0063664913177490234,
+          "input_size": 130,
+          "output_size": 6,
+          "duplicates_removed": 124,
+          "unsafe_filtered": 0,
+          "throughput": 20419.41055312137,
+          "success": true,
+          "error": null,
+          "left_hemisphere_ops": 1,
+          "right_hemisphere_ops": 1,
+          "time_saved": 0
+        },
+        {
+          "name": "CorpusCallosumPreprocessor (Parallel)",
+          "processing_time": 0.005697965621948242,
+          "input_size": 130,
+          "output_size": 6,
+          "duplicates_removed": 124,
+          "unsafe_filtered": 0,
+          "throughput": 22815.160466965146,
+          "success": true,
+          "error": null,
+          "left_hemisphere_ops": 1,
+          "right_hemisphere_ops": 1,
+          "time_saved": 0.001786351203918457
+        },
+        {
+          "name": "HybridPreprocessor",
+          "processing_time": 0.0009093284606933594,
+          "input_size": 130,
+          "output_size": 15,
+          "duplicates_removed": 115,
+          "unsafe_filtered": 0,
+          "throughput": 142962.64289459886,
+          "success": true,
+          "error": null
+        }
+      ],
+      "bottlenecks": {
+        "slowest_preprocessor": {
+          "name": "AdvancedDataPreprocessor",
+          "time": 0.03066873550415039,
+          "throughput": 4238.844473467357
+        },
+        "fastest_preprocessor": {
+          "name": "ConventionalPreprocessor",
+          "time": 0.0,
+          "throughput": Infinity
+        },
+        "speedup_opportunities": [],
+        "bottleneck_analysis": [
+          {
+            "preprocessor": "AdvancedDataPreprocessor",
+            "time": 0.03066873550415039,
+            "avg_time": 0.008728504180908203,
+            "slower_by": 251.36301556951653
+          }
+        ],
+        "max_speedup": 1.0
+      }
+    },
+    "size_500": {
+      "dataset_size": 500,
+      "results": [
+        {
+          "name": "ConventionalPreprocessor",
+          "processing_time": 0.0010988712310791016,
+          "input_size": 650,
+          "output_size": 15,
+          "duplicates_removed": 635,
+          "unsafe_filtered": 0,
+          "throughput": 591516.0772401822,
+          "success": true,
+          "error": null
+        },
+        {
+          "name": "AdvancedDataPreprocessor",
+          "processing_time": 0.15970706939697266,
+          "input_size": 650,
+          "output_size": 6,
+          "duplicates_removed": 644,
+          "unsafe_filtered": 0,
+          "throughput": 4069.951333114382,
+          "success": true,
+          "error": null
+        },
+        {
+          "name": "CorpusCallosumPreprocessor (Intelligent)",
+          "processing_time": 0.0020716190338134766,
+          "input_size": 650,
+          "output_size": 6,
+          "duplicates_removed": 644,
+          "unsafe_filtered": 0,
+          "throughput": 313764.25365404534,
+          "success": true,
+          "error": null,
+          "left_hemisphere_ops": 1,
+          "right_hemisphere_ops": 1,
+          "time_saved": 0
+        },
+        {
+          "name": "CorpusCallosumPreprocessor (Parallel)",
+          "processing_time": 0.0032351016998291016,
+          "input_size": 650,
+          "output_size": 6,
+          "duplicates_removed": 644,
+          "unsafe_filtered": 0,
+          "throughput": 200921.04060726656,
+          "success": true,
+          "error": null,
+          "left_hemisphere_ops": 1,
+          "right_hemisphere_ops": 1,
+          "time_saved": 0
+        },
+        {
+          "name": "HybridPreprocessor",
+          "processing_time": 0.0,
+          "input_size": 650,
+          "output_size": 15,
+          "duplicates_removed": 635,
+          "unsafe_filtered": 0,
+          "throughput": Infinity,
+          "success": true,
+          "error": null
+        }
+      ],
+      "bottlenecks": {
+        "slowest_preprocessor": {
+          "name": "AdvancedDataPreprocessor",
+          "time": 0.15970706939697266,
+          "throughput": 4069.951333114382
+        },
+        "fastest_preprocessor": {
+          "name": "HybridPreprocessor",
+          "time": 0.0,
+          "throughput": Infinity
+        },
+        "speedup_opportunities": [],
+        "bottleneck_analysis": [
+          {
+            "preprocessor": "AdvancedDataPreprocessor",
+            "time": 0.15970706939697266,
+            "avg_time": 0.033222532272338866,
+            "slower_by": 380.71913389318917
+          }
+        ],
+        "max_speedup": 1.0
+      }
+    },
+    "size_1000": {
+      "dataset_size": 1000,
+      "results": [
+        {
+          "name": "ConventionalPreprocessor",
+          "processing_time": 0.002015829086303711,
+          "input_size": 1300,
+          "output_size": 15,
+          "duplicates_removed": 1285,
+          "unsafe_filtered": 0,
+          "throughput": 644895.9432288586,
+          "success": true,
+          "error": null
+        },
+        {
+          "name": "AdvancedDataPreprocessor",
+          "processing_time": 0.032587528228759766,
+          "input_size": 1300,
+          "output_size": 6,
+          "duplicates_removed": 1294,
+          "unsafe_filtered": 0,
+          "throughput": 39892.56229788853,
+          "success": true,
+          "error": null
+        },
+        {
+          "name": "CorpusCallosumPreprocessor (Intelligent)",
+          "processing_time": 0.008095741271972656,
+          "input_size": 1300,
+          "output_size": 6,
+          "duplicates_removed": 1294,
+          "unsafe_filtered": 0,
+          "throughput": 160578.2542113323,
+          "success": true,
+          "error": null,
+          "left_hemisphere_ops": 1,
+          "right_hemisphere_ops": 1,
+          "time_saved": 0
+        },
+        {
+          "name": "CorpusCallosumPreprocessor (Parallel)",
+          "processing_time": 0.012580156326293945,
+          "input_size": 1300,
+          "output_size": 6,
+          "duplicates_removed": 1294,
+          "unsafe_filtered": 0,
+          "throughput": 103337.34862124514,
+          "success": true,
+          "error": null,
+          "left_hemisphere_ops": 1,
+          "right_hemisphere_ops": 1,
+          "time_saved": 0
+        },
+        {
+          "name": "HybridPreprocessor",
+          "processing_time": 0.002074718475341797,
+          "input_size": 1300,
+          "output_size": 15,
+          "duplicates_removed": 1285,
+          "unsafe_filtered": 0,
+          "throughput": 626591.0365433234,
+          "success": true,
+          "error": null
+        }
+      ],
+      "bottlenecks": {
+        "slowest_preprocessor": {
+          "name": "AdvancedDataPreprocessor",
+          "time": 0.032587528228759766,
+          "throughput": 39892.56229788853
+        },
+        "fastest_preprocessor": {
+          "name": "ConventionalPreprocessor",
+          "time": 0.002015829086303711,
+          "throughput": 644895.9432288586
+        },
+        "speedup_opportunities": [],
+        "bottleneck_analysis": [
+          {
+            "preprocessor": "AdvancedDataPreprocessor",
+            "time": 0.032587528228759766,
+            "avg_time": 0.011470794677734375,
+            "slower_by": 184.09128699700696
+          }
+        ],
+        "max_speedup": 16.16581904198699
+      }
+    },
+    "size_5000": {
+      "dataset_size": 5000,
+      "results": [
+        {
+          "name": "ConventionalPreprocessor",
+          "processing_time": 0.008545637130737305,
+          "input_size": 6500,
+          "output_size": 15,
+          "duplicates_removed": 6485,
+          "unsafe_filtered": 0,
+          "throughput": 760622.046145691,
+          "success": true,
+          "error": null
+        },
+        {
+          "name": "AdvancedDataPreprocessor",
+          "processing_time": 0.13554811477661133,
+          "input_size": 6500,
+          "output_size": 6,
+          "duplicates_removed": 6494,
+          "unsafe_filtered": 0,
+          "throughput": 47953.45188468506,
+          "success": true,
+          "error": null
+        },
+        {
+          "name": "CorpusCallosumPreprocessor (Intelligent)",
+          "processing_time": 0.012504816055297852,
+          "input_size": 6500,
+          "output_size": 6,
+          "duplicates_removed": 6494,
+          "unsafe_filtered": 0,
+          "throughput": 519799.72926080576,
+          "success": true,
+          "error": null,
+          "left_hemisphere_ops": 1,
+          "right_hemisphere_ops": 1,
+          "time_saved": 0
+        },
+        {
+          "name": "CorpusCallosumPreprocessor (Parallel)",
+          "processing_time": 0.008404254913330078,
+          "input_size": 6500,
+          "output_size": 6,
+          "duplicates_removed": 6494,
+          "unsafe_filtered": 0,
+          "throughput": 773417.7588652482,
+          "success": true,
+          "error": null,
+          "left_hemisphere_ops": 1,
+          "right_hemisphere_ops": 1,
+          "time_saved": 0
+        },
+        {
+          "name": "HybridPreprocessor",
+          "processing_time": 0.008949041366577148,
+          "input_size": 6500,
+          "output_size": 15,
+          "duplicates_removed": 6485,
+          "unsafe_filtered": 0,
+          "throughput": 726334.7808711869,
+          "success": true,
+          "error": null
+        }
+      ],
+      "bottlenecks": {
+        "slowest_preprocessor": {
+          "name": "AdvancedDataPreprocessor",
+          "time": 0.13554811477661133,
+          "throughput": 47953.45188468506
+        },
+        "fastest_preprocessor": {
+          "name": "CorpusCallosumPreprocessor (Parallel)",
+          "time": 0.008404254913330078,
+          "throughput": 773417.7588652482
+        },
+        "speedup_opportunities": [],
+        "bottleneck_analysis": [
+          {
+            "preprocessor": "AdvancedDataPreprocessor",
+            "time": 0.13554811477661133,
+            "avg_time": 0.03479037284851074,
+            "slower_by": 289.6138606126312
+          }
+        ],
+        "max_speedup": 16.128510638297872
+      }
+    }
+  },
+  "summary": {
+    "preprocessor_averages": {
+      "ConventionalPreprocessor": {
+        "times": [
+          0.0,
+          0.0010988712310791016,
+          0.002015829086303711,
+          0.008545637130737305
+        ],
+        "throughputs": [
+          Infinity,
+          591516.0772401822,
+          644895.9432288586,
+          760622.046145691
+        ]
+      },
+      "AdvancedDataPreprocessor": {
+        "times": [
+          0.03066873550415039,
+          0.15970706939697266,
+          0.032587528228759766,
+          0.13554811477661133
+        ],
+        "throughputs": [
+          4238.844473467357,
+          4069.951333114382,
+          39892.56229788853,
+          47953.45188468506
+        ]
+      },
+      "CorpusCallosumPreprocessor (Intelligent)": {
+        "times": [
+          0.0063664913177490234,
+          0.0020716190338134766,
+          0.008095741271972656,
+          0.012504816055297852
+        ],
+        "throughputs": [
+          20419.41055312137,
+          313764.25365404534,
+          160578.2542113323,
+          519799.72926080576
+        ]
+      },
+      "CorpusCallosumPreprocessor (Parallel)": {
+        "times": [
+          0.005697965621948242,
+          0.0032351016998291016,
+          0.012580156326293945,
+          0.008404254913330078
+        ],
+        "throughputs": [
+          22815.160466965146,
+          200921.04060726656,
+          103337.34862124514,
+          773417.7588652482
+        ]
+      },
+      "HybridPreprocessor": {
+        "times": [
+          0.0009093284606933594,
+          0.0,
+          0.002074718475341797,
+          0.008949041366577148
+        ],
+        "throughputs": [
+          142962.64289459886,
+          Infinity,
+          626591.0365433234,
+          726334.7808711869
+        ]
+      }
+    },
+    "total_tests": 20,
+    "successful_tests": 20
+  }
+}
