@@ -12,7 +12,8 @@ import sys
 from pathlib import Path
 from typing import List, Dict, Tuple, Any, Optional, Union, Set
 import numpy as np
-from collections import deque, heapq
+from collections import deque
+import heapq
 import warnings
 
 sys.path.insert(0, str(Path(__file__).parent))
