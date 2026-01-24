@@ -726,6 +726,63 @@ class MLToolbox:
             return self.model_cache.get_stats()
         return {"status": "caching_disabled"}
     
+    @property
+    def computational_kernel(self):
+        """Access to computational kernel for advanced operations"""
+        return self._comp_kernel
+    
+    def preprocess(self, X, method: str = 'standardize', use_kernels: bool = True):
+        """
+        Preprocess data using computational kernels or fallback methods
+        
+        Args:
+            X: Input data
+            method: Preprocessing method ('standardize', 'normalize')
+            use_kernels: Use computational kernels if available
+            
+        Returns:
+            Preprocessed data
+        """
+        import numpy as np
+        
+        if not isinstance(X, np.ndarray):
+            X = np.array(X)
+        
+        if use_kernels and self._comp_kernel is not None:
+            try:
+                if method == 'standardize':
+                    return self._comp_kernel.standardize(X)
+                elif method == 'normalize':
+                    return self._comp_kernel.normalize(X)
+                else:
+                    raise ValueError(f"Unknown method: {method}")
+            except Exception as e:
+                if self.error_handler:
+                    self.error_handler.handle_error(e, "Kernel preprocessing", is_optional=True)
+                # Fallback to NumPy
+                return self._preprocess_fallback(X, method)
+        else:
+            # Fallback to NumPy
+            return self._preprocess_fallback(X, method)
+    
+    def _preprocess_fallback(self, X, method: str):
+        """Fallback preprocessing using NumPy"""
+        import numpy as np
+        
+        if method == 'standardize':
+            mean = np.mean(X, axis=0, keepdims=True)
+            std = np.std(X, axis=0, keepdims=True)
+            std = np.where(std < 1e-10, 1.0, std)
+            return (X - mean) / std
+        elif method == 'normalize':
+            min_val = np.min(X, axis=0, keepdims=True)
+            max_val = np.max(X, axis=0, keepdims=True)
+            range_val = max_val - min_val
+            range_val = np.where(range_val < 1e-10, 1.0, range_val)
+            return (X - min_val) / range_val
+        else:
+            raise ValueError(f"Unknown method: {method}")
+    
     def register_model(self, model: Any, model_name: str, version: Optional[str] = None,
                        metadata: Optional[Dict] = None, stage: str = 'dev'):
         """
