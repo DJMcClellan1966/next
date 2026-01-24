@@ -84,11 +84,13 @@ except ImportError:
 
 # Import Phase 3 integrations
 try:
-    from .deployment.model_deployment import ModelDeployment
+    from .deployment.model_deployment import ModelServer, ModelRegistry, BatchInference
     DEPLOYMENT_API_AVAILABLE = True
 except ImportError:
     DEPLOYMENT_API_AVAILABLE = False
-    ModelDeployment = None
+    ModelServer = None
+    ModelRegistry = None
+    BatchInference = None
 
 try:
     from .ui import ExperimentTrackingUI, InteractiveDashboard
@@ -132,7 +134,7 @@ if MODELS_AVAILABLE:
     __all__.append('PretrainedModelHub')
 
 if DEPLOYMENT_API_AVAILABLE:
-    __all__.append('ModelDeployment')
+    __all__.extend(['ModelServer', 'ModelRegistry', 'BatchInference'])
 
 if UI_AVAILABLE:
     __all__.extend(['ExperimentTrackingUI', 'InteractiveDashboard'])
