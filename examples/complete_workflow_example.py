@@ -18,8 +18,8 @@ try:
     from ml_toolbox import MLToolbox
     print("[OK] ML Toolbox imported successfully")
 except ImportError as e:
-    print(f"❌ Error importing ML Toolbox: {e}")
-    print("\n💡 Try installing the package first:")
+    print(f"[ERROR] Error importing ML Toolbox: {e}")
+    print("\n[TIP] Try installing the package first:")
     print("   pip install -e .")
     raise
 
@@ -39,13 +39,13 @@ def example_1_simple_classification():
     # Simple API - auto-detects and trains
     result = toolbox.fit(X, y)
     
-    print(f"\n✅ Model trained!")
+    print(f"\n[OK] Model trained!")
     print(f"   Model type: {result.get('model_type', 'auto-detected')}")
     print(f"   Accuracy: {result.get('accuracy', 'N/A')}")
     
     # Make predictions
     predictions = toolbox.predict(result['model'], X[:10])
-    print(f"\n✅ Predictions made: {predictions[:5]}")
+    print(f"\n[OK] Predictions made: {predictions[:5]}")
     
     return result
 
@@ -64,7 +64,7 @@ def example_2_natural_language_ml():
     # Natural language interface
     response = toolbox.chat("Classify this data and tell me the accuracy", X, y)
     
-    print(f"\n✅ Agent response:")
+    print(f"\n[OK] Agent response:")
     print(f"   {response.get('message', 'No message')}")
     print(f"   Success: {response.get('success', False)}")
     
@@ -83,13 +83,13 @@ def example_3_agent_workflow():
         # Use agent systems
         agent = toolbox.agents.systems.create_super_power_agent()
         if agent:
-            print("\n✅ Super Power Agent created")
+            print("\n[OK] Super Power Agent created")
             # Use agent for task
             print("   Agent ready for natural language ML tasks")
         else:
-            print("\n⚠️  Agent not available")
+            print("\n[WARNING] Agent not available")
     else:
-        print("\n⚠️  Agent systems not available")
+        print("\n[WARNING] Agent systems not available")
     
     return None
 
@@ -112,13 +112,13 @@ def example_4_brain_features():
             recalled = brain.recall("models")
             state = brain.get_state()
             
-            print("\n✅ Brain system working:")
+            print("\n[OK] Brain system working:")
             print(f"   Working memory chunks: {state.get('working_memory', {}).get('chunks', 0)}")
             print(f"   Episodic events: {state.get('episodic_memory', {}).get('events', 0)}")
         else:
-            print("\n⚠️  Brain system not available")
+            print("\n[WARNING] Brain system not available")
     else:
-        print("\n⚠️  Agent core not available")
+        print("\n[WARNING] Agent core not available")
     
     return None
 
@@ -144,13 +144,13 @@ def example_5_production_workflow():
             model_name='house_price_predictor',
             metadata={'r2_score': result.get('r2_score', 0.0)}
         )
-        print(f"\n✅ Model registered: {model_id}")
+        print(f"\n[OK] Model registered: {model_id}")
         
         # Retrieve model
         model, metadata = toolbox.get_registered_model(model_id)
         print(f"   Retrieved model: {model_id}")
     else:
-        print("\n⚠️  Model registry not available")
+        print("\n[WARNING] Model registry not available")
     
     return result
 
@@ -178,7 +178,7 @@ def run_all_examples():
             result = example_func()
             results[name] = {'success': True, 'result': result}
         except Exception as e:
-            print(f"\n❌ Error in {name}: {e}")
+            print(f"\n[ERROR] Error in {name}: {e}")
             results[name] = {'success': False, 'error': str(e)}
     
     # Summary
@@ -186,8 +186,8 @@ def run_all_examples():
     print("SUMMARY")
     print("="*80)
     successful = sum(1 for r in results.values() if r.get('success'))
-    print(f"\n✅ Successful: {successful}/{len(examples)}")
-    print(f"❌ Failed: {len(examples) - successful}/{len(examples)}")
+    print(f"\n[OK] Successful: {successful}/{len(examples)}")
+    print(f"[ERROR] Failed: {len(examples) - successful}/{len(examples)}")
     
     return results
 
