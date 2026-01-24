@@ -93,6 +93,30 @@ except ImportError:
     MultiAgentSystem = None
     AgentEvaluator = None
 
+# Import Multi-Agent Design
+try:
+    from .multi_agent_design import (
+        AdvancedMultiAgentSystem, AgentHierarchy, HierarchyLevel,
+        CoordinatorPattern, BlackboardPattern, ContractNetPattern,
+        SwarmPattern, PipelinePattern, TaskDecomposer, AgentNegotiation,
+        DistributedExecutor, AgentMonitor
+    )
+    MULTI_AGENT_DESIGN_AVAILABLE = True
+except ImportError:
+    MULTI_AGENT_DESIGN_AVAILABLE = False
+    AdvancedMultiAgentSystem = None
+    AgentHierarchy = None
+    HierarchyLevel = None
+    CoordinatorPattern = None
+    BlackboardPattern = None
+    ContractNetPattern = None
+    SwarmPattern = None
+    PipelinePattern = None
+    TaskDecomposer = None
+    AgentNegotiation = None
+    DistributedExecutor = None
+    AgentMonitor = None
+
 # Import Phase 1 integrations
 try:
     from .testing import ComprehensiveMLTestSuite, MLBenchmarkSuite
@@ -349,6 +373,9 @@ class MLToolbox:
         # Initialize LLM+RAG+KG Agents (lazy-loaded)
         self._llm_rag_kg_agent = None
         self._agent_builder = None
+        
+        # Initialize Advanced Multi-Agent System (lazy-loaded)
+        self._advanced_multi_agent_system = None
         
         # Initialize compartments (pass medulla to infrastructure)
         self.data = DataCompartment()
@@ -887,6 +914,20 @@ class MLToolbox:
                     self.error_handler.handle_import_error('agent_builder', 'Agent Builder', is_optional=True)
                 self._agent_builder = None
         return self._agent_builder
+    
+    @property
+    def advanced_multi_agent_system(self):
+        """Access to Advanced Multi-Agent System (design patterns)"""
+        if self._advanced_multi_agent_system is None and MULTI_AGENT_DESIGN_AVAILABLE:
+            try:
+                from .multi_agent_design import AdvancedMultiAgentSystem
+                self._advanced_multi_agent_system = AdvancedMultiAgentSystem(coordination_pattern='coordinator')
+                print("[MLToolbox] Advanced Multi-Agent System enabled (design patterns)")
+            except Exception as e:
+                if self.error_handler:
+                    self.error_handler.handle_import_error('advanced_multi_agent_system', 'Advanced Multi-Agent System', is_optional=True)
+                self._advanced_multi_agent_system = None
+        return self._advanced_multi_agent_system
     
     def chat(self, message: str, data=None, 
              target=None, **kwargs) -> Dict:
