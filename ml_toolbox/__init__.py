@@ -67,6 +67,44 @@ except ImportError:
     ModelCompression = None
     ModelCalibration = None
 
+# Import Phase 2 integrations
+try:
+    from .automl import AutoMLFramework
+    AUTOML_AVAILABLE = True
+except ImportError:
+    AUTOML_AVAILABLE = False
+    AutoMLFramework = None
+
+try:
+    from .models import PretrainedModelHub
+    MODELS_AVAILABLE = True
+except ImportError:
+    MODELS_AVAILABLE = False
+    PretrainedModelHub = None
+
+# Import Phase 3 integrations
+try:
+    from .deployment.model_deployment import ModelDeployment
+    DEPLOYMENT_API_AVAILABLE = True
+except ImportError:
+    DEPLOYMENT_API_AVAILABLE = False
+    ModelDeployment = None
+
+try:
+    from .ui import ExperimentTrackingUI, InteractiveDashboard
+    UI_AVAILABLE = True
+except ImportError:
+    UI_AVAILABLE = False
+    ExperimentTrackingUI = None
+    InteractiveDashboard = None
+
+try:
+    from .security import MLSecurityFramework
+    SECURITY_AVAILABLE = True
+except ImportError:
+    SECURITY_AVAILABLE = False
+    MLSecurityFramework = None
+
 # Build __all__
 __all__ = [
     'DataCompartment',
@@ -86,6 +124,21 @@ if DEPLOYMENT_AVAILABLE:
 
 if OPTIMIZATION_AVAILABLE:
     __all__.extend(['ModelCompression', 'ModelCalibration'])
+
+if AUTOML_AVAILABLE:
+    __all__.append('AutoMLFramework')
+
+if MODELS_AVAILABLE:
+    __all__.append('PretrainedModelHub')
+
+if DEPLOYMENT_API_AVAILABLE:
+    __all__.append('ModelDeployment')
+
+if UI_AVAILABLE:
+    __all__.extend(['ExperimentTrackingUI', 'InteractiveDashboard'])
+
+if SECURITY_AVAILABLE:
+    __all__.append('MLSecurityFramework')
 
 
 class MLToolbox:

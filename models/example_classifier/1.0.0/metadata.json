@@ -1,0 +1,11 @@
+{
+  "model_name": "example_classifier",
+  "version": "1.0.0",
+  "format": "pickle",
+  "compressed": false,
+  "saved_at": "2026-01-23T19:18:35.951291",
+  "model_type": "RandomForestClassifier",
+  "metadata": {
+    "accuracy": 0
+  }
+}
