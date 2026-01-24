@@ -24,7 +24,11 @@ class AgentState(Enum):
 @dataclass
 class AgentState:
     """Agent state container"""
-    current_state: 'AgentStateEnum' = AgentStateEnum.IDLE
+    current_state: 'AgentStateEnum' = None
+    
+    def __post_init__(self):
+        if self.current_state is None:
+            self.current_state = AgentStateEnum.IDLE
     context: Dict[str, Any] = field(default_factory=dict)
     history: List[Dict] = field(default_factory=list)
     tools: List[str] = field(default_factory=list)
