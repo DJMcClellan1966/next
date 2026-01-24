@@ -7,11 +7,12 @@ Agent Fundamentals - From Microsoft's AI Agents for Beginners
 - Production-ready patterns
 """
 try:
-    from .agent_basics import AgentBasics, SimpleAgent
+    from .agent_basics import AgentBasics, SimpleAgent, AgentStateEnum
     from .agent_loops import AgentLoop, ReActLoop, PlanActLoop
     __all__ = [
         'AgentBasics',
         'SimpleAgent',
+        'AgentStateEnum',
         'AgentLoop',
         'ReActLoop',
         'PlanActLoop'
