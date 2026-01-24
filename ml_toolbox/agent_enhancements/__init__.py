@@ -14,7 +14,6 @@ Missing features that would significantly enhance agents:
 try:
     from .agent_memory import AgentMemory, ShortTermMemory, LongTermMemory
     from .agent_tools import AgentTool, ToolRegistry, ToolExecutor
-    from .agent_streaming import StreamingAgent, AsyncAgent
     from .agent_persistence import AgentCheckpoint, AgentPersistence
     from .agent_evaluation import AgentEvaluator, AgentMetrics
     from .agent_monitoring import AgentMonitor, CostTracker, RateLimiter
@@ -25,8 +24,6 @@ try:
         'AgentTool',
         'ToolRegistry',
         'ToolExecutor',
-        'StreamingAgent',
-        'AsyncAgent',
         'AgentCheckpoint',
         'AgentPersistence',
         'AgentEvaluator',
