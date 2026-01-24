@@ -75,6 +75,24 @@ except ImportError:
     AgentBuilder = None
     KnowledgeGraphAgent = None
 
+# Import Agentic Systems
+try:
+    from .agentic_systems import (
+        CompleteAgent, AgentCore, AgentPlanner, AgentExecutor,
+        AgentToolRegistry, AgentCommunication, MultiAgentSystem, AgentEvaluator
+    )
+    AGENTIC_SYSTEMS_AVAILABLE = True
+except ImportError:
+    AGENTIC_SYSTEMS_AVAILABLE = False
+    CompleteAgent = None
+    AgentCore = None
+    AgentPlanner = None
+    AgentExecutor = None
+    AgentToolRegistry = None
+    AgentCommunication = None
+    MultiAgentSystem = None
+    AgentEvaluator = None
+
 # Import Phase 1 integrations
 try:
     from .testing import ComprehensiveMLTestSuite, MLBenchmarkSuite
