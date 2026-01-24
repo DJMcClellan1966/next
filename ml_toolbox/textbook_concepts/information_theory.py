@@ -8,7 +8,7 @@ Implements:
 - Information Gain
 """
 import numpy as np
-from typing import Optional
+from typing import Optional, List
 import logging
 
 logger = logging.getLogger(__name__)

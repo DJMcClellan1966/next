@@ -214,7 +214,11 @@ class HyperparameterTuning:
             params = dict(zip(param_names, combo))
             
             # Create model with parameters
-            model = model_class(**params)
+            try:
+                model = model_class(**params)
+            except TypeError:
+                # If model doesn't accept these params, skip
+                continue
             
             # Cross-validation
             cv_scores = CrossValidation.cross_val_score(model, X, y, cv=cv, scoring=scoring)
@@ -266,7 +270,10 @@ class HyperparameterTuning:
             params = {name: dist() for name, dist in param_distributions.items()}
             
             # Create model
-            model = model_class(**params)
+            try:
+                model = model_class(**params)
+            except TypeError:
+                continue
             
             # Cross-validation
             cv_scores = CrossValidation.cross_val_score(model, X, y, cv=cv, scoring=scoring)
