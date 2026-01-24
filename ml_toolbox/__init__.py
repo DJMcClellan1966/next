@@ -790,3 +790,84 @@ class MLToolbox:
             from ml_toolbox.optimization import ModelCalibration
             self._model_calibration = ModelCalibration()
         return self._model_calibration
+    
+    # Phase 2 Integration: AutoML
+    def get_automl_framework(self):
+        """Get AutoML framework instance"""
+        if AUTOML_AVAILABLE and self._automl_framework is None:
+            try:
+                from ml_toolbox.automl import AutoMLFramework
+                self._automl_framework = AutoMLFramework()
+            except Exception as e:
+                if self.error_handler:
+                    self.error_handler.handle_import_error('ml_toolbox.automl', 'AutoML Framework', is_optional=True)
+                self._automl_framework = None
+        return self._automl_framework
+    
+    def get_pretrained_model_hub(self, hub_path: str = "model_hub"):
+        """Get pretrained model hub instance"""
+        if MODELS_AVAILABLE:
+            try:
+                from ml_toolbox.models import PretrainedModelHub
+                if self._pretrained_model_hub is None:
+                    self._pretrained_model_hub = PretrainedModelHub(hub_path=hub_path)
+            except Exception as e:
+                if self.error_handler:
+                    self.error_handler.handle_import_error('ml_toolbox.models', 'Pretrained Model Hub', is_optional=True)
+                self._pretrained_model_hub = None
+        return self._pretrained_model_hub
+    
+    # Phase 3 Integration: Deployment
+    def get_model_deployment(self):
+        """Get model deployment instance (ModelServer)"""
+        if DEPLOYMENT_API_AVAILABLE and self._model_deployment is None:
+            try:
+                from ml_toolbox.deployment.model_deployment import ModelServer, ModelRegistry
+                # Create a default registry and server
+                registry = ModelRegistry()
+                self._model_deployment = ModelServer(registry)
+            except Exception as e:
+                if self.error_handler:
+                    self.error_handler.handle_import_error('ml_toolbox.deployment.model_deployment', 'Model Deployment', is_optional=True)
+                self._model_deployment = None
+        return self._model_deployment
+    
+    # Phase 3 Integration: UI
+    def get_experiment_tracking_ui(self, storage_path: str = "experiments.json"):
+        """Get experiment tracking UI instance"""
+        if UI_AVAILABLE:
+            try:
+                from ml_toolbox.ui import ExperimentTrackingUI
+                if self._experiment_tracking_ui is None:
+                    self._experiment_tracking_ui = ExperimentTrackingUI(storage_path=storage_path)
+            except Exception as e:
+                if self.error_handler:
+                    self.error_handler.handle_import_error('ml_toolbox.ui', 'Experiment Tracking UI', is_optional=True)
+                self._experiment_tracking_ui = None
+        return self._experiment_tracking_ui
+    
+    def get_interactive_dashboard(self, storage_path: str = "experiments.json"):
+        """Get interactive dashboard instance"""
+        if UI_AVAILABLE:
+            try:
+                from ml_toolbox.ui import InteractiveDashboard
+                if self._interactive_dashboard is None:
+                    self._interactive_dashboard = InteractiveDashboard(storage_path=storage_path)
+            except Exception as e:
+                if self.error_handler:
+                    self.error_handler.handle_import_error('ml_toolbox.ui', 'Interactive Dashboard', is_optional=True)
+                self._interactive_dashboard = None
+        return self._interactive_dashboard
+    
+    # Phase 3 Integration: Security
+    def get_ml_security_framework(self):
+        """Get ML security framework instance"""
+        if SECURITY_AVAILABLE and self._ml_security_framework is None:
+            try:
+                from ml_toolbox.security import MLSecurityFramework
+                self._ml_security_framework = MLSecurityFramework()
+            except Exception as e:
+                if self.error_handler:
+                    self.error_handler.handle_import_error('ml_toolbox.security', 'ML Security Framework', is_optional=True)
+                self._ml_security_framework = None
+        return self._ml_security_framework
