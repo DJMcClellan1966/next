@@ -57,6 +57,14 @@ except ImportError:
     JuliaLikeKernel = None
     UnifiedComputationalKernel = None
 
+# Import Super Power Agent
+try:
+    from .ai_agent import SuperPowerAgent
+    SUPER_POWER_AGENT_AVAILABLE = True
+except ImportError:
+    SUPER_POWER_AGENT_AVAILABLE = False
+    SuperPowerAgent = None
+
 # Import Phase 1 integrations
 try:
     from .testing import ComprehensiveMLTestSuite, MLBenchmarkSuite
@@ -297,6 +305,18 @@ class MLToolbox:
             self._cv_kernel = None
             self._eval_kernel = None
             self._serving_kernel = None
+        
+        # Initialize Super Power Agent
+        self._super_power_agent = None
+        if SUPER_POWER_AGENT_AVAILABLE:
+            try:
+                from .ai_agent import SuperPowerAgent
+                self._super_power_agent = SuperPowerAgent(toolbox=self)
+                print("[MLToolbox] Super Power Agent enabled (natural language ML)")
+            except Exception as e:
+                if self.error_handler:
+                    self.error_handler.handle_import_error('super_power_agent', 'Super Power Agent', is_optional=True)
+                self._super_power_agent = None
         
         # Initialize compartments (pass medulla to infrastructure)
         self.data = DataCompartment()
@@ -803,6 +823,46 @@ class MLToolbox:
     def serving_kernel(self):
         """Access to serving kernel"""
         return self._serving_kernel
+    
+    @property
+    def super_power_agent(self):
+        """Access to Super Power Agent (natural language ML)"""
+        return self._super_power_agent
+    
+    def chat(self, message: str, data=None, 
+             target=None, **kwargs) -> Dict:
+        """
+        Conversational ML interface
+        
+        Parameters
+        ----------
+        message : str
+            Natural language message (e.g., "Predict house prices from this data")
+        data : array-like, optional
+            Input data
+        target : array-like, optional
+            Target labels
+        **kwargs
+            Additional parameters
+            
+        Returns
+        -------
+        response : dict
+            Agent response with results and suggestions
+            
+        Example:
+            >>> toolbox = MLToolbox()
+            >>> response = toolbox.chat("Predict sales from this data", X, y)
+            >>> print(response['message'])
+            "Task completed! Accuracy: 92.5%"
+        """
+        if self._super_power_agent:
+            return self._super_power_agent.chat(message, data, target, **kwargs)
+        else:
+            return {
+                'error': 'Super Power Agent not available',
+                'message': 'Please install required dependencies'
+            }
     
     def preprocess(self, X, method: str = 'standardize', use_kernels: bool = True):
         """
