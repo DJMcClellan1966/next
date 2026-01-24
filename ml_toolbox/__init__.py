@@ -65,6 +65,16 @@ except ImportError:
     SUPER_POWER_AGENT_AVAILABLE = False
     SuperPowerAgent = None
 
+# Import LLM+RAG+KG Agents
+try:
+    from .ai_agents import LLMRAGKGAgent, AgentBuilder, KnowledgeGraphAgent
+    LLM_RAG_KG_AGENTS_AVAILABLE = True
+except ImportError:
+    LLM_RAG_KG_AGENTS_AVAILABLE = False
+    LLMRAGKGAgent = None
+    AgentBuilder = None
+    KnowledgeGraphAgent = None
+
 # Import Phase 1 integrations
 try:
     from .testing import ComprehensiveMLTestSuite, MLBenchmarkSuite
@@ -317,6 +327,10 @@ class MLToolbox:
                 if self.error_handler:
                     self.error_handler.handle_import_error('super_power_agent', 'Super Power Agent', is_optional=True)
                 self._super_power_agent = None
+        
+        # Initialize LLM+RAG+KG Agents (lazy-loaded)
+        self._llm_rag_kg_agent = None
+        self._agent_builder = None
         
         # Initialize compartments (pass medulla to infrastructure)
         self.data = DataCompartment()
@@ -828,6 +842,33 @@ class MLToolbox:
     def super_power_agent(self):
         """Access to Super Power Agent (natural language ML)"""
         return self._super_power_agent
+    
+    @property
+    def llm_rag_kg_agent(self):
+        """Access to LLM+RAG+KG Agent (comprehensive AI agent)"""
+        if self._llm_rag_kg_agent is None and LLM_RAG_KG_AGENTS_AVAILABLE:
+            try:
+                from .ai_agents import LLMRAGKGAgent
+                self._llm_rag_kg_agent = LLMRAGKGAgent(toolbox=self)
+                print("[MLToolbox] LLM+RAG+KG Agent enabled (comprehensive AI agent)")
+            except Exception as e:
+                if self.error_handler:
+                    self.error_handler.handle_import_error('llm_rag_kg_agent', 'LLM+RAG+KG Agent', is_optional=True)
+                self._llm_rag_kg_agent = None
+        return self._llm_rag_kg_agent
+    
+    @property
+    def agent_builder(self):
+        """Access to Agent Builder (build custom agents)"""
+        if self._agent_builder is None and LLM_RAG_KG_AGENTS_AVAILABLE:
+            try:
+                from .ai_agents import AgentBuilder
+                self._agent_builder = AgentBuilder()
+            except Exception as e:
+                if self.error_handler:
+                    self.error_handler.handle_import_error('agent_builder', 'Agent Builder', is_optional=True)
+                self._agent_builder = None
+        return self._agent_builder
     
     def chat(self, message: str, data=None, 
              target=None, **kwargs) -> Dict:
