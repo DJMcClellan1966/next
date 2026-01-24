@@ -388,6 +388,23 @@ class MLToolbox:
         else:
             self.mlops = None
         
+        # Agent compartments (organized like toolbox)
+        try:
+            from .agents import (
+                AgentCoreCompartment, AgentIntelligenceCompartment,
+                AgentSystemsCompartment, AgentOperationsCompartment
+            )
+            self.agents = type('Agents', (), {
+                'core': AgentCoreCompartment(),
+                'intelligence': AgentIntelligenceCompartment(),
+                'systems': AgentSystemsCompartment(),
+                'operations': AgentOperationsCompartment()
+            })()
+            print("[MLToolbox] Agent Compartments enabled (organized structure)")
+        except ImportError as e:
+            print(f"[MLToolbox] Warning: Agent Compartments not available: {e}")
+            self.agents = None
+        
         # Model Registry (automatic)
         try:
             from .model_registry import get_model_registry
