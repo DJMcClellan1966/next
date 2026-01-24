@@ -301,8 +301,8 @@ class MLToolbox:
         
         # Mark as available (will load on first access)
         self._revolutionary_features_available = True
-            print("[MLToolbox] Revolutionary Features available (lazy-loaded)")
-            print("[MLToolbox] Fun & Daring Features available (lazy-loaded)")
+        print("[MLToolbox] Revolutionary Features available (lazy-loaded)")
+        print("[MLToolbox] Fun & Daring Features available (lazy-loaded)")
         
         # Initialize Phase 1 integrations (lazy-loaded)
         self._test_suite = None
