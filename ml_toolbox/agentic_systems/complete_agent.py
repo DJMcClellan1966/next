@@ -145,11 +145,13 @@ class CompleteAgent:
         # Validate plan
         validation = self.planner.validate_plan(plan, capabilities)
         if not validation['is_valid']:
+            execution_time = time.time() - start_time
             self.core.update_state(AgentStatus.ERROR, error=str(validation['issues']))
             return {
                 'success': False,
                 'error': 'Plan validation failed',
-                'issues': validation['issues']
+                'issues': validation['issues'],
+                'execution_time': execution_time
             }
         
         # Optimize plan
@@ -159,7 +161,17 @@ class CompleteAgent:
         self.core.update_state(AgentStatus.EXECUTING, current_plan=plan)
         
         # Execute plan
-        execution_result = self.executor.execute_plan(plan, self.core)
+        try:
+            execution_result = self.executor.execute_plan(plan, self.core)
+        except Exception as e:
+            execution_time = time.time() - start_time
+            logger.error(f"[CompleteAgent] Plan execution failed: {e}")
+            self.core.update_state(AgentStatus.ERROR, error=str(e))
+            return {
+                'success': False,
+                'error': str(e),
+                'execution_time': execution_time
+            }
         
         execution_time = time.time() - start_time
         
