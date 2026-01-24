@@ -301,8 +301,8 @@ class MLToolbox:
         
         # Mark as available (will load on first access)
         self._revolutionary_features_available = True
-        print("[MLToolbox] Revolutionary Features available (lazy-loaded)")
-        print("[MLToolbox] Fun & Daring Features available (lazy-loaded)")
+            print("[MLToolbox] Revolutionary Features available (lazy-loaded)")
+            print("[MLToolbox] Fun & Daring Features available (lazy-loaded)")
         
         # Initialize Phase 1 integrations (lazy-loaded)
         self._test_suite = None
@@ -310,6 +310,16 @@ class MLToolbox:
         self._model_persistence = None
         self._model_compression = None
         self._model_calibration = None
+        
+        # Initialize Phase 2 integrations (lazy-loaded)
+        self._automl_framework = None
+        self._pretrained_model_hub = None
+        
+        # Initialize Phase 3 integrations (lazy-loaded)
+        self._model_deployment = None
+        self._experiment_tracking_ui = None
+        self._interactive_dashboard = None
+        self._ml_security_framework = None
     
     def __repr__(self):
         mlops_info = f", mlops={len(self.mlops.components)}" if self.mlops else ""
