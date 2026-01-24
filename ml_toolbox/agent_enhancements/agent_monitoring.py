@@ -3,7 +3,7 @@ Agent Monitoring - Cost Tracking, Rate Limiting, Metrics
 
 Production-ready monitoring
 """
-from typing import Dict, Optional, List
+from typing import Dict, Optional, List, Any
 from collections import defaultdict
 import time
 import logging
