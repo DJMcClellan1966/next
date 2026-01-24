@@ -3,10 +3,25 @@ Complete ML Workflow Example
 
 Demonstrates end-to-end ML pipeline using ML Toolbox
 This is what users actually want to do.
+
+Installation:
+    pip install -e .  # From project root
+
+Usage:
+    python examples/complete_workflow_example.py
 """
 import numpy as np
 from sklearn.datasets import make_classification, make_regression
-from ml_toolbox import MLToolbox
+
+# Import ML Toolbox
+try:
+    from ml_toolbox import MLToolbox
+    print("✅ ML Toolbox imported successfully")
+except ImportError as e:
+    print(f"❌ Error importing ML Toolbox: {e}")
+    print("\n💡 Try installing the package first:")
+    print("   pip install -e .")
+    raise
 
 def example_1_simple_classification():
     """Example 1: Simple Classification - What users actually want"""

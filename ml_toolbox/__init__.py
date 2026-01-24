@@ -12,16 +12,26 @@ from typing import Any, Optional, Dict
 import sys
 from pathlib import Path
 
-# Add parent directory to path for improvements
-sys.path.insert(0, str(Path(__file__).parent.parent))
+# Try to add parent directory to path for improvements (optional)
+# This allows importing optional modules from parent directory if they exist
+_parent_dir = Path(__file__).parent.parent
+if _parent_dir.exists():
+    _parent_str = str(_parent_dir)
+    if _parent_str not in sys.path:
+        sys.path.insert(0, _parent_str)
 
-# Import improvements
+# Import improvements (optional - toolbox works without them)
 try:
     from dependency_manager import get_dependency_manager
     from error_handler import get_error_handler
     IMPROVEMENTS_AVAILABLE = True
 except ImportError:
     IMPROVEMENTS_AVAILABLE = False
+    # Create dummy functions if not available
+    def get_dependency_manager():
+        return None
+    def get_error_handler(verbose=False):
+        return None
 
 from .compartment1_data import DataCompartment
 from .compartment2_infrastructure import InfrastructureCompartment
