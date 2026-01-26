@@ -51,6 +51,9 @@ try:
     from .self_organization import (
         SelfOrganizingMap, EmergentBehaviorSystem, DissipativeStructure
     )
+    from .precognition import (
+        PrecognitiveForecaster, CausalPrecognition, ProbabilityVision
+    )
     __all__ = [
         'KnowledgeBase',
         'RuleBasedSystem',
@@ -104,7 +107,10 @@ try:
         'RobustMLProtocol',
         'SelfOrganizingMap',
         'EmergentBehaviorSystem',
-        'DissipativeStructure'
+        'DissipativeStructure',
+        'PrecognitiveForecaster',
+        'CausalPrecognition',
+        'ProbabilityVision'
     ]
 except ImportError as e:
     import warnings

@@ -14,3 +14,12 @@ except ImportError as e:
     __all__ = []
     import warnings
     warnings.warn(f"AutoML module imports failed: {e}")
+
+# Singularity (Sci-Fi)
+try:
+    from ml_toolbox.automl.singularity import (
+        SelfModifyingSystem, RecursiveOptimizer, SingularitySystem
+    )
+    __all__.extend(['SelfModifyingSystem', 'RecursiveOptimizer', 'SingularitySystem'])
+except ImportError:
+    pass

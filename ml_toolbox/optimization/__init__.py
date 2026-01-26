@@ -57,3 +57,12 @@ try:
                     'SystemHierarchy', 'MetaCommunication'])
 except ImportError:
     pass
+
+# Multiverse Processing (Sci-Fi)
+try:
+    from ml_toolbox.optimization.multiverse import (
+        ParallelUniverse, MultiverseProcessor
+    )
+    __all__.extend(['ParallelUniverse', 'MultiverseProcessor'])
+except ImportError:
+    pass
