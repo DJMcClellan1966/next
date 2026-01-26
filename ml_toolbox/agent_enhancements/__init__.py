@@ -28,6 +28,13 @@ try:
         PersonalityTypeAnalyzer, PersonalityProfile,
         PersonalityBasedAgentSelector, SymbolicPatternRecognizer
     )
+    from .socratic_method import (
+        SocraticQuestioner, SocraticDebugger, SocraticExplainer,
+        SocraticActiveLearner
+    )
+    from .moral_laws import (
+        MoralLawSystem, EthicalModelSelector, MoralReasoner
+    )
     __all__ = [
         'AgentMemory',
         'ShortTermMemory',
@@ -54,7 +61,14 @@ try:
         'PersonalityTypeAnalyzer',
         'PersonalityProfile',
         'PersonalityBasedAgentSelector',
-        'SymbolicPatternRecognizer'
+        'SymbolicPatternRecognizer',
+        'SocraticQuestioner',
+        'SocraticDebugger',
+        'SocraticExplainer',
+        'SocraticActiveLearner',
+        'MoralLawSystem',
+        'EthicalModelSelector',
+        'MoralReasoner'
     ]
 except ImportError as e:
     import warnings

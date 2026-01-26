@@ -22,6 +22,9 @@ try:
     from .distributed_execution import DistributedExecutor, ExecutionStrategy
     from .agent_monitoring import AgentMonitor, HealthCheck, AgentHealth, HealthStatus
     from .advanced_multi_agent_system import AdvancedMultiAgentSystem
+    from .divine_omniscience import (
+        OmniscientKnowledgeBase, OmniscientCoordinator, DivineOversight
+    )
     __all__ = [
         'AgentHierarchy',
         'HierarchyLevel',
@@ -40,7 +43,10 @@ try:
         'HealthCheck',
         'AgentHealth',
         'HealthStatus',
-        'AdvancedMultiAgentSystem'
+        'AdvancedMultiAgentSystem',
+        'OmniscientKnowledgeBase',
+        'OmniscientCoordinator',
+        'DivineOversight'
     ]
 except ImportError as e:
     import warnings

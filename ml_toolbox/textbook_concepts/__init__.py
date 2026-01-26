@@ -36,6 +36,21 @@ try:
         HeisenbergUncertaintyRegularizer, SchrodingerWaveFunction,
         BellInequality, BornRule, WaveParticleDuality
     )
+    from .statistical_mechanics import (
+        SimulatedAnnealing, BoltzmannMachine, TemperatureScheduler,
+        entropy_regularization, free_energy
+    )
+    from .linguistics import (
+        SimpleSyntacticParser, GrammarBasedFeatureExtractor,
+        HierarchicalTextProcessor
+    )
+    from .communication_theory import (
+        ErrorCorrectingPredictions, NoiseRobustModel,
+        channel_capacity, signal_to_noise_ratio, RobustMLProtocol
+    )
+    from .self_organization import (
+        SelfOrganizingMap, EmergentBehaviorSystem, DissipativeStructure
+    )
     __all__ = [
         'KnowledgeBase',
         'RuleBasedSystem',
@@ -73,7 +88,23 @@ try:
         'SchrodingerWaveFunction',
         'BellInequality',
         'BornRule',
-        'WaveParticleDuality'
+        'WaveParticleDuality',
+        'SimulatedAnnealing',
+        'BoltzmannMachine',
+        'TemperatureScheduler',
+        'entropy_regularization',
+        'free_energy',
+        'SimpleSyntacticParser',
+        'GrammarBasedFeatureExtractor',
+        'HierarchicalTextProcessor',
+        'ErrorCorrectingPredictions',
+        'NoiseRobustModel',
+        'channel_capacity',
+        'signal_to_noise_ratio',
+        'RobustMLProtocol',
+        'SelfOrganizingMap',
+        'EmergentBehaviorSystem',
+        'DissipativeStructure'
     ]
 except ImportError as e:
     import warnings

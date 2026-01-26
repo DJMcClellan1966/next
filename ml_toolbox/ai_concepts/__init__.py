@@ -17,6 +17,22 @@ try:
         find_nash_equilibrium, find_nash_equilibrium_general,
         game_theoretic_ensemble_selection, NonZeroSumGame, MultiPlayerGame
     )
+    from .cooperative_games import (
+        shapley_value, shapley_value_feature_importance,
+        CoalitionFormation, NashBargainingSolution
+    )
+    from .network_theory import (
+        ScaleFreeNetwork, NetworkCentrality, CommunityDetection,
+        network_based_feature_importance
+    )
+    from .cooperative_games import (
+        shapley_value, shapley_value_feature_importance,
+        CoalitionFormation, NashBargainingSolution
+    )
+    from .network_theory import (
+        ScaleFreeNetwork, NetworkCentrality, CommunityDetection,
+        network_based_feature_importance
+    )
     __all__ = [
         'AStar',
         'AdversarialSearch',
@@ -38,7 +54,15 @@ try:
         'find_nash_equilibrium_general',
         'game_theoretic_ensemble_selection',
         'NonZeroSumGame',
-        'MultiPlayerGame'
+        'MultiPlayerGame',
+        'shapley_value',
+        'shapley_value_feature_importance',
+        'CoalitionFormation',
+        'NashBargainingSolution',
+        'ScaleFreeNetwork',
+        'NetworkCentrality',
+        'CommunityDetection',
+        'network_based_feature_importance'
     ]
 except ImportError as e:
     import warnings
