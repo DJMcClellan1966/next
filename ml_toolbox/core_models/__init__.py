@@ -22,7 +22,8 @@ try:
     )
     from .evaluation_metrics import (
         precision_score, recall_score, f1_score,
-        roc_curve, roc_auc_score, auc_score, classification_report
+        roc_curve, roc_auc_score, auc_score, classification_report,
+        cross_entropy_loss, kl_divergence_score, model_comparison_kl
     )
     __all__ = [
         'LinearRegression',
@@ -44,7 +45,10 @@ try:
         'roc_curve',
         'roc_auc_score',
         'auc_score',
-        'classification_report'
+        'classification_report',
+        'cross_entropy_loss',
+        'kl_divergence_score',
+        'model_comparison_kl'
     ]
 except ImportError as e:
     import warnings

@@ -7,6 +7,8 @@ Implements:
 - F1-Score
 - ROC Curve
 - AUC
+- Cross-Entropy Loss (Information-Theoretic)
+- KL Divergence for Model Comparison (Information-Theoretic)
 """
 import numpy as np
 from typing import Tuple, Dict, List, Optional
@@ -335,3 +337,142 @@ def classification_report(y_true: np.ndarray, y_pred: np.ndarray,
     report['f1-score']['weighted avg'] = f1_score(y_true, y_pred, average='weighted')
     
     return report
+
+
+def cross_entropy_loss(y_true: np.ndarray, y_pred_proba: np.ndarray, 
+                       epsilon: float = 1e-15) -> float:
+    """
+    Calculate Cross-Entropy Loss (Information-Theoretic)
+    
+    H(P, Q) = -Σ P(x) * log(Q(x))
+    
+    Parameters
+    ----------
+    y_true : array
+        True labels (one-hot encoded or class indices)
+    y_pred_proba : array
+        Predicted probabilities (shape: [n_samples, n_classes])
+    epsilon : float
+        Small value to avoid log(0)
+        
+    Returns
+    -------
+    loss : float
+        Cross-entropy loss
+    """
+    y_true = np.asarray(y_true)
+    y_pred_proba = np.asarray(y_pred_proba)
+    
+    # Clip probabilities to avoid log(0)
+    y_pred_proba = np.clip(y_pred_proba, epsilon, 1 - epsilon)
+    
+    # Handle one-hot encoding
+    if y_true.ndim == 1:
+        # Convert class indices to one-hot
+        n_classes = y_pred_proba.shape[1] if y_pred_proba.ndim > 1 else 2
+        y_true_onehot = np.zeros((len(y_true), n_classes))
+        y_true_onehot[np.arange(len(y_true)), y_true.astype(int)] = 1
+        y_true = y_true_onehot
+    elif y_true.ndim == 2 and y_true.shape[1] == 1:
+        # Reshape if needed
+        n_classes = y_pred_proba.shape[1] if y_pred_proba.ndim > 1 else 2
+        y_true_onehot = np.zeros((len(y_true), n_classes))
+        y_true_onehot[np.arange(len(y_true)), y_true.ravel().astype(int)] = 1
+        y_true = y_true_onehot
+    
+    # Ensure shapes match
+    if y_pred_proba.ndim == 1:
+        # Binary classification: convert to 2D
+        y_pred_proba = np.column_stack([1 - y_pred_proba, y_pred_proba])
+    
+    # Calculate cross-entropy
+    loss = -np.mean(np.sum(y_true * np.log(y_pred_proba), axis=1))
+    
+    return loss
+
+
+def kl_divergence_score(y_true_proba: np.ndarray, y_pred_proba: np.ndarray,
+                        epsilon: float = 1e-15) -> float:
+    """
+    Calculate KL Divergence between True and Predicted Distributions
+    
+    KL(P || Q) = Σ P(x) * log(P(x) / Q(x))
+    
+    Useful for comparing model predictions to true probability distributions
+    
+    Parameters
+    ----------
+    y_true_proba : array
+        True probability distribution (shape: [n_samples, n_classes])
+    y_pred_proba : array
+        Predicted probability distribution (shape: [n_samples, n_classes])
+    epsilon : float
+        Small value to avoid log(0)
+        
+    Returns
+    -------
+    kl_div : float
+        Average KL divergence across samples
+    """
+    y_true_proba = np.asarray(y_true_proba)
+    y_pred_proba = np.asarray(y_pred_proba)
+    
+    # Normalize to ensure they're probability distributions
+    y_true_proba = y_true_proba / (y_true_proba.sum(axis=1, keepdims=True) + epsilon)
+    y_pred_proba = y_pred_proba / (y_pred_proba.sum(axis=1, keepdims=True) + epsilon)
+    
+    # Clip to avoid log(0)
+    y_true_proba = np.clip(y_true_proba, epsilon, 1.0)
+    y_pred_proba = np.clip(y_pred_proba, epsilon, 1.0)
+    
+    # Calculate KL divergence for each sample
+    kl_per_sample = np.sum(y_true_proba * np.log(y_true_proba / y_pred_proba), axis=1)
+    
+    # Return average
+    return np.mean(kl_per_sample)
+
+
+def model_comparison_kl(model1_proba: np.ndarray, model2_proba: np.ndarray,
+                        reference_proba: Optional[np.ndarray] = None,
+                        epsilon: float = 1e-15) -> Dict[str, float]:
+    """
+    Compare two models using KL Divergence
+    
+    Compares how well each model approximates the reference distribution
+    (or compares them to each other)
+    
+    Parameters
+    ----------
+    model1_proba : array
+        Model 1 predicted probabilities
+    model2_proba : array
+        Model 2 predicted probabilities
+    reference_proba : array, optional
+        Reference/true probability distribution
+        If None, compares models to each other
+    epsilon : float
+        Small value to avoid log(0)
+        
+    Returns
+    -------
+    comparison : dict
+        Dictionary with KL divergence scores
+    """
+    model1_proba = np.asarray(model1_proba)
+    model2_proba = np.asarray(model2_proba)
+    
+    comparison = {}
+    
+    if reference_proba is not None:
+        # Compare both models to reference
+        reference_proba = np.asarray(reference_proba)
+        comparison['model1_to_reference'] = kl_divergence_score(reference_proba, model1_proba, epsilon)
+        comparison['model2_to_reference'] = kl_divergence_score(reference_proba, model2_proba, epsilon)
+        comparison['better_model'] = 'model1' if comparison['model1_to_reference'] < comparison['model2_to_reference'] else 'model2'
+    else:
+        # Compare models to each other (symmetric)
+        comparison['model1_to_model2'] = kl_divergence_score(model1_proba, model2_proba, epsilon)
+        comparison['model2_to_model1'] = kl_divergence_score(model2_proba, model1_proba, epsilon)
+        comparison['symmetric_kl'] = (comparison['model1_to_model2'] + comparison['model2_to_model1']) / 2
+    
+    return comparison

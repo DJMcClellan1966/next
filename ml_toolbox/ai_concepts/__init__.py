@@ -13,6 +13,10 @@ try:
     from .reinforcement_learning import QLearning, PolicyGradient, DQN
     from .cnn import CNN, ConvLayer, PoolingLayer
     from .probabilistic_reasoning import BayesianNetwork, MarkovChain, HMM, Inference
+    from .game_theory import (
+        find_nash_equilibrium, find_nash_equilibrium_general,
+        game_theoretic_ensemble_selection, NonZeroSumGame, MultiPlayerGame
+    )
     __all__ = [
         'AStar',
         'AdversarialSearch',
@@ -29,7 +33,12 @@ try:
         'BayesianNetwork',
         'MarkovChain',
         'HMM',
-        'Inference'
+        'Inference',
+        'find_nash_equilibrium',
+        'find_nash_equilibrium_general',
+        'game_theoretic_ensemble_selection',
+        'NonZeroSumGame',
+        'MultiPlayerGame'
     ]
 except ImportError as e:
     import warnings

@@ -191,6 +191,30 @@ except ImportError:
     SECURITY_AVAILABLE = False
     MLSecurityFramework = None
 
+# Import Unified ML Pipelines (Option 3: New Pipeline Module)
+try:
+    from .pipelines import (
+        UnifiedMLPipeline,
+        FeaturePipeline,
+        TrainingPipeline,
+        InferencePipeline,
+        PipelineState,
+        FeatureStore,
+        PipelineStage,
+        BasePipeline
+    )
+    PIPELINES_AVAILABLE = True
+except ImportError:
+    PIPELINES_AVAILABLE = False
+    UnifiedMLPipeline = None
+    FeaturePipeline = None
+    TrainingPipeline = None
+    InferencePipeline = None
+    PipelineState = None
+    FeatureStore = None
+    PipelineStage = None
+    BasePipeline = None
+
 # Build __all__
 __all__ = [
     'DataCompartment',
@@ -225,6 +249,18 @@ if UI_AVAILABLE:
 
 if SECURITY_AVAILABLE:
     __all__.append('MLSecurityFramework')
+
+if PIPELINES_AVAILABLE:
+    __all__.extend([
+        'UnifiedMLPipeline',
+        'FeaturePipeline',
+        'TrainingPipeline',
+        'InferencePipeline',
+        'PipelineState',
+        'FeatureStore',
+        'PipelineStage',
+        'BasePipeline'
+    ])
 
 
 class MLToolbox:

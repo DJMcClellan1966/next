@@ -330,12 +330,19 @@ class DecisionTree:
         return 1 - np.sum(proportions ** 2)
     
     def _entropy(self, y: np.ndarray) -> float:
-        """Calculate entropy"""
+        """Calculate entropy using information_theory module"""
         if len(y) == 0:
             return 0.0
-        counts = np.bincount(y.astype(int))
-        proportions = counts[counts > 0] / len(y)
-        return -np.sum(proportions * np.log2(proportions))
+        try:
+            from ml_toolbox.textbook_concepts.information_theory import entropy
+            counts = np.bincount(y.astype(int))
+            proportions = counts[counts > 0] / len(y)
+            return entropy(proportions, base=2.0)
+        except ImportError:
+            # Fallback to original implementation
+            counts = np.bincount(y.astype(int))
+            proportions = counts[counts > 0] / len(y)
+            return -np.sum(proportions * np.log2(proportions))
     
     def _mse(self, y: np.ndarray) -> float:
         """Calculate mean squared error"""
@@ -368,21 +375,37 @@ class DecisionTree:
                     parent_impurity = self._gini(y)
                     left_impurity = self._gini(y[left_mask])
                     right_impurity = self._gini(y[right_mask])
+                    n_left = np.sum(left_mask)
+                    n_right = np.sum(right_mask)
+                    n_total = len(y)
+                    gain = parent_impurity - (n_left / n_total * left_impurity + 
+                                             n_right / n_total * right_impurity)
                 elif self.criterion == 'entropy':
-                    parent_impurity = self._entropy(y)
-                    left_impurity = self._entropy(y[left_mask])
-                    right_impurity = self._entropy(y[right_mask])
+                    # Use information gain from information_theory module
+                    try:
+                        from ml_toolbox.textbook_concepts.information_theory import information_gain
+                        y_left = y[left_mask]
+                        y_right = y[right_mask]
+                        gain = information_gain(y, [y_left, y_right])
+                    except (ImportError, Exception):
+                        # Fallback to manual calculation
+                        parent_impurity = self._entropy(y)
+                        left_impurity = self._entropy(y[left_mask])
+                        right_impurity = self._entropy(y[right_mask])
+                        n_left = np.sum(left_mask)
+                        n_right = np.sum(right_mask)
+                        n_total = len(y)
+                        gain = parent_impurity - (n_left / n_total * left_impurity + 
+                                                 n_right / n_total * right_impurity)
                 else:  # mse
                     parent_impurity = self._mse(y)
                     left_impurity = self._mse(y[left_mask])
                     right_impurity = self._mse(y[right_mask])
-                
-                n_left = np.sum(left_mask)
-                n_right = np.sum(right_mask)
-                n_total = len(y)
-                
-                gain = parent_impurity - (n_left / n_total * left_impurity + 
-                                         n_right / n_total * right_impurity)
+                    n_left = np.sum(left_mask)
+                    n_right = np.sum(right_mask)
+                    n_total = len(y)
+                    gain = parent_impurity - (n_left / n_total * left_impurity + 
+                                             n_right / n_total * right_impurity)
                 
                 if gain > best_gain:
                     best_gain = gain

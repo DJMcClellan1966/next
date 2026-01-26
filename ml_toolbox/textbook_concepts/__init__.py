@@ -28,6 +28,10 @@ try:
     from .dimensionality_reduction import (
         PCA, LDA, tSNE, UMAP, Autoencoder
     )
+    from .data_quality import (
+        DataQualityAssessor, feature_informativeness, feature_redundancy,
+        data_quality_score, missing_value_impact
+    )
     __all__ = [
         'KnowledgeBase',
         'RuleBasedSystem',
@@ -55,7 +59,12 @@ try:
         'LDA',
         'tSNE',
         'UMAP',
-        'Autoencoder'
+        'Autoencoder',
+        'DataQualityAssessor',
+        'feature_informativeness',
+        'feature_redundancy',
+        'data_quality_score',
+        'missing_value_impact'
     ]
 except ImportError as e:
     import warnings
