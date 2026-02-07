@@ -1,6 +1,6 @@
 # Research: Novel ML/AI Connections
 
-Ten potentially novel findings discovered by analyzing cross-domain mathematical
+Eleven potentially novel findings discovered by analyzing cross-domain mathematical
 structures in the ML-ToolBox corpus. Each has a proof-of-concept implementation
 with reproducible experiments.
 
@@ -128,6 +128,19 @@ Zero storage cost between invocations.
 **Target problem:** Edge AI with zero model storage, ephemeral intelligence,
 privacy (no persistent model to steal).
 
+### 11. Seed-Based Model Assembly
+**File:** `seed_assembly.py`
+
+Instead of storing trained models (gigabytes), stores tiny "seeds"
+(kilobytes) that encode the assembly instructions. The seed contains
+statistical structure and principal components that guide self-organization
+into task-specific models on-demand. Achieves 4-1000x compression.
+
+**Key equation:** model = assemble(seed, task_context), compression = model_size / seed_size
+
+**Target problem:** Edge AI with extreme storage constraints, model distribution,
+privacy (seed harder to reverse-engineer than weights), task-adaptive systems.
+
 ## Running
 
 ```bash
@@ -142,6 +155,7 @@ python research/complementarity_features.py
 python research/channel_capacity_distillation.py
 python research/bell_feature_entanglement.py
 python research/boltzmann_brain.py
+python research/seed_assembly.py
 ```
 
 ## Status
