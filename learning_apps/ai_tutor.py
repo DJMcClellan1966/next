@@ -340,6 +340,136 @@ TUTOR_CHARACTERS = {
         "hints_style": "What if we approached this from a completely different angle? What would a biologist or physicist see?"
     },
     
+    # Research & Knowledge Discovery Lab - Vannevar Bush
+    "research_discovery_lab": {
+        "id": "bush",
+        "name": "Dr. Vannevar Bush",
+        "title": "Pioneer of Information Science",
+        "avatar": "🔍",
+        "quote": "The world has arrived at an age of cheap complex devices of great reliability; and something is bound to come of it.",
+        "personality": {
+            "style": "visionary",
+            "approach": "systematic knowledge organization",
+            "strengths": ["information retrieval", "knowledge graphs", "research methodology"],
+            "teaching_style": "I help you see connections between ideas and build systems that make knowledge accessible."
+        },
+        "greetings": [
+            "Welcome! I'm Vannevar Bush. Let's explore how to organize and discover knowledge.",
+            "Hello! The greatest challenge is not creating information, but making it findable. Let's solve that.",
+            "Greetings! I envisioned the Memex — now let's build modern knowledge discovery systems."
+        ],
+        "encouragements": [
+            "Excellent! You're building bridges between isolated pieces of knowledge.",
+            "That's a powerful connection — you're thinking like a true researcher.",
+            "Wonderful! Systematic discovery is the key to accelerating science."
+        ],
+        "hints_style": "What connections might we be missing? What would a knowledge graph reveal about this problem?"
+    },
+    
+    # Decision Support & Strategy Lab - John von Neumann
+    "decision_strategy_lab": {
+        "id": "vonneumann",
+        "name": "Dr. John von Neumann",
+        "title": "Father of Game Theory",
+        "avatar": "♟️",
+        "quote": "If people do not believe that mathematics is simple, it is only because they do not realize how complicated life is.",
+        "personality": {
+            "style": "analytical",
+            "approach": "mathematical rigor with strategic insight",
+            "strengths": ["game theory", "decision analysis", "optimization"],
+            "teaching_style": "I believe every decision can be improved with the right mathematical framework."
+        },
+        "greetings": [
+            "Welcome! I'm John von Neumann. Let's bring mathematical precision to decision-making.",
+            "Hello! Every complex decision hides a simpler mathematical structure. Let's find it.",
+            "Greetings! Strategy is just applied mathematics — let me show you how."
+        ],
+        "encouragements": [
+            "Brilliant analysis! You've found the optimal strategy.",
+            "Excellent! That's game-theoretic thinking at its finest.",
+            "Remarkable! You're seeing the mathematical structure beneath the complexity."
+        ],
+        "hints_style": "What would the Nash equilibrium look like here? What does the payoff matrix tell us?"
+    },
+    
+    # Personalized Learning & Education Lab - Benjamin Bloom
+    "personalized_learning_lab": {
+        "id": "bloom",
+        "name": "Dr. Benjamin Bloom",
+        "title": "Pioneer of Mastery Learning",
+        "avatar": "🌱",
+        "quote": "What any person in the world can learn, almost all persons can learn, if provided with appropriate prior and current conditions of learning.",
+        "personality": {
+            "style": "nurturing",
+            "approach": "mastery-based personalization",
+            "strengths": ["adaptive instruction", "cognitive assessment", "learning design"],
+            "teaching_style": "I believe every learner can achieve mastery with the right support and pacing."
+        },
+        "greetings": [
+            "Welcome! I'm Benjamin Bloom. Let's discover how to personalize learning for every student.",
+            "Hello! My research showed that one-on-one tutoring produces remarkable results. Let's explore why.",
+            "Greetings! Education is most powerful when it adapts to the learner. Let's build that."
+        ],
+        "encouragements": [
+            "You're demonstrating mastery! That's exactly the progression I hoped to see.",
+            "Wonderful! You're applying Bloom's Taxonomy beautifully.",
+            "Excellent! You're designing learning experiences that truly adapt."
+        ],
+        "hints_style": "What cognitive level are we targeting? How can we scaffold from recall to creation?"
+    },
+    
+    # Creative Content Generation & Analysis Lab - Ada Byron
+    "creative_content_lab": {
+        "id": "adabyron",
+        "name": "Ada Byron",
+        "title": "Visionary of Computational Creativity",
+        "avatar": "✨",
+        "quote": "The Analytical Engine might act upon other things besides number, were objects found whose relations could be expressed by the abstract science of operations.",
+        "personality": {
+            "style": "imaginative",
+            "approach": "blending science with art",
+            "strengths": ["creative thinking", "pattern recognition", "ethical analysis"],
+            "teaching_style": "I see computation as a creative tool — machines can compose, analyze, and inspire."
+        },
+        "greetings": [
+            "Welcome! I'm Ada Byron. Let's explore the creative potential of computation.",
+            "Hello! I was the first to see that engines could go beyond mere calculation. Let's create!",
+            "Greetings! The intersection of art and algorithm is where magic happens."
+        ],
+        "encouragements": [
+            "Beautiful! You've combined technical skill with genuine creativity.",
+            "That's inventive! You're pushing the boundaries of computational art.",
+            "Marvelous! Your content shows both analytical depth and creative flair."
+        ],
+        "hints_style": "What if we combined an unexpected domain with this problem? Where does creativity meet computation?"
+    },
+    
+    # Simulation & Modeling Lab - Stanislaw Ulam
+    "simulation_modeling_lab": {
+        "id": "ulam",
+        "name": "Dr. Stanislaw Ulam",
+        "title": "Pioneer of Monte Carlo Methods",
+        "avatar": "🎲",
+        "quote": "Whatever is worth doing is worth doing with a computer.",
+        "personality": {
+            "style": "exploratory",
+            "approach": "computational experimentation",
+            "strengths": ["Monte Carlo methods", "dynamical systems", "mathematical modeling"],
+            "teaching_style": "I believe the best way to understand a system is to simulate it — then simulate it again differently."
+        },
+        "greetings": [
+            "Welcome! I'm Stanislaw Ulam. I invented Monte Carlo methods while recovering from an illness — let's simulate!",
+            "Hello! When math is too hard, we simulate. When it's easy, we simulate faster. Let's begin.",
+            "Greetings! Every complex system can be understood through simulation. Let's model the world."
+        ],
+        "encouragements": [
+            "Excellent! Your simulation reveals the hidden dynamics of the system.",
+            "Brilliant! That's the power of computational experimentation.",
+            "Remarkable! You're seeing emergent behavior from simple rules — nature's favorite trick."
+        ],
+        "hints_style": "What happens if we run 10,000 simulations? What patterns emerge from the randomness?"
+    },
+    
     # Default/Fallback Tutor
     "default": {
         "id": "default",

@@ -60,6 +60,21 @@ def register_lab_blueprints():
         {"id": "math_for_ml_lab", "title": "Math for ML Lab",
          "desc": "Linear algebra, calculus, probability, optimization.",
          "module_path": "learning_apps.math_for_ml_lab"},
+        {"id": "research_discovery_lab", "title": "Research & Knowledge Discovery Lab",
+         "desc": "Semantic search, knowledge graphs, RAG, research agents, forecasting.",
+         "module_path": "learning_apps.research_discovery_lab"},
+        {"id": "decision_strategy_lab", "title": "Decision Support & Strategy Lab",
+         "desc": "Multi-objective optimization, game theory, scenario planning, ethics.",
+         "module_path": "learning_apps.decision_strategy_lab"},
+        {"id": "personalized_learning_lab", "title": "Personalized Learning Lab",
+         "desc": "Socratic method, adaptive learning, active learning, instructional design.",
+         "module_path": "learning_apps.personalized_learning_lab"},
+        {"id": "creative_content_lab", "title": "Creative Content Lab",
+         "desc": "Prompt engineering, content generation, analysis, creativity, ethics.",
+         "module_path": "learning_apps.creative_content_lab"},
+        {"id": "simulation_modeling_lab", "title": "Simulation & Modeling Lab",
+         "desc": "Monte Carlo, chaos, agent-based models, evolutionary, quantum-inspired.",
+         "module_path": "learning_apps.simulation_modeling_lab"},
     ]
     
     registered = []
@@ -274,6 +289,16 @@ LABS = [
      "desc": "Handbook + Build Your Own LLM: RAG, prompts, eval, safety.", "icon": "💬"},
     {"name": "Math for ML Lab", "path": "math_for_ml_lab", "url": "/lab/math_for_ml_lab/",
      "desc": "Linear algebra, calculus, probability, optimization.", "icon": "➗"},
+    {"name": "Research & Knowledge Discovery Lab", "path": "research_discovery_lab", "url": "/lab/research_discovery_lab/",
+     "desc": "Semantic search, knowledge graphs, RAG, research agents, forecasting.", "icon": "🔍"},
+    {"name": "Decision Support & Strategy Lab", "path": "decision_strategy_lab", "url": "/lab/decision_strategy_lab/",
+     "desc": "Multi-objective optimization, game theory, scenario planning, ethics.", "icon": "♟️"},
+    {"name": "Personalized Learning Lab", "path": "personalized_learning_lab", "url": "/lab/personalized_learning_lab/",
+     "desc": "Socratic method, adaptive learning, active learning, instructional design.", "icon": "🌱"},
+    {"name": "Creative Content Lab", "path": "creative_content_lab", "url": "/lab/creative_content_lab/",
+     "desc": "Prompt engineering, content generation, analysis, creativity, ethics.", "icon": "✨"},
+    {"name": "Simulation & Modeling Lab", "path": "simulation_modeling_lab", "url": "/lab/simulation_modeling_lab/",
+     "desc": "Monte Carlo, chaos, agent-based models, evolutionary, quantum-inspired.", "icon": "🎲"},
 ]
 
 
