@@ -1,6 +1,6 @@
 # Research: Novel ML/AI Connections
 
-Nine potentially novel findings discovered by analyzing cross-domain mathematical
+Ten potentially novel findings discovered by analyzing cross-domain mathematical
 structures in the ML-ToolBox corpus. Each has a proof-of-concept implementation
 with reproducible experiments.
 
@@ -115,6 +115,19 @@ terms or non-linear processing.
 **Target problem:** Detecting which feature pairs need interaction
 terms before adding them.
 
+### 10. Boltzmann Brain AI
+**File:** `boltzmann_brain.py`
+
+A neural network that doesn't exist until needed, then spontaneously
+self-assembles from random thermal fluctuations into a minimal working
+configuration, solves the task, and dissolves back to vacuum state.
+Zero storage cost between invocations.
+
+**Key equation:** P(brain) = exp(-E(brain) / kT), where E = task_loss + disorder
+
+**Target problem:** Edge AI with zero model storage, ephemeral intelligence,
+privacy (no persistent model to steal).
+
 ## Running
 
 ```bash
@@ -128,6 +141,7 @@ python research/helmholtz_training.py
 python research/complementarity_features.py
 python research/channel_capacity_distillation.py
 python research/bell_feature_entanglement.py
+python research/boltzmann_brain.py
 ```
 
 ## Status
