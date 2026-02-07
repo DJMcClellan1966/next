@@ -6,24 +6,24 @@ Models neural network training as a Prigogine dissipative system to predict
 when grokking (sudden generalization after memorization) will occur.
 
 Core idea: Training dynamics follow
-    ds/dt = (E_in - γs)(1 - s) - δs
+    ds/dt = (E_in - gammas)(1 - s) - deltas
 
 where:
     s = generalization level (0=memorization, 1=full generalization)
-    E_in = learning rate × gradient signal (energy input)
-    γ = weight decay rate (dissipation)
-    δ = noise/forgetting rate
+    E_in = learning rate x gradient signal (energy input)
+    gamma = weight decay rate (dissipation)
+    delta = noise/forgetting rate
 
 The system undergoes a phase transition at a critical ratio:
-    E_in / γ > critical_threshold
+    E_in / gamma > critical_threshold
 
-Below the threshold: stable at s≈0 (memorization, no grokking)
+Below the threshold: stable at s~=0 (memorization, no grokking)
 Above the threshold: bifurcation to s>0 (generalization emerges)
 
-This predicts grokking timing from just η, λ, and gradient statistics.
+This predicts grokking timing from just eta, lambda, and gradient statistics.
 
 Author: Research module, ML-ToolBox
-Status: Proof-of-concept — not peer-reviewed
+Status: Proof-of-concept -- not peer-reviewed
 """
 
 import numpy as np
@@ -40,20 +40,20 @@ class DissipativeModel:
     Models generalization dynamics as a dissipative system.
 
     The ODE:
-        ds/dt = (E_in - γ*s)*(1 - s) - δ*s
+        ds/dt = (E_in - gamma*s)*(1 - s) - delta*s
 
     Fixed points (set ds/dt = 0):
-        s₀ = 0 is always a fixed point when E_in = 0
+        s_0 = 0 is always a fixed point when E_in = 0
         For E_in > 0, solving the quadratic gives critical behavior
 
     Stability: linearize around s=0:
-        ds/dt ≈ (E_in - δ)*s  for small s
-        → unstable (grokking starts) when E_in > δ
+        ds/dt ~= (E_in - delta)*s  for small s
+        -> unstable (grokking starts) when E_in > delta
 
-    The full critical condition accounting for γ:
-        E_in > δ + γ*E_in/(E_in + γ)  [from the bifurcation analysis]
+    The full critical condition accounting for gamma:
+        E_in > delta + gamma*E_in/(E_in + gamma)  [from the bifurcation analysis]
 
-    Simplified: grokking occurs when η/λ > threshold
+    Simplified: grokking occurs when eta/lambda > threshold
     """
 
     def __init__(self, gamma: float = 0.1, delta: float = 0.05):
@@ -73,12 +73,12 @@ class DissipativeModel:
         """
         Find fixed points of ds/dt = 0.
 
-        (E_in - γs)(1-s) - δs = 0
-        Expanding: E_in - E_in*s - γs + γs² - δs = 0
-                   γs² - (E_in + γ + δ)s + E_in = 0
+        (E_in - gammas)(1-s) - deltas = 0
+        Expanding: E_in - E_in*s - gammas + gammas^2 - deltas = 0
+                   gammas^2 - (E_in + gamma + delta)s + E_in = 0
 
         Using quadratic formula:
-            s = [(E_in + γ + δ) ± sqrt((E_in + γ + δ)² - 4γE_in)] / (2γ)
+            s = [(E_in + gamma + delta) +/- sqrt((E_in + gamma + delta)^2 - 4gammaE_in)] / (2gamma)
         """
         a = self.gamma
         b = -(e_in + self.gamma + self.delta)
@@ -111,11 +111,11 @@ class DissipativeModel:
 
         At the bifurcation, the discriminant = 0 OR the lower fixed point
         becomes unstable. Linearizing around s=0:
-            ds/dt ≈ (E_in - δ) * 1 = E_in - δ
-        So s=0 is unstable when E_in > δ.
+            ds/dt ~= (E_in - delta) * 1 = E_in - delta
+        So s=0 is unstable when E_in > delta.
 
         More precisely, accounting for the full dynamics:
-            critical E_in = δ(1 + δ/γ) approximately
+            critical E_in = delta(1 + delta/gamma) approximately
         """
         # Numerical: find E_in where s=0 becomes unstable
         for e_test in np.linspace(0, 2, 1000):
@@ -162,7 +162,7 @@ class DissipativeModel:
 
 
 # =============================================================================
-# MAPPING: Neural Network → Dissipative Parameters
+# MAPPING: Neural Network -> Dissipative Parameters
 # =============================================================================
 
 def estimate_energy_input(learning_rate: float, grad_norm: float,
@@ -170,7 +170,7 @@ def estimate_energy_input(learning_rate: float, grad_norm: float,
     """
     Map neural network training to dissipative energy input.
 
-    E_in ∝ η × ‖∇L‖ × (1 - train_accuracy)
+    E_in  proportional to  eta x ||nablaL|| x (1 - train_accuracy)
 
     Higher learning rate + larger gradients + more room to improve = more energy.
     """
@@ -182,8 +182,8 @@ def map_training_to_dissipative(learning_rate: float, weight_decay: float,
     """
     Map training hyperparameters to dissipative model parameters.
 
-    γ (dissipation) ← weight_decay × scale_factor
-    δ (noise) ← label_noise_rate + inherent_forgetting
+    gamma (dissipation) <- weight_decay x scale_factor
+    delta (noise) <- label_noise_rate + inherent_forgetting
     """
     gamma = weight_decay * 10.0  # Scale to make dynamics visible
     delta = label_noise * 5.0 + 0.02  # Base forgetting rate
@@ -205,7 +205,7 @@ def run_phase_diagram_experiment():
     print("EXPERIMENT 1: Grokking Phase Diagram")
     print("=" * 70)
     print()
-    print("Sweeping learning rate (η) vs weight decay (λ).")
+    print("Sweeping learning rate (eta) vs weight decay (lambda).")
     print("Predicting where grokking occurs based on dissipative dynamics.")
     print()
 
@@ -215,7 +215,7 @@ def run_phase_diagram_experiment():
     # Assume a typical gradient norm during training
     typical_grad_norm = 1.0
 
-    print(f"  {'η \\ λ':>8s}", end="")
+    print(f"  {'eta \\ lambda':>8s}", end="")
     for wd in weight_decays:
         print(f" {wd:>6.3f}", end="")
     print()
@@ -231,9 +231,9 @@ def run_phase_diagram_experiment():
             result = model.simulate(e_in, s0=0.01, t_max=100.0)
 
             if result["grokked"]:
-                symbol = "  ★   "  # Grokking predicted
+                symbol = "  *   "  # Grokking predicted
             else:
-                symbol = "  ·   "  # No grokking
+                symbol = "  *   "  # No grokking
             print(symbol, end="")
 
             phase_data.append({
@@ -245,7 +245,7 @@ def run_phase_diagram_experiment():
         print()
 
     print()
-    print("  ★ = grokking predicted    · = memorization only")
+    print("  * = grokking predicted    * = memorization only")
     print()
 
     # Find the critical ratio
@@ -257,11 +257,11 @@ def run_phase_diagram_experiment():
         max_no_grok_ratio = max(d["ratio"] for d in not_grokked)
         critical_ratio = (min_grok_ratio + max_no_grok_ratio) / 2
 
-        print(f"  Critical ratio η/λ ≈ {critical_ratio:.2f}")
+        print(f"  Critical ratio eta/lambda ~= {critical_ratio:.2f}")
         print(f"    Minimum grokking ratio: {min_grok_ratio:.2f}")
         print(f"    Maximum non-grokking ratio: {max_no_grok_ratio:.2f}")
         print()
-        print(f"  PREDICTION: Grokking occurs when η/λ > ~{critical_ratio:.1f}")
+        print(f"  PREDICTION: Grokking occurs when eta/lambda > ~{critical_ratio:.1f}")
     else:
         print("  Could not determine critical ratio (all grokked or none grokked)")
 
@@ -276,7 +276,7 @@ def run_timing_experiment():
     """
     Experiment 2: Predict WHEN grokking will occur.
 
-    For different η/λ ratios above the critical threshold,
+    For different eta/lambda ratios above the critical threshold,
     predict the number of training steps before generalization emerges.
     """
     print()
@@ -284,13 +284,13 @@ def run_timing_experiment():
     print("EXPERIMENT 2: Grokking Timing Prediction")
     print("=" * 70)
     print()
-    print("For different η/λ ratios, predicting when generalization emerges.")
+    print("For different eta/lambda ratios, predicting when generalization emerges.")
     print()
 
     weight_decay = 0.01
     results = []
 
-    print(f"  {'η':>8s} {'η/λ':>8s} {'Grokked':>8s} {'Time':>10s} {'Final s':>10s}")
+    print(f"  {'eta':>8s} {'eta/lambda':>8s} {'Grokked':>8s} {'Time':>10s} {'Final s':>10s}")
     print(f"  {'-'*8} {'-'*8} {'-'*8} {'-'*10} {'-'*10}")
 
     for lr in [0.005, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1.0]:
@@ -321,13 +321,13 @@ def run_timing_experiment():
         times = [r["grokking_time"] for r in grokked_results]
 
         if times[0] > times[-1]:
-            print("  ✅ Higher η/λ ratio → faster grokking (as predicted)")
+            print("  [OK] Higher eta/lambda ratio -> faster grokking (as predicted)")
         else:
-            print("  ⚠️  Timing relationship unclear")
+            print("  [!]  Timing relationship unclear")
 
         print()
         print("  KEY INSIGHT: The dissipative model predicts that grokking time")
-        print("  scales as t_grok ∝ 1 / (E_in - E_critical)")
+        print("  scales as t_grok  proportional to  1 / (E_in - E_critical)")
         print("  i.e., the further above threshold, the faster it happens.")
     else:
         print("  Insufficient grokking events to analyze timing.")
@@ -390,7 +390,7 @@ def run_neural_validation():
     X_train, y_train = X_oh[train_idx], y_oh[train_idx]
     X_test, y_test = X_oh[test_idx], y_oh[test_idx]
 
-    # Network: 14 → 64 → 64 → 7
+    # Network: 14 -> 64 -> 64 -> 7
     input_dim, hidden1, hidden2, output_dim = 14, 64, 64, p
 
     def softmax(z):
@@ -398,9 +398,9 @@ def run_neural_validation():
         return e / (e.sum(axis=-1, keepdims=True) + 1e-10)
 
     configs = [
-        {"name": "η=0.1, λ=0.1", "lr": 0.1, "wd": 0.1},
-        {"name": "η=0.1, λ=0.01", "lr": 0.1, "wd": 0.01},
-        {"name": "η=0.1, λ=0.001", "lr": 0.1, "wd": 0.001},
+        {"name": "eta=0.1, lambda=0.1", "lr": 0.1, "wd": 0.1},
+        {"name": "eta=0.1, lambda=0.01", "lr": 0.1, "wd": 0.01},
+        {"name": "eta=0.1, lambda=0.001", "lr": 0.1, "wd": 0.001},
     ]
 
     for cfg in configs:
@@ -484,7 +484,7 @@ def run_neural_validation():
         memorized_early = any(ta[1] > 0.9 for ta in train_accs[:8])
         generalized_late = final_test > 0.5
 
-        print(f"  {cfg['name']:20s} | η/λ={lr/wd:>6.1f} | "
+        print(f"  {cfg['name']:20s} | eta/lambda={lr/wd:>6.1f} | "
               f"train={final_train:.2f} test={final_test:.2f} | "
               f"memorized={memorized_early} generalized={generalized_late} | "
               f"predicted_grok={pred['grokked']}")
@@ -492,7 +492,7 @@ def run_neural_validation():
     print()
     print("INTERPRETATION:")
     print("  If 'predicted_grok' matches 'generalized', the dissipative model works.")
-    print("  Higher η/λ should show both predicted AND actual grokking.")
+    print("  Higher eta/lambda should show both predicted AND actual grokking.")
     print()
     print("  CAVEAT: This is a tiny experiment. Real grokking studies use")
     print("  much longer training (10k-100k+ epochs) and larger models.")
@@ -509,13 +509,13 @@ def run_neural_validation():
 
 if __name__ == "__main__":
     print()
-    print("╔══════════════════════════════════════════════════════════════════╗")
-    print("║  DISSIPATIVE GROKKING PREDICTOR                                ║")
-    print("║  Research Proof-of-Concept                                      ║")
-    print("╚══════════════════════════════════════════════════════════════════╝")
+    print("+==================================================================+")
+    print("|  DISSIPATIVE GROKKING PREDICTOR                                |")
+    print("|  Research Proof-of-Concept                                      |")
+    print("+==================================================================+")
     print()
     print("Hypothesis: Grokking is a dissipative phase transition.")
-    print("The critical ratio η/λ determines whether memorization→generalization")
+    print("The critical ratio eta/lambda determines whether memorization->generalization")
     print("occurs, and how fast.")
     print()
 
@@ -528,15 +528,15 @@ if __name__ == "__main__":
     print("=" * 70)
     print()
     print("The Prigogine dissipative model predicts:")
-    print("  1. A critical η/λ ratio below which grokking CANNOT occur")
-    print("  2. Above the threshold, grokking time ∝ 1/(E_in - E_critical)")
-    print("  3. Weight decay is not just 'regularization' — it's the dissipation")
+    print("  1. A critical eta/lambda ratio below which grokking CANNOT occur")
+    print("  2. Above the threshold, grokking time  proportional to  1/(E_in - E_critical)")
+    print("  3. Weight decay is not just 'regularization' -- it's the dissipation")
     print("     rate that enables the phase transition")
     print()
     print("Next steps if results are positive:")
     print("  1. Run on canonical grokking tasks (modular arithmetic, perm groups)")
     print("     with 50k+ epochs to see true grokking")
-    print("  2. Measure E_in = η×‖∇L‖ dynamically during training and feed into")
+    print("  2. Measure E_in = etax||nablaL|| dynamically during training and feed into")
     print("     the ODE solver for real-time grokking prediction")
     print("  3. Test whether the predicted critical ratio holds across architectures")
     print("  4. Extend to multi-dimensional dissipative model (one ODE per layer)")

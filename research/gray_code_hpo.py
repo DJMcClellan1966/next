@@ -10,8 +10,8 @@ Core idea:
     - Discretize each hyperparameter into 2^k levels
     - Generate a Gray code sequence of length 2^(k*n_params)
     - Each successive Gray code value differs in exactly 1 bit position
-    - Map bit positions to hyperparameters → each step changes exactly 1 HP
-    - After evaluating all points, compute Δaccuracy for each HP change
+    - Map bit positions to hyperparameters -> each step changes exactly 1 HP
+    - After evaluating all points, compute Deltaaccuracy for each HP change
     - Attribution: which HP changes caused the biggest accuracy swings?
 
 Advantages over random/grid search:
@@ -21,7 +21,7 @@ Advantages over random/grid search:
     - No repeated configurations
 
 Author: Research module, ML-ToolBox
-Status: Proof-of-concept — not peer-reviewed
+Status: Proof-of-concept -- not peer-reviewed
 """
 
 import numpy as np
@@ -164,7 +164,7 @@ class GrayCodeHPO:
         if verbose:
             print(f"  Gray code HPO: {n_evals} evaluations over "
                   f"{self.n_hps} hyperparameters")
-            print(f"  {self.bits_per_hp} bits/HP → "
+            print(f"  {self.bits_per_hp} bits/HP -> "
                   f"{2**self.bits_per_hp} levels each")
             print()
 
@@ -336,7 +336,7 @@ def run_landscape_experiment():
 
     print()
     print("  SENSITIVITY ANALYSIS (Gray Code exclusive):")
-    print(f"  {'HP':>20s} {'Mean |Δ|':>10s} {'Max |Δ|':>10s} {'Std(Δ)':>10s} {'Changes':>8s}")
+    print(f"  {'HP':>20s} {'Mean |Delta|':>10s} {'Max |Delta|':>10s} {'Std(Delta)':>10s} {'Changes':>8s}")
     print(f"  {'-'*20} {'-'*10} {'-'*10} {'-'*10} {'-'*8}")
     for name, sens in gray_result["sensitivity"].items():
         print(f"  {name:>20s} {sens['mean_abs_delta']:>10.4f} "
@@ -344,7 +344,7 @@ def run_landscape_experiment():
               f"{sens['n_changes']:>8d}")
 
     print()
-    print("  ✅ Gray code provides ATTRIBUTION for free:")
+    print("  [OK] Gray code provides ATTRIBUTION for free:")
     print("     The sensitivity table shows which HP matters most,")
     print("     computed from the score deltas when each HP changes.")
     print()
@@ -464,11 +464,11 @@ def run_neural_hpo_experiment():
     ranked = sorted(gray_result["sensitivity"].items(),
                     key=lambda x: x[1]["mean_abs_delta"], reverse=True)
     for i, (name, sens) in enumerate(ranked, 1):
-        bar = "█" * int(sens["mean_abs_delta"] * 50)
-        print(f"    #{i} {name:>20s}: mean|Δ|={sens['mean_abs_delta']:.4f} {bar}")
+        bar = "#" * int(sens["mean_abs_delta"] * 50)
+        print(f"    #{i} {name:>20s}: mean|Delta|={sens['mean_abs_delta']:.4f} {bar}")
 
     print()
-    print("  ✅ Gray code HPO gives you a RANKING of HP importance for free.")
+    print("  [OK] Gray code HPO gives you a RANKING of HP importance for free.")
     print("     This normally requires expensive tools like SHAP or fANOVA!")
     print()
 
@@ -514,7 +514,7 @@ def run_properties_experiment():
         unique = len(set(seq))
         total = len(seq)
         print(f"    {n_bits} bits: {unique}/{total} unique configs "
-              f"({'✅ Complete' if unique == total else '❌ Incomplete'})")
+              f"({'[OK] Complete' if unique == total else '[X] Incomplete'})")
 
     print()
 
@@ -523,7 +523,7 @@ def run_properties_experiment():
     print("    Comparing Gray code sensitivity to brute-force computation")
     print()
 
-    # Known landscape: f(x,y,z) = -2x² - 0.5y² - 3z² (known sensitivities)
+    # Known landscape: f(x,y,z) = -2x^2 - 0.5y^2 - 3z^2 (known sensitivities)
     hp_space = {
         "x": [-1.0, -0.33, 0.33, 1.0],
         "y": [-1.0, -0.33, 0.33, 1.0],
@@ -535,7 +535,7 @@ def run_properties_experiment():
                       - 3 * config["z"] ** 2)
 
     # True sensitivity: which variable has the largest effect?
-    # d²f/dx² = -4, d²f/dy² = -1, d²f/dz² = -6
+    # d^2f/dx^2 = -4, d^2f/dy^2 = -1, d^2f/dz^2 = -6
     # So z > x > y in importance
     true_ranking = ["z", "x", "y"]
 
@@ -547,14 +547,14 @@ def run_properties_experiment():
     print(f"    True importance ranking: {' > '.join(true_ranking)}")
     print(f"    Gray code ranking:       {' > '.join(gray_ranking)}")
     match = gray_ranking == true_ranking
-    print(f"    Rankings match: {'✅ Yes' if match else '❌ No'}")
+    print(f"    Rankings match: {'[OK] Yes' if match else '[X] No'}")
 
     print()
 
     # Show the actual values
     for name, sens in gray_result["sensitivity"].items():
-        print(f"    {name}: mean|Δ|={sens['mean_abs_delta']:.4f}, "
-              f"max|Δ|={sens['max_abs_delta']:.4f}")
+        print(f"    {name}: mean|Delta|={sens['mean_abs_delta']:.4f}, "
+              f"max|Delta|={sens['max_abs_delta']:.4f}")
 
     print()
     print("  KEY PROPERTY: Gray code HPO recovers the correct HP importance")
@@ -570,13 +570,13 @@ def run_properties_experiment():
 
 if __name__ == "__main__":
     print()
-    print("╔══════════════════════════════════════════════════════════════════╗")
-    print("║  GRAY CODE HYPERPARAMETER OPTIMIZATION                         ║")
-    print("║  Research Proof-of-Concept                                      ║")
-    print("╚══════════════════════════════════════════════════════════════════╝")
+    print("+==================================================================+")
+    print("|  GRAY CODE HYPERPARAMETER OPTIMIZATION                         |")
+    print("|  Research Proof-of-Concept                                      |")
+    print("+==================================================================+")
     print()
     print("Hypothesis: Walking hyperparameter space via Gray code gives")
-    print("free single-factor attribution — each step changes exactly 1 HP,")
+    print("free single-factor attribution -- each step changes exactly 1 HP,")
     print("so every evaluation doubles as a sensitivity probe.")
     print()
 
@@ -592,7 +592,7 @@ if __name__ == "__main__":
     print("  1. Systematic coverage (like grid search)")
     print("  2. Single-factor attribution (like ablation studies)")
     print("  3. Sensitivity ranking (like SHAP/fANOVA)")
-    print("  4. All from the SAME evaluations — no extra cost")
+    print("  4. All from the SAME evaluations -- no extra cost")
     print()
     print("Trade-offs:")
     print("  - Requires discretization of HP space (2^k levels per HP)")
@@ -602,7 +602,7 @@ if __name__ == "__main__":
     print()
     print("Next steps:")
     print("  1. Combine with early stopping (skip unpromising configs)")
-    print("  2. Multi-resolution: coarse Gray sweep → zoom in with finer grid")
+    print("  2. Multi-resolution: coarse Gray sweep -> zoom in with finer grid")
     print("  3. Compare attribution accuracy against SHAP on real tasks")
     print("  4. Extend to mixed continuous/discrete HP spaces")
     print()

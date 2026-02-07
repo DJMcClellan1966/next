@@ -1,15 +1,15 @@
 """
-L⁻² Regularization (Heisenberg Regularizer)
+L^-^2 Regularization (Heisenberg Regularizer)
 =============================================
 
 Novel regularization that penalizes weight concentration (low variance)
 rather than weight magnitude (high variance like L2).
 
-    L_total = L_task + λ₂‖w‖² + λ_H / (Var(w) + ε)
+    L_total = L_task + lambda_2||w||^2 + lambda_H / (Var(w) + epsilon)
 
-Where L2 prevents explosion, L⁻² prevents collapse.
+Where L2 prevents explosion, L^-^2 prevents collapse.
 Together they enforce an uncertainty-principle-like bound:
-    std(w) * std(∇w L) ≥ lower_bound
+    std(w) * std(nablaw L) >= lower_bound
 
 Target problems:
   - Representational collapse in self-supervised learning
@@ -17,7 +17,7 @@ Target problems:
   - Ensemble member convergence
 
 Author: Research module, ML-ToolBox
-Status: Proof-of-concept — not peer-reviewed
+Status: Proof-of-concept -- not peer-reviewed
 """
 
 import numpy as np
@@ -27,19 +27,19 @@ import time
 
 
 # =============================================================================
-# CORE: The L⁻² Regularizer
+# CORE: The L^-^2 Regularizer
 # =============================================================================
 
 class HeisenbergRegularizer:
     """
-    Implements L⁻² regularization: penalty = λ_H / (Var(w) + ε)
+    Implements L^-^2 regularization: penalty = lambda_H / (Var(w) + epsilon)
 
     This is the mathematical dual of L2:
-      - L2:   λ₂ * Σ wᵢ²          → penalizes large weights (high variance)
-      - L⁻²:  λ_H / (Var(w) + ε)   → penalizes collapsed weights (low variance)
+      - L2:   lambda_2 * Sigma w_i^2          -> penalizes large weights (high variance)
+      - L^-^2:  lambda_H / (Var(w) + epsilon)   -> penalizes collapsed weights (low variance)
 
     The gradient is:
-      ∂/∂wⱼ [λ_H / (Var(w) + ε)] = -λ_H * 2(wⱼ - w̄) / (n * (Var(w) + ε)²)
+      d/dw_j [lambda_H / (Var(w) + epsilon)] = -lambda_H * 2(w_j - w) / (n * (Var(w) + epsilon)^2)
 
     This PUSHES weights APART when they're too similar.
     """
@@ -49,18 +49,18 @@ class HeisenbergRegularizer:
         self.epsilon = epsilon
 
     def penalty(self, weights: np.ndarray) -> float:
-        """Compute L⁻² penalty value."""
+        """Compute L^-^2 penalty value."""
         var = np.var(weights)
         return self.lambda_h / (var + self.epsilon)
 
     def gradient(self, weights: np.ndarray) -> np.ndarray:
-        """Compute gradient of L⁻² penalty w.r.t. weights."""
+        """Compute gradient of L^-^2 penalty w.r.t. weights."""
         n = weights.size
         w_flat = weights.flatten()
         mean_w = np.mean(w_flat)
         var_w = np.var(w_flat) + self.epsilon
 
-        # ∂/∂wⱼ [λ / (Var + ε)] = -λ * 2(wⱼ - w̄) / (n * (Var + ε)²)
+        # d/dw_j [lambda / (Var + epsilon)] = -lambda * 2(w_j - w) / (n * (Var + epsilon)^2)
         grad = -self.lambda_h * 2.0 * (w_flat - mean_w) / (n * var_w ** 2)
         return grad.reshape(weights.shape)
 
@@ -80,11 +80,11 @@ class L2Regularizer:
 
 class CombinedRegularizer:
     """
-    L2 + L⁻² together: the full uncertainty-principle regularizer.
+    L2 + L^-^2 together: the full uncertainty-principle regularizer.
 
-    L_reg = λ₂‖w‖² + λ_H / (Var(w) + ε)
+    L_reg = lambda_2||w||^2 + lambda_H / (Var(w) + epsilon)
 
-    The L2 term prevents explosion. The L⁻² term prevents collapse.
+    The L2 term prevents explosion. The L^-^2 term prevents collapse.
     Together they keep weights in a "Goldilocks zone" of spread.
     """
 
@@ -187,16 +187,16 @@ def bce_loss(y, y_hat):
 
 def run_collapse_experiment():
     """
-    Experiment 1: Does L⁻² prevent weight collapse?
+    Experiment 1: Does L^-^2 prevent weight collapse?
 
     Train the same network on a collapse-prone dataset with:
       (a) No regularization
       (b) L2 only
-      (c) L⁻² only
-      (d) L2 + L⁻² combined
+      (c) L^-^2 only
+      (d) L2 + L^-^2 combined
 
     Measure weight variance, effective rank, and accuracy over training.
-    If L⁻² works, (c) and (d) should maintain higher weight diversity than (a) and (b).
+    If L^-^2 works, (c) and (d) should maintain higher weight diversity than (a) and (b).
     """
     print("=" * 70)
     print("EXPERIMENT 1: Weight Collapse Prevention")
@@ -272,22 +272,22 @@ def run_collapse_experiment():
     print("  Higher col_var = hidden units more diverse")
     print()
 
-    # Check if L⁻² actually helped
+    # Check if L^-^2 actually helped
     no_reg_var = results["no_reg"]["W1_var"][-1]
     l2_var = results["L2_only"]["W1_var"][-1]
     lh_var = results["L-2_only"]["W1_var"][-1]
     combined_var = results["L2+L-2"]["W1_var"][-1]
 
     if lh_var > no_reg_var * 1.2:
-        print("  ✅ L⁻² maintained higher weight variance than no regularization")
+        print("  [OK] L^-^2 maintained higher weight variance than no regularization")
     else:
-        print("  ⚠️  L⁻² did not significantly improve weight variance")
-        print("     (may need λ_H tuning or different architecture)")
+        print("  [!]  L^-^2 did not significantly improve weight variance")
+        print("     (may need lambda_H tuning or different architecture)")
 
     if combined_var > l2_var * 1.1:
-        print("  ✅ L2+L⁻² maintained more diversity than L2 alone")
+        print("  [OK] L2+L^-^2 maintained more diversity than L2 alone")
     else:
-        print("  ⚠️  Combined did not clearly beat L2 alone")
+        print("  [!]  Combined did not clearly beat L2 alone")
 
     return results
 
@@ -299,7 +299,7 @@ def run_collapse_experiment():
 class MultiHeadAttention:
     """
     Minimal multi-head self-attention for testing head diversity.
-    No masking, no positional encoding — just the core mechanism.
+    No masking, no positional encoding -- just the core mechanism.
     """
 
     def __init__(self, d_model: int, n_heads: int):
@@ -314,7 +314,7 @@ class MultiHeadAttention:
         self.W_O = np.random.randn(n_heads * self.d_k, d_model) * scale
 
     def forward(self, X):
-        """X: (seq_len, d_model) → (seq_len, d_model)"""
+        """X: (seq_len, d_model) -> (seq_len, d_model)"""
         heads_out = []
         self.attention_patterns = []
         for h in range(self.n_heads):
@@ -361,17 +361,17 @@ class MultiHeadAttention:
 
 def run_attention_diversity_experiment():
     """
-    Experiment 2: Does L⁻² keep attention heads diverse?
+    Experiment 2: Does L^-^2 keep attention heads diverse?
 
     Simulate training where gradient updates push heads toward similar patterns.
-    Apply L⁻² to head projection weights and measure whether heads stay diverse.
+    Apply L^-^2 to head projection weights and measure whether heads stay diverse.
     """
     print("=" * 70)
     print("EXPERIMENT 2: Attention Head Diversity")
     print("=" * 70)
     print()
     print("Simulating gradient pressure that homogenizes attention heads.")
-    print("L⁻² should resist this by penalizing low variance across heads.")
+    print("L^-^2 should resist this by penalizing low variance across heads.")
     print()
 
     np.random.seed(42)
@@ -419,9 +419,9 @@ def run_attention_diversity_experiment():
 
     # Check results
     if results["L-2_only"][-1] > results["no_reg"][-1] * 1.3:
-        print("  ✅ L⁻² significantly preserved head diversity under collapse pressure")
+        print("  [OK] L^-^2 significantly preserved head diversity under collapse pressure")
     else:
-        print("  ⚠️  Results inconclusive — may need parameter tuning")
+        print("  [!]  Results inconclusive -- may need parameter tuning")
 
     return results
 
@@ -434,15 +434,15 @@ def run_uncertainty_bound_experiment():
     """
     Experiment 3: Verify the uncertainty-principle-like bound.
 
-    Track std(w) * std(∇L/∂w) during training with L2+L⁻².
-    If the bound holds, this product should stay above a minimum threshold —
+    Track std(w) * std(nablaL/dw) during training with L2+L^-^2.
+    If the bound holds, this product should stay above a minimum threshold --
     weights can't simultaneously have low spread AND low gradient spread.
     """
     print("=" * 70)
     print("EXPERIMENT 3: Uncertainty Bound Verification")
     print("=" * 70)
     print()
-    print("Tracking std(w) × std(∇w) during training.")
+    print("Tracking std(w) x std(nablaw) during training.")
     print("The Heisenberg regularizer should enforce a lower bound on this product.")
     print()
 
@@ -484,12 +484,12 @@ def run_uncertainty_bound_experiment():
 
         min_up = min(uncertainty_products)
         mean_up = np.mean(uncertainty_products)
-        print(f"  {name:12s} | min(std(w)·std(∇w))={min_up:.6f} | "
+        print(f"  {name:12s} | min(std(w)*std(nablaw))={min_up:.6f} | "
               f"mean={mean_up:.6f}")
 
     print()
     print("INTERPRETATION:")
-    print("  If L2+L⁻² has a HIGHER minimum product, the uncertainty bound is working.")
+    print("  If L2+L^-^2 has a HIGHER minimum product, the uncertainty bound is working.")
     print("  The bound prevents simultaneous concentration of weights AND gradients.")
     print()
 
@@ -502,12 +502,12 @@ def run_uncertainty_bound_experiment():
 
 if __name__ == "__main__":
     print()
-    print("╔══════════════════════════════════════════════════════════════════╗")
-    print("║  L⁻² REGULARIZATION (HEISENBERG REGULARIZER)                   ║")
-    print("║  Research Proof-of-Concept                                      ║")
-    print("╚══════════════════════════════════════════════════════════════════╝")
+    print("+==================================================================+")
+    print("|  L^-^2 REGULARIZATION (HEISENBERG REGULARIZER)                   |")
+    print("|  Research Proof-of-Concept                                      |")
+    print("+==================================================================+")
     print()
-    print("Hypothesis: Adding λ/Var(w) as a penalty prevents weight collapse,")
+    print("Hypothesis: Adding lambda/Var(w) as a penalty prevents weight collapse,")
     print("complementing L2's prevention of weight explosion.")
     print()
 
@@ -521,15 +521,15 @@ if __name__ == "__main__":
     print("SUMMARY")
     print("=" * 70)
     print()
-    print("The L⁻² regularizer is the mathematical dual of L2:")
-    print("  L2:   λ‖w‖²         → shrinks weights toward zero")
-    print("  L⁻²:  λ/(Var(w)+ε)  → pushes weights apart from each other")
+    print("The L^-^2 regularizer is the mathematical dual of L2:")
+    print("  L2:   lambda||w||^2         -> shrinks weights toward zero")
+    print("  L^-^2:  lambda/(Var(w)+epsilon)  -> pushes weights apart from each other")
     print()
-    print("Together they enforce: std(w) × std(∇w) ≥ lower_bound")
+    print("Together they enforce: std(w) x std(nablaw) >= lower_bound")
     print()
     print("Next steps if results are positive:")
     print("  1. Test on CIFAR-10 with a real CNN (measure generalization gap)")
     print("  2. Apply to self-supervised learning (SimSiam/BYOL collapse)")
     print("  3. Apply per-head to multi-head attention (prevent head death)")
-    print("  4. Derive the theoretical bound on std(w)·std(∇w) from λ₂ and λ_H")
+    print("  4. Derive the theoretical bound on std(w)*std(nablaw) from lambda_2 and lambda_H")
     print()
